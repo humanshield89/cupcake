@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project cupcakeant">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/HumanShield85/workspace/cupcakeant/build/cupcake.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.lordroid.cupcake.App"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="C:/Users/HumanShield85/workspace/cupcakeant/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/aopalliance-1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/bt-bencoding-1.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/snakeyaml-1.17.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/guice-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/javax.inject-1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/guava-19.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/guice-multibindings-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/bt-core-1.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/bt-dht-1.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/bt-http-tracker-client-1.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/commons-codec-1.9.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/commons-logging-1.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/filters-2.0.235.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/httpclient-4.5.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/httpcore-4.4.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/java-image-scaling-0.8.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/jericho-html-3.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/jna-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/jna-platform-4.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/sample-1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/slf4j-api-1.7.10.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/slf4j-simple-1.7.25.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/vlcj-3.10.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/weblaf-1.28.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/xstream-1.4.7.jar"/>
+        </jar>
+    </target>
+</project>
