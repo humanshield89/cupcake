@@ -20,7 +20,6 @@ package com.lordroid.cupcake.player;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -43,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alee.laf.slider.WebSlider;
-import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.controlers.Watchable;
 import com.lordroid.cupcake.controlers.Watcher;
 import com.lordroid.cupcake.res.R;
@@ -114,6 +112,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 					int value = ui.valueForXPosition(p.x);
 
 					setValue(value);
+					updateWatchers(S.TIMER_CLICKED);
 				}
 
 				@Override
@@ -128,7 +127,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					progress.setToolTipText(null);
+					progress.setToolTipText("");
 				}
 
 				// disable check that will invoke scrollDueToClickInTrack
@@ -156,7 +155,21 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 	private JButton fullScreen = new JButton(new ImageIcon(R.FULL_SCREEN));
 
-	private JLabel currentVolume = new JLabel();
+	private JLabel currentVolume = new JLabel(){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override public void setText(String text){
+			if(text.length() == 1) {
+				text="  "+text;
+			} else if (text.length() == 2) {
+				text=" "+text;
+			} 
+			super.setText(text);
+		}
+	};
 
 	private JPanel volumePanel = new JPanel();
 
@@ -169,10 +182,11 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	private JPanel controlsContainer = new JPanel();
 
 	public ControlPanel() {
-
+		this.currentVolume.setFont(R.NORMAL_FONT);
+		progress.setDrawProgress(true);
 		progress.setTrackBgTop(new Color(135, 124, 176));
 		progress.setDrawProgress(true);
-		progress.setTrackBgBottom(new Color(135, 124, 176));
+		progress.setTrackBgBottom(new Color(100, 124, 125));
 		progress.setFocusable(false);
 		progress.setValue(0);
 
@@ -189,9 +203,9 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				updateWatchers(S.TIMER_CLICKED);
-				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
-						.getValue() * 1000));
+//				updateWatchers(S.TIMER_CLICKED);
+//				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
+//						.getValue() * 1000));
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -219,7 +233,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 			public void mouseDragged(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				// updateWatchers(S.TIMER_SLIDED);
+				
 				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
 						.getValue() * 1000));
 			}
@@ -240,7 +254,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		volumeControl.setMaximumSize(new Dimension(50, 20));
 		volumeControl.setMargin(0, 0, 0, 5);
 		volumeControl.setPreferredWidth(125);
-		volumeControl.setTrackBgBottom(new Color(135, 124, 176));
+		volumeControl.setTrackBgBottom(new Color(100, 124, 125));
 		volumeControl.setTrackBgTop(new Color(135, 124, 176));
 
 		controlsContainer.setLayout(new BorderLayout());
@@ -254,10 +268,12 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		btnContainer.add(rewindBtn);
 		btnContainer.add(playBtn);
 		btnContainer.add(skipBtn);
-		volumePanel.add(volumeBtn);
-		volumePanel.add(volumeControl);
-		currentVolume.setText("" + Settings.getCurrentVolume());
+		
 		volumePanel.add(currentVolume);
+		volumePanel.add(volumeControl);
+		volumePanel.add(volumeBtn);
+
+		currentVolume.setText("" + Settings.getCurrentVolume());
 
 		volumePanel.add(fullScreen);
 

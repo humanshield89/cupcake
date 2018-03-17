@@ -18,6 +18,7 @@
  */
 package com.lordroid.cupcake.res;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
 
@@ -28,7 +29,7 @@ import javax.imageio.ImageIO;
  * 
  */
 public class R {
-
+	public static final Font NORMAL_FONT = new Font("Arial", Font.BOLD, 12);
 	public static final Image ICON = getIcon("icon.png");
 
 	public static final Image PLAY_BTN_ICON = getIcon("play.png");

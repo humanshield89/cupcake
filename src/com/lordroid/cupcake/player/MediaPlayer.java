@@ -23,7 +23,6 @@ import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -66,12 +65,19 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	static String[] argument_libvlc = { "--subsdec-encoding="
 			+ Settings.getDefaultSubtittleEncoding() };
 
-	public static final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory(
+	private static final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory(
 			argument_libvlc);
-	private final EmbeddedMediaPlayer mediaPlayer = mediaPlayerFactory
+	/**
+	 * @return the mediaplayerfactory
+	 */
+	public static MediaPlayerFactory getMediaplayerfactory() {
+		return mediaPlayerFactory;
+	}
+
+	private static final EmbeddedMediaPlayer mediaPlayer = mediaPlayerFactory
 			.newEmbeddedMediaPlayer();
-	Canvasx mediaPlayerComponent = new Canvasx(mediaPlayer);
-	CanvasVideoSurface videoSurface = mediaPlayerFactory
+	private Canvasx mediaPlayerComponent = new Canvasx(mediaPlayer);
+	private CanvasVideoSurface videoSurface = mediaPlayerFactory
 			.newVideoSurface(mediaPlayerComponent);
 
 	private ArrayList<Watcher> watchers = new ArrayList<Watcher>();
@@ -84,61 +90,16 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	private long lastRewind = 0L;
 	private long lastRewindTime = 0L;
 
-	private String currentState = S.MEDIA_STOPED;
 	private String currentTitle = "No media";
 
 	private boolean wasPlaying;
 	private boolean mouseOncontrol = false;
 
 	
-	MouseListener controlListener = new MouseListener() {
-
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-//			Object source = arg0.getSource();
-//			for(int i = 0; i < mouseOncontrol.length ; i++) {
-//				App.LOGGER.info("mouse in to "+source.toString());
-//				if(source.equals(controlPanel.getAllComponents()[i])){
-//					mouseOncontrol[i] = true;
-//				}
-//			}
-			mouseOncontrol = true;
-				
-		}
-
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			mouseOncontrol = false;
-//			Object source = arg0.getSource();
-//			for(int i = 0; i < mouseOncontrol.length ; i++) {
-//				if(source.equals(controlPanel.getAllComponents()[i])){
-//					App.LOGGER.info("mouse out of "+source.toString());
-//					mouseOncontrol[i] = false;
-//				}
-//			}		
-			}
-
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-	};
 	public MediaPlayer(JFrame frame) {
 		this.frame = frame;
 
 		this.setLayout(new BorderLayout());
-		// mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 		mediaPlayer.setVideoSurface(videoSurface);
 		mediaPlayerComponent.setVideoSurface(videoSurface);
 
@@ -234,11 +195,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	}
 
 	private void initActionListners() {
-//		for (Component c : controlPanel.getAllComponents()){
-//			c.addMouseListener(controlListener);
-//		}
-
-		controlPanel.addMouseListener(controlListener);
 
 		mediaPlayer.setEnableMouseInputHandling(false);
 		mediaPlayer.setEnableKeyInputHandling(false);
@@ -262,11 +218,13 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				// TODO Auto-generated method stub
+				mouseOncontrol = false;
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 				// TODO Auto-generated method stub
+				mouseOncontrol = true;
 			}
 
 		});
@@ -540,11 +498,11 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 						// TODO Auto-generated method stub
 						// long mili = arg0.getTime();
 						// int minutes = (int) ((mili/60));.
-						int minutes = (int) (mediaPlayerComponent
+						int seconds = (int) (mediaPlayerComponent
 								.getMediaPlayer().getTime() / 1000);
 						// App.LOGGER.info("total time is  "+mediaPlayerComponent.getMediaPlayer().getLength());
 						// App.LOGGER.info("current time is  "+mediaPlayerComponent.getMediaPlayer().getTime());
-						controlPanel.getProgress().setValue(minutes);
+						controlPanel.getProgress().setValue(seconds);
 						controlPanel
 								.getCurrentTimeLab()
 								.setText(
@@ -628,7 +586,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 					.getLength() / 1000);
 			controlPanel.getProgress().setMinimum(0);
 			controlPanel.getProgress().setValue(0);
-			LOGGER.debug("setting max to " + seconds);
+			LOGGER.info("setting max to " + seconds);
 			controlPanel.getProgress().setMaximum(seconds);
 			// controlPanel.getCurrentTimeLab().setText("  00:00  ");
 			// controlPanel.getTotalTimeLab().setText(TimeUtils.getLabelFormatedTime(seconds*1000));
@@ -641,6 +599,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		} else {
 			this.mediaPlayerComponent.getMediaPlayer().play();
 		}
+				
 	}
 
 	/*
@@ -740,7 +699,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		} else if (message == S.TIMER_SLIDED) {
 			pause();
 			setTime();
-			play();
+			//play();
 		} else if (message == S.TIMER_PRESSED) {
 			if (mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 				pause();
@@ -756,6 +715,12 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		} else if (message == S.TIMER_CLICKED) {
 			if (mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 				pause();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				setTime();
 				play();
 			} else {

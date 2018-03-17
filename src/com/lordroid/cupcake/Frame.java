@@ -62,8 +62,10 @@ public class Frame extends JFrame {
 			}
 
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
+				// let's release properly 
+				// TODO : prompt user to prevent accidental close 
 				player.getMediaPlayerComponent().release();
+				MediaPlayer.getMediaplayerfactory().release();
 				System.exit(0);
 			}
 
@@ -85,14 +87,6 @@ public class Frame extends JFrame {
 			public void windowOpened(WindowEvent arg0) {
 				// TODO Auto-generated method stub
 
-			}
-
-			public void windowStateChanged(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				if (arg0.getNewState() == WindowEvent.WINDOW_CLOSED) {
-					player.getMediaPlayerComponent().release();
-					System.exit(0);
-				}
 			}
 
 		});

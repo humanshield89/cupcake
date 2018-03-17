@@ -20,6 +20,8 @@ package com.lordroid.cupcake.utils;
 
 import java.text.SimpleDateFormat;
 
+import com.lordroid.cupcake.App;
+
 /**
  * @author HumanShield85
  * 
@@ -28,13 +30,20 @@ public class TimeUtils {
 
 	public static String getLabelFormatedTime(long time) {
 		// check if it's more than an hour
-		String timeFormated = null;
-		if (time - (3600 * 1000) >= 0) {
-			timeFormated = new SimpleDateFormat("  HH:mm:ss  ").format(time);
-		} else {
-			timeFormated = new SimpleDateFormat("  mm:ss  ").format(time);
-		}
-
-		return timeFormated;
+		App.LOGGER.info("About to convert  time = "+time);
+//		String timeFormated = null;
+//		if (time - (3600 * 1000) >= 0) {
+//			timeFormated = new SimpleDateFormat("  KK:mm:ss  ").format(time);
+//		} else {
+//			timeFormated = new SimpleDateFormat("  mm:ss  ").format(time);
+//		}
+//		App.LOGGER.info("About to return  time = "+timeFormated);
+		
+		long ss = (time / 1000) % 60;
+		long mm = (time/ 1000 / 60) % 60;
+		long hh = (time/1000/60/60) % 24;
+		App.LOGGER.info("true ?"+"   "+hh+":"+mm+":"+ss+"  ");
+		
+		return "   "+hh+":"+mm+":"+ss+"  ";
 	}
 }

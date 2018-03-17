@@ -23,6 +23,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import javax.swing.SwingUtilities;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +44,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.utils.PathUtils;
+import com.lordroid.cupcake.utils.TimeUtils;
 import com.sun.jna.NativeLibrary;
 
 /**
@@ -49,7 +52,7 @@ import com.sun.jna.NativeLibrary;
  * 
  */
 public class App {
-	private static Logger LOGGER = LoggerFactory.getLogger(App.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(App.class);
 
 	private static boolean initVlcJ() {
 		String ourLocation = PathUtils.getExcutionPath();
@@ -57,33 +60,32 @@ public class App {
 				ourLocation + "/" + S.NATIVE_LIB_FOLDER);
 		LOGGER.info("added " + ourLocation + File.separator
 				+ S.NATIVE_LIB_FOLDER + " to search path");
+
 		// boolean found = new NativeDiscovery().discover();
 
 		LOGGER.info("Libvlc found ! " + LibVlc.INSTANCE.libvlc_get_version());
 
-		// LOGGER.error("Libvlc not found player will not work ! make sure native library is present in native folder ! ");
 		// TODO : find a better way to report found or not !
 		return true;
 	}
 
 	public static void main(String[] args) {
-		// try {
-		// // Set System L&F
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// } catch (UnsupportedLookAndFeelException e) {
-		// // handle exception
-		// } catch (ClassNotFoundException e) {
-		// // handle exception
-		// } catch (InstantiationException e) {
-		// // handle exception
-		// } catch (IllegalAccessException e) {
-		// // handle exception
-		// }
+
 		WebLookAndFeel.install();
 		WebLookAndFeel.initializeManagers();
 		new NativeDiscovery().discover();
 		LOGGER.info("initializing libvlc...");
-		new Frame();
+		SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+				// TODO Auto-generated method stub
+				new Frame();
+			}
+
+		});
+		System.out.print(TimeUtils.getLabelFormatedTime(System
+				.currentTimeMillis()));
+
 		// initVlcJ();
 		// new MainFram();
 		// System.setProperty("java.net.preferIPv4Stack", "true");
