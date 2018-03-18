@@ -112,7 +112,7 @@ public class ClickListener extends MouseAdapter implements Watcher {
 	}
 
 	public void singleClick(MouseEvent e) {
-		
+
 	}
 
 	public void doubleClick(MouseEvent e) {

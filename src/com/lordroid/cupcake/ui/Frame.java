@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.lordroid.cupcake;
+package com.lordroid.cupcake.ui;
 
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -47,7 +47,7 @@ public class Frame extends JFrame {
 		this.setSize(600, 400);
 		this.add(player);
 		this.setVisible(true);
-		//player.setVideo(str);
+		// player.setVideo(str);
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowListener() {
 
@@ -62,8 +62,8 @@ public class Frame extends JFrame {
 			}
 
 			public void windowClosing(WindowEvent arg0) {
-				// let's release properly 
-				// TODO : prompt user to prevent accidental close 
+				// let's release properly
+				// TODO : prompt user to prevent accidental close
 				player.getMediaPlayerComponent().release();
 				MediaPlayer.getMediaplayerfactory().release();
 				System.exit(0);

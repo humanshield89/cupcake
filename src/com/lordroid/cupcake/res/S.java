@@ -18,11 +18,19 @@
  */
 package com.lordroid.cupcake.res;
 
+import java.io.File;
+
+import com.lordroid.cupcake.utils.PathUtils;
+
 /**
  * @author HumanShield85
  * 
  */
 public class S {
+	public static final String SYSTEM_TMP_FOLDER = System
+			.getProperty("java.io.tmpdir") + "cupcake" + File.separator;
+	public static final File DEFAULT_BG = new File(PathUtils.getExcutionPath()
+			+ File.separator + "resources" + File.separator + "defaultBG.jpg");
 	public static final String NATIVE_LIB_FOLDER = "native";
 	public static final int PLAY_BTN_PRESSED = 0;
 	public static final int SKIP_BTN_PRESSED = 1;

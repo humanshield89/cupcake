@@ -155,18 +155,19 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 	private JButton fullScreen = new JButton(new ImageIcon(R.FULL_SCREEN));
 
-	private JLabel currentVolume = new JLabel(){
+	private JLabel currentVolume = new JLabel() {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		@Override public void setText(String text){
-			if(text.length() == 1) {
-				text="  "+text;
+		@Override
+		public void setText(String text) {
+			if (text.length() == 1) {
+				text = "  " + text;
 			} else if (text.length() == 2) {
-				text=" "+text;
-			} 
+				text = " " + text;
+			}
 			super.setText(text);
 		}
 	};
@@ -203,9 +204,9 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-//				updateWatchers(S.TIMER_CLICKED);
-//				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
-//						.getValue() * 1000));
+				// updateWatchers(S.TIMER_CLICKED);
+				// currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
+				// .getValue() * 1000));
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -233,7 +234,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 			public void mouseDragged(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
 						.getValue() * 1000));
 			}
@@ -268,7 +269,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		btnContainer.add(rewindBtn);
 		btnContainer.add(playBtn);
 		btnContainer.add(skipBtn);
-		
+
 		volumePanel.add(currentVolume);
 		volumePanel.add(volumeControl);
 		volumePanel.add(volumeBtn);
@@ -414,6 +415,5 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 			w.updateHundler(this, message);
 		}
 	}
-
 
 }

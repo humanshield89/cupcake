@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.lordroid.cupcake;
+package com.lordroid.cupcake.player;
 
 import java.awt.Canvas;
 import java.awt.Color;

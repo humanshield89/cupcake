@@ -19,6 +19,7 @@
 package com.lordroid.cupcake;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -43,8 +44,10 @@ import bt.torrent.TorrentSessionState;
 import com.alee.laf.WebLookAndFeel;
 import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
+import com.lordroid.cupcake.ui.Frame;
 import com.lordroid.cupcake.utils.PathUtils;
 import com.lordroid.cupcake.utils.TimeUtils;
+import com.lordroid.cupcake.yify.JSonTest;
 import com.sun.jna.NativeLibrary;
 
 /**
@@ -53,6 +56,14 @@ import com.sun.jna.NativeLibrary;
  */
 public class App {
 	public static Logger LOGGER = LoggerFactory.getLogger(App.class);
+
+	private static void setSysPropreties() {
+		System.setProperty(
+				"http.agent",
+				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
+		WebLookAndFeel.install();
+		WebLookAndFeel.initializeManagers();
+	}
 
 	private static boolean initVlcJ() {
 		String ourLocation = PathUtils.getExcutionPath();
@@ -69,10 +80,12 @@ public class App {
 		return true;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
+		setSysPropreties();
+		System.out.println(PathUtils.getExcutionPath());
+		JSonTest.main(args);
 
-		WebLookAndFeel.install();
-		WebLookAndFeel.initializeManagers();
 		new NativeDiscovery().discover();
 		LOGGER.info("initializing libvlc...");
 		SwingUtilities.invokeLater(new Runnable() {
@@ -83,8 +96,6 @@ public class App {
 			}
 
 		});
-		System.out.print(TimeUtils.getLabelFormatedTime(System
-				.currentTimeMillis()));
 
 		// initVlcJ();
 		// new MainFram();

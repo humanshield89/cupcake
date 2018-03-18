@@ -43,7 +43,6 @@ import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrate
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.videosurface.CanvasVideoSurface;
 
-import com.lordroid.cupcake.Canvasx;
 import com.lordroid.cupcake.controlers.Watchable;
 import com.lordroid.cupcake.controlers.Watcher;
 import com.lordroid.cupcake.res.R;
@@ -60,13 +59,13 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	private static final long serialVersionUID = 1L;
 	private static Logger LOGGER = LoggerFactory.getLogger(MediaPlayer.class);
 
-
 	private final JFrame frame;
 	static String[] argument_libvlc = { "--subsdec-encoding="
 			+ Settings.getDefaultSubtittleEncoding() };
 
 	private static final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory(
 			argument_libvlc);
+
 	/**
 	 * @return the mediaplayerfactory
 	 */
@@ -95,7 +94,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	private boolean wasPlaying;
 	private boolean mouseOncontrol = false;
 
-	
 	public MediaPlayer(JFrame frame) {
 		this.frame = frame;
 
@@ -535,15 +533,15 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 				});
 	}
 
-//	private boolean isMouseOnControl() {
-//		for (int i = 0 ; i < mouseOncontrol.length ; i++) {
-//			if(mouseOncontrol[i]){
-//				return true;
-////			}
-//		}
-//		return false;
-//	}
-	
+	// private boolean isMouseOnControl() {
+	// for (int i = 0 ; i < mouseOncontrol.length ; i++) {
+	// if(mouseOncontrol[i]){
+	// return true;
+	// // }
+	// }
+	// return false;
+	// }
+
 	private void pause() {
 		this.mediaPlayerComponent.getMediaPlayer().pause();
 	}
@@ -599,7 +597,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		} else {
 			this.mediaPlayerComponent.getMediaPlayer().play();
 		}
-				
+
 	}
 
 	/*
@@ -699,7 +697,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		} else if (message == S.TIMER_SLIDED) {
 			pause();
 			setTime();
-			//play();
+			// play();
 		} else if (message == S.TIMER_PRESSED) {
 			if (mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 				pause();
@@ -758,9 +756,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 			} else if (volume >= 100) {
 				controlPanel.getVolumeBtn().setIcon(
 						new ImageIcon(R.VOLUME_MEDIUM));
-			} else if(volume > 0){
-				controlPanel.getVolumeBtn().setIcon(
-						new ImageIcon(R.VOLUME_LOW));
+			} else if (volume > 0) {
+				controlPanel.getVolumeBtn()
+						.setIcon(new ImageIcon(R.VOLUME_LOW));
 			} else {
 				controlPanel.getVolumeBtn().setIcon(
 						new ImageIcon(R.VOLUME_MUTED));
