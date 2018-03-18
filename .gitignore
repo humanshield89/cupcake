@@ -1,4 +1,6 @@
 target
+native
+libs
 .classpath
 .project
 .settings
