@@ -37,7 +37,7 @@ public class JSONComunicator {
 		try {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 			String jsonText = readAll(rd);
-			System.out.print(jsonText);
+			//System.out.print(jsonText);
 			JSONObject json = new JSONObject(jsonText);
 			return json;
 		} finally {

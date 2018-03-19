@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lordroid.cupcake.controlers.Watchable;
-import com.lordroid.cupcake.controlers.Watcher;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 
 public class YifyMovie {
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
+	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
 	private String url;
 	private String imdbCode;
@@ -22,6 +21,8 @@ public class YifyMovie {
 	private int year;
 	private double rating;
 	private int runtime;
+	private int likeCount;
+	private int downloadCount;
 	private ArrayList<String> genre = new ArrayList<String>();
 	private String descriptionShort;
 	private String descriptionFull;
@@ -39,7 +40,6 @@ public class YifyMovie {
 	private File bgImageFile;
 	private File CoverImageFileMedium;
 	// private File coverImageFileLarge;
-
 	private boolean isBGCached = false;
 	private boolean isBGBEingCached = false;
 	private boolean isCoverMediumCached = false;
@@ -48,8 +48,21 @@ public class YifyMovie {
 	// private boolean isCoverLargeCached = false;
 	// private boolean isCoverLargeBeingCached = false;
 
-	public YifyMovie(JSONObject movie) {
-		this.id = movie.getInt(YifyS.RESPONSE_ID_KEY);
+	public YifyMovie(JSONObject movieArg) {
+		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
+		JSONObject movie = movieArg;
+		try {
+			movie = JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			movie = movieArg;
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			movie = movieArg;
+			e.printStackTrace();
+		}
+		
 		this.url = movie.getString(YifyS.RESPONSE_URL_KEY);
 		this.imdbCode = movie.getString(YifyS.RESPONSE_IMDB_CODE_KEY);
 		this.title = movie.getString(YifyS.RESPONSE_TITLE_KEY);
@@ -59,14 +72,23 @@ public class YifyMovie {
 		this.year = movie.getInt(YifyS.RESPONSE_YEAR_KEY);
 		this.rating = movie.getDouble(YifyS.RESPONSE_RATING_KEY);
 		this.runtime = movie.getInt(YifyS.RESPONSE_RUNTIME_KEY);
-
-		JSONArray genreJSON = movie.getJSONArray(YifyS.RESPONSE_GENRES_KEY);
+		this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+		try {
+		JSONArray genreJSON = movieArg.getJSONArray(YifyS.RESPONSE_GENRES_KEY);
 		for (int i = 0; i < genreJSON.length(); i++) {
 			genre.add(genreJSON.getString(i));
 		}
-
-		this.descriptionShort = movie.getString(YifyS.RESPONSE_SUMMARY_KEY);
-		this.descriptionFull = movie.getString(YifyS.RESPONSE_SUMMARY_FULL_KEY);
+		} catch (Exception e) {
+			genre.add("unknown");
+		}
+		try {
+			this.descriptionShort = movie.getString(YifyS.RESPONSE_SUMMARY_KEY);
+			this.descriptionFull = movie.getString(YifyS.RESPONSE_SUMMARY_FULL_KEY);
+		} catch(Exception E){
+			this.descriptionShort = movie.getString("description_intro");
+			this.descriptionFull = movie.getString("description_full");
+		}
 		this.youtubeTrailerURL = YOUTUBE
 				+ movie.getString(YifyS.RESPONSE_TRAILER_CODE_KEY);
 		this.language = movie.getString(YifyS.RESPONSE_LANGUAGE_KEY);
@@ -77,12 +99,15 @@ public class YifyMovie {
 		this.coverSmallURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_S_KEY);
 		this.coverMediumURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_M_KEY);
 		this.coverLargeURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_L_KEY);
-		this.state = movie.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
-
-		JSONArray torrentsJSON = movie
-				.getJSONArray(YifyS.RESPONSE_TORRENTS_KEY);
-		for (int i = 0; i < torrentsJSON.length(); i++) {
-			torrents.add(new YifyTorrent(torrentsJSON.getJSONObject(i)));
+		this.state = movieArg.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
+		try {
+			JSONArray torrentsJSON = movie
+					.getJSONArray(YifyS.RESPONSE_TORRENTS_KEY);
+			for (int i = 0; i < torrentsJSON.length(); i++) {
+				torrents.add(new YifyTorrent(torrentsJSON.getJSONObject(i)));
+			}
+		} catch (Exception e) {
+			
 		}
 
 		tmpFolder = new File(S.SYSTEM_TMP_FOLDER + this.id + File.separator);
@@ -143,11 +168,11 @@ public class YifyMovie {
 									.downloadFile(coverMediumURL,
 											tmpFolder.getAbsolutePath());
 						} catch (IOException e) {
-							CoverImageFileMedium = S.DEFAULT_BG;
+							CoverImageFileMedium = S.DEFAULT_COVER;
 							e.printStackTrace();
 						}
 						if (!CoverImageFileMedium.exists()) {
-							CoverImageFileMedium = S.DEFAULT_BG;
+							CoverImageFileMedium = S.DEFAULT_COVER;
 						}
 					} else {
 						System.out.println("no need to cache ");
@@ -278,6 +303,19 @@ public class YifyMovie {
 	}
 
 	/**
+	 * @return the likeCount
+	 */
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	/**
+	 * @return the downloadCount
+	 */
+	public int getDownloadCount() {
+		return downloadCount;
+	}
+	/**
 	 * @return the bgImage
 	 */
 	public String getBgImageURL() {
@@ -309,6 +347,7 @@ public class YifyMovie {
 	 * @return the coverMedium
 	 */
 	public String getCoverMediumURL() {
+
 		return coverMediumURL;
 	}
 
@@ -352,6 +391,38 @@ public class YifyMovie {
 	 */
 	public Boolean getIsBGCached() {
 		return isBGCached;
+	}
+	/**
+	 * @return the coverImageFileMedium
+	 */
+	public File getCoverImageFileMedium() {
+		if (!isCoverMediumCached) {
+			if (!this.isCoverMediumBeingCached){
+				this.cacheCoverImageMedium();
+			}
+		}
+		return CoverImageFileMedium;
+	}
+
+	/**
+	 * @return the isBGBEingCached
+	 */
+	public boolean isBGBEingCached() {
+		return isBGBEingCached;
+	}
+
+	/**
+	 * @return the isCoverMediumCached
+	 */
+	public boolean isCoverMediumCached() {
+		return isCoverMediumCached;
+	}
+
+	/**
+	 * @return the isCoverMediumBeingCached
+	 */
+	public boolean isCoverMediumBeingCached() {
+		return isCoverMediumBeingCached;
 	}
 
 }

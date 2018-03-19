@@ -4,15 +4,16 @@ public class YifyTorrent {
 	private String url;
 	private String hash;
 	private String quality;
-	private int seed;
+	private int seeds;
 	private int peers;
 	private String size;
 	private long sizeInBytes;
 	private String uploadDate;
 	private long dateUploadedMilis;
 
-	public YifyTorrent(JSONObject jsonObject) {
+	public YifyTorrent(JSONObject torrent) {
 		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -40,7 +41,7 @@ public class YifyTorrent {
 	 * @return the seed
 	 */
 	public int getSeed() {
-		return seed;
+		return seeds;
 	}
 
 	/**

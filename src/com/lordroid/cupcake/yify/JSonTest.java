@@ -3,10 +3,6 @@ package com.lordroid.cupcake.yify;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.lordroid.cupcake.controlers.Watchable;
-import com.lordroid.cupcake.controlers.Watcher;
-import com.lordroid.cupcake.utils.TimeUtils;
-
 public class JSonTest {
 	static long start;
 	static long end;
@@ -68,63 +64,39 @@ public class JSonTest {
 			// c.disconnect();
 		}
 		for (YifyMovie movie : movies) {
+			String genres = "";
+			for (String str : movie.getGenre()) {
+				genres = str +" ";
+			}
 			System.out
 					.println("=========================================================");
-			System.out.println("==================    " + movie.getTitle()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getTitleLong()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getId()
-					+ "    ======================");
-			System.out.println("==================    "
-					+ movie.getBgImageOriginalURL()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getBgImageURL()
-					+ "    ======================");
-			System.out.println("==================    "
-					+ movie.getCoverLargeURL() + "    ======================");
-			System.out.println("==================    "
-					+ movie.getCoverMediumURL() + "    ======================");
-			System.out.println("==================    "
-					+ movie.getCoverSmallURL() + "    ======================");
+			System.out.println("Title       :   " + movie.getTitle());
+			System.out.println("Title long  :   " + movie.getTitleLong());
+			System.out.println("Title eng   :   "+ movie.getTitleEnglish());
+			System.out.println("Id          :   " + movie.getId());
+			System.out.println("likes       :   " + movie.getLikeCount());
+			System.out.println("downloads   :   " + movie.getDownloadCount());
+			System.out.println("BG image    :   "+ movie.getBgImageOriginalURL());
+			System.out.println("bg image    :   " + movie.getBgImageURL());
+			System.out.println("cover L     :   "+movie.getCoverLargeURL());
+			System.out.println("cover M     :   "+ movie.getCoverMediumURL());
+			System.out.println("cover S     :   "+ movie.getCoverSmallURL());
+			System.out.println("desc full   :   "+ movie.getDescriptionFull());
+			System.out.println("desc short  :   "+ movie.getDescriptionShort());
+			System.out.println("imdbcode    :   " + movie.getImdbCode());
+			System.out.println("language    :   " + movie.getLanguage());
+			System.out.println("MPA rating  :   " + movie.getMPARating());
+			System.out.println("imdb rating :   " + movie.getRating());
+			System.out.println("Total time  :   " + movie.getRuntime());
+			System.out.println("Slug        :   " + movie.getSlug());
+			System.out.println("state       :   " + movie.getState());
+			System.out.println("URL         :   " + movie.getUrl());
+			System.out.println("Year        :   " + movie.getYear());
+			System.out.println("Trailer     :   "+ movie.getYoutubeTrailerURL());
+			System.out.println("genres     :   "+ genres);
 			System.out
-					.println("==================    "
-							+ movie.getDescriptionFull()
-							+ "    ======================");
-			System.out.println("==================    "
-					+ movie.getDescriptionShort()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getImdbCode()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getLanguage()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getMPARating()
-					+ "    ======================");
-
-			System.out.println("==================    " + movie.getRating()
-					+ "    ======================");
-			// System.out.println();
-			System.out.println("==================    " + movie.getRuntime()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getSlug()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getState()
-					+ "    ======================");
-			System.out.println("==================    "
-					+ movie.getTitleEnglish() + "    ======================");
-			System.out.println("==================    " + movie.getTitleLong()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getUrl()
-					+ "    ======================");
-			System.out.println("==================    " + movie.getYear()
-					+ "    ======================");
-			System.out.println("==================    "
-					+ movie.getYoutubeTrailerURL()
-					+ "    ======================");
-			// System.out.println("=================="+movie.getGenre()+"    ======================");
-
-			System.out
-					.println("=========================================================");
+					  .println("=========================================================");
+			
 		}
 		// Thread.sleep(5000);
 		// System.out.println(HttpsDownloadUtility.downloadFile("https://yts.am/torrent/download/5D14C2E9E8577402F91B6A4C638E22DAA4930E23",
