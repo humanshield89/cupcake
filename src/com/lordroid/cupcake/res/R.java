@@ -30,6 +30,12 @@ import javax.imageio.ImageIO;
  */
 public class R {
 	public static final Font NORMAL_FONT = new Font("Arial", Font.BOLD, 12);
+	public static final Font MOVIE_TITLE_FONT = new Font("Arial", Font.BOLD, 16);
+	public static final Font VIEWS_FONT = new Font("Arial", Font.PLAIN, 8);
+	public static final Font DESCRIPTION_FONT = new Font("Arial", Font.BOLD, 12);
+	public static final Font GENRE_FONT = new Font("Arial", Font.BOLD, 10);
+
+
 	public static final Image ICON = getIcon("icon.png");
 
 	public static final Image PLAY_BTN_ICON = getIcon("play.png");
@@ -42,11 +48,32 @@ public class R {
 	public static final Image VOLUME_MUTED = getIcon("muted.png");
 	public static final Image FULL_SCREEN = getIcon("tgl_fullscreen.png");
 	public static final Image EXIT_FULL_SCREEN = getIcon("exut_full_screen.png");
-
 	public static final Image VOLUME_DOWN = getIcon("volumeDown.png");
-
 	public static final Image VOLUME_UP = getIcon("volumeUp.png");
 
+	public static final Image QUALITY_3D = getIcon("3D.png");
+	public static final Image QUALITY_720P = getIcon("720p.png");
+	public static final Image QUALITY_1080P = getIcon("1080p.png");
+	
+	public static final Image IMDB_ICON = getIcon("imdb2.png");
+	public static final Image VIEWS_ICON = getIcon("views2.png");
+	public static final Image GENRE_ICON = getIcon("genre.png");
+	
+	public static final Image RATING_G = getIcon("ratting_g.png");
+	public static final Image RATING_PG = getIcon("ratting_PG.png");
+	public static final Image RATING_PG13 = getIcon("ratting_pg-13.png");
+	public static final Image RATING_R16 = getIcon("ratting_R-16.png");
+	public static final Image RATING_R18 = getIcon("ratting_R-18.png");
+	
+	public static final Image STATUS_GOOD = getIcon("status_good.png");
+	public static final Image STATUS_MEDIUM = getIcon("status_medium.png");
+	public static final Image STATUS_POOR = getIcon("status_poor.png");
+	public static final Image BORDER_IMAGE = getIcon("border.png");
+
+	
+	public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
+
+	
 	private static Image getIcon(String file) {
 		Image image = null;
 		try {

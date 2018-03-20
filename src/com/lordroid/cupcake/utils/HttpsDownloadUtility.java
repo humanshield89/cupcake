@@ -17,7 +17,7 @@ import com.lordroid.cupcake.App;
  * @author humanshield85
  */
 public class HttpsDownloadUtility {
-	private static final int BUFFER_SIZE = 4096;
+	private static final int BUFFER_SIZE = 32768;
 
 	/**
 	 * Downloads a file from a URL

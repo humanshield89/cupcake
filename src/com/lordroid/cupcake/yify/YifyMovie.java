@@ -39,14 +39,18 @@ public class YifyMovie {
 	private File tmpFolder;
 	private File bgImageFile;
 	private File CoverImageFileMedium;
-	// private File coverImageFileLarge;
+	//private File coverImageFileLarge;
 	private boolean isBGCached = false;
 	private boolean isBGBEingCached = false;
 	private boolean isCoverMediumCached = false;
 	private boolean isCoverMediumBeingCached = false;
 
-	// private boolean isCoverLargeCached = false;
-	// private boolean isCoverLargeBeingCached = false;
+	//private boolean isCoverLargeCached = false;
+	//private boolean isCoverLargeBeingCached = false;
+	
+	private boolean has720p = false;
+	private boolean has1080p = false;
+	private boolean has3d = false;
 
 	public YifyMovie(JSONObject movieArg) {
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
@@ -71,6 +75,7 @@ public class YifyMovie {
 		this.slug = movie.getString(YifyS.RESPONSE_SLUG_KEY);
 		this.year = movie.getInt(YifyS.RESPONSE_YEAR_KEY);
 		this.rating = movie.getDouble(YifyS.RESPONSE_RATING_KEY);
+		
 		this.runtime = movie.getInt(YifyS.RESPONSE_RUNTIME_KEY);
 		this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
 		this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
@@ -112,9 +117,48 @@ public class YifyMovie {
 
 		tmpFolder = new File(S.SYSTEM_TMP_FOLDER + this.id + File.separator);
 		tmpFolder.mkdirs();
-
+		System.out.println("ratting = "+this.MPARating);
 		cacheBgImage();
 		cacheCoverImageMedium();
+		sortTorrentsBySize();
+		setAvailableQualities();
+	}
+
+	private void setAvailableQualities() {
+		// TODO Auto-generated method stub
+		// no need to look forward there is no torrents 
+		if (this.torrents.isEmpty())
+			return;
+		for (YifyTorrent t : torrents ){
+			if (t.getQuality().equals(YifyS.QUALITY_720P) ) {
+				this.has720p = true;
+			} else if (t.getQuality().equals(YifyS.QUALITY_1080P)) {
+				this.has1080p = true;
+			} else if (t.getQuality().equals(YifyS.QUALITY_3D)) {
+				this.has3d = true;
+			}
+		}
+	}
+
+	private void sortTorrentsBySize() {
+		if (this.torrents.isEmpty())
+			return;
+		// TODO Auto-generated method stub
+		boolean swaped = false;
+
+		do {
+			swaped = false;
+			for (int i = 0 ; i< torrents.size()-1 ; i++) {
+				YifyTorrent prev = torrents.get(i);
+				YifyTorrent next = torrents.get(i+1);
+				if (prev.getSizeInBytes() > next.getSizeInBytes()) {
+					torrents.set(i, next);
+					torrents.set(i+1, prev);
+					swaped = true;
+				}			
+			}
+			
+		} while (swaped);
 	}
 
 	public void cacheBgImage() {
@@ -156,9 +200,9 @@ public class YifyMovie {
 	public void cacheCoverImageMedium() {
 
 		if (!isCoverMediumBeingCached) {
-			new Thread(new Runnable() {
-
-				public void run() {
+//			new Thread(new Runnable() {
+//
+//				public void run() {
 					// TODO Auto-generated method stub medium-cover.jpg
 					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
@@ -183,9 +227,9 @@ public class YifyMovie {
 					}
 					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
-				}
-
-			}).start();
+//				}
+//
+//			}).start();
 		}
 
 	}
@@ -423,6 +467,27 @@ public class YifyMovie {
 	 */
 	public boolean isCoverMediumBeingCached() {
 		return isCoverMediumBeingCached;
+	}
+
+	/**
+	 * @return the has720p
+	 */
+	public boolean isHas720p() {
+		return has720p;
+	}
+
+	/**
+	 * @return the has1080p
+	 */
+	public boolean isHas1080p() {
+		return has1080p;
+	}
+
+	/**
+	 * @return the has3d
+	 */
+	public boolean isHas3d() {
+		return has3d;
 	}
 
 }

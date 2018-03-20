@@ -12,8 +12,23 @@ public class YifyTorrent {
 	private long dateUploadedMilis;
 
 	public YifyTorrent(JSONObject torrent) {
-		// TODO Auto-generated constructor stub
+		this.url = torrent.getString(YifyS.RESPONSE_TORRENT_URL_KEY);
+		this.hash = torrent.getString(YifyS.RESPONSE_TORRENT_HASH_KEY);
+		this.quality = torrent.getString(YifyS.RESPONSE_TORRENT_QUALITY_KEY);
+		this.seeds = torrent.getInt(YifyS.RESPONSE_TORRENT_SEEDS_KEY);
+		this.peers = torrent.getInt(YifyS.RESPONSE_TORRENT_PEERS_KEY);
+		this.size = torrent.getString(YifyS.RESPONSE_TORRENT_SIZE_STRING_KEY);
+		this.sizeInBytes = torrent.getLong(YifyS.RESPONSE_TORRENT_SIZE_BYTE_KEY);
+		this.uploadDate = torrent.getString(YifyS.RESPONSE_TORRENT_UPLOADED_STRING_KEY);
+		this.dateUploadedMilis = torrent.getLong(YifyS.RESPONSE_TORRENT_UPLOADED_LONG_KEY);
 		
+	}
+
+	/**
+	 * @return the seeds
+	 */
+	public int getSeeds() {
+		return seeds;
 	}
 
 	/**
