@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.lordroid.cupcake.res.R;
+import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
 public class MovieItem extends JPanel{
@@ -109,7 +110,7 @@ public class MovieItem extends JPanel{
 		imdbRatingLab.setBounds(50, 49, 20, 20);
 		
 		this.viewsIcon.setBounds(88,49,60,20);
-		this.viewCountLab.setText(movie.getDownloadCount()+"");
+		this.viewCountLab.setText(TimeUtils.getFormatedViewCount(movie.getDownloadCount()));
 		viewCountLab.setFont(R.VIEWS_FONT);
 		this.viewCountLab.setForeground(Color.WHITE);
 		this.viewCountLab.setBounds(113	, 49, 32, 20);

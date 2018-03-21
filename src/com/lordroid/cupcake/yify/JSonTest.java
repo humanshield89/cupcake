@@ -19,32 +19,6 @@ public class JSonTest {
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
 		System.out.println("Start time " + System.currentTimeMillis());
-		// TODO Auto-generated method stub
-		// File json = new File("a.json");
-		// URL url = new URL("https://yts.am/api/v2/list_movies.json");
-		// url.openConnection();
-		// InputStream in = url.openStream();
-		// FileUtils.copyFile(in, json);
-		// System.out.print(json.exists());
-		System.setProperty(
-				"http.agent",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-		JSONObject json = JSONComunicator
-				.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year");
-		JSONObject data = (JSONObject) json.getJSONObject("data");
-		JSONArray arr = data.getJSONArray("movies");
-		JSONArray arrays[] = new JSONArray[10];
-		arrays[0] = arr;
-		int n = 1;
-//		for (int i = 2 ; i < 10 ; i++){
-//			json = JSONComunicator
-//					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"+"&page="+i);
-//			data = (JSONObject) json.getJSONObject("data");
-//			arr = data.getJSONArray("movies");
-//			arrays[n] = arr;
-//			n++;
-//		}
-		ArrayList<YifyMovie> movies = new ArrayList<YifyMovie>();
 		start = System.currentTimeMillis();
 		JFrame frame = new JFrame ();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,62 +31,89 @@ public class JSonTest {
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		//scrollPane.add(pan);
-		pan.setLayout(new ModifiedFlowLayout(ModifiedFlowLayout.LEFT, 10, 20));
+		pan.setLayout(new ModifiedFlowLayout(ModifiedFlowLayout.CENTER, 10, 20));
 		pan.setBackground(Color.GRAY);
 		//scrollPane.setPreferredSize(new Dimension(frame.getWidth(),frame.getHeight()));
 		//pan.setLayout(new FlowLayout());
 		frame.add(scrollPane,BorderLayout.CENTER);
 		frame.setVisible(true);
+		// TODO Auto-generated method stub
+		// File json = new File("a.json");
+		// URL url = new URL("https://yts.am/api/v2/list_movies.json");
+		// url.openConnection();
+		// InputStream in = url.openStream();
+		// FileUtils.copyFile(in, json);
+		// System.out.print(json.exists());
+		System.setProperty(
+				"http.agent",
+				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
+		JSONObject json = JSONComunicator
+				.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50");
+		JSONObject data = (JSONObject) json.getJSONObject("data");
+		JSONArray arr = data.getJSONArray("movies");
+		JSONArray arrays[] = new JSONArray[10];
+		arrays[0] = arr;
+		int n = 1;
+		for (int i = 2 ; i < 144 ; i++){
+			json = JSONComunicator
+					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"+"&page="+i);
+			data = (JSONObject) json.getJSONObject("data");
+			arr = data.getJSONArray("movies");
+			arrays[n] = arr;
+			for (int i1 = 0; i1 < arr.length(); i1++) {
+				YifyMovie m = new YifyMovie(arr.getJSONObject(i1));
+				//movies.add(m);
+				pan.add(new MovieItem(m));
 
-		for ( n = 0 ; n < arrays.length ; n++) {
-			arr = arrays[n];
-		
-		for (int i = 0; i < arr.length(); i++) {
-			YifyMovie m = new YifyMovie(arr.getJSONObject(i));
-			//movies.add(m);
-			pan.add(new MovieItem(m));
+				// JSONObject movie = arr.getJSONObject(i);
+				// System.out.println("========================================================");
+				// System.out.println("=======    "+movie.getString("title")+"");
+				// System.out.println("========================================================");
+				// System.out.println("======= release year : "+movie.getInt("year"));
+				// System.out.println("======= Description : "+movie.getString("summary"));
+				// System.out.println("======= torrent : "+movie.getJSONArray("torrents").getJSONObject(0).getString("url"));
+				// System.out.println("======= seeders : "+movie.getJSONArray("torrents").getJSONObject(0).getInt("seeds"));
+				// System.out.println("======= leachers : "+movie.getJSONArray("torrents").getJSONObject(0).getInt("peers"));
+				// String image = movie.getString("background_image");
+				// System.out.println(image);
+				// URL u = new URL(image);
+				// HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+				// c.setRequestMethod("GET");
+				// c.setRequestProperty("Content-length", "0");
+				// c.setUseCaches(false);
+				// c.setAllowUserInteraction(false);
+				// c.setConnectTimeout(1000);
+				// c.setReadTimeout(5000);
+				// c.connect();
+				// InputStream is = c.getInputStream();
+				// //FileUtils.copyFile(is, new File("image"+i+".jpg"));
+				// OutputStream out = new FileOutputStream(new
+				// File("image"+i+".jpg"));
+				// byte[] buffer = new byte[32768];
+				// int len;
+				// while ((len = is.read(buffer)) != -1) {
+				// out.write(buffer, 0, len);
+				// }
+				// //in.close();
+				// out.close();
+				// is.close();
+				// c.disconnect();
+				
+				//frame.pack();
+				pan.revalidate();
+			}
+			n++;
+		}
+		//ArrayList<YifyMovie> movies = new ArrayList<YifyMovie>();
 
-			// JSONObject movie = arr.getJSONObject(i);
-			// System.out.println("========================================================");
-			// System.out.println("=======    "+movie.getString("title")+"");
-			// System.out.println("========================================================");
-			// System.out.println("======= release year : "+movie.getInt("year"));
-			// System.out.println("======= Description : "+movie.getString("summary"));
-			// System.out.println("======= torrent : "+movie.getJSONArray("torrents").getJSONObject(0).getString("url"));
-			// System.out.println("======= seeders : "+movie.getJSONArray("torrents").getJSONObject(0).getInt("seeds"));
-			// System.out.println("======= leachers : "+movie.getJSONArray("torrents").getJSONObject(0).getInt("peers"));
-			// String image = movie.getString("background_image");
-			// System.out.println(image);
-			// URL u = new URL(image);
-			// HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
-			// c.setRequestMethod("GET");
-			// c.setRequestProperty("Content-length", "0");
-			// c.setUseCaches(false);
-			// c.setAllowUserInteraction(false);
-			// c.setConnectTimeout(1000);
-			// c.setReadTimeout(5000);
-			// c.connect();
-			// InputStream is = c.getInputStream();
-			// //FileUtils.copyFile(is, new File("image"+i+".jpg"));
-			// OutputStream out = new FileOutputStream(new
-			// File("image"+i+".jpg"));
-			// byte[] buffer = new byte[32768];
-			// int len;
-			// while ((len = is.read(buffer)) != -1) {
-			// out.write(buffer, 0, len);
-			// }
-			// //in.close();
-			// out.close();
-			// is.close();
-			// c.disconnect();
-			
-			//frame.pack();
-			frame.revalidate();
-		}
-			// just remove this incase of tests 
-		 break;
-		}
-			
+
+//		for ( n = 0 ; n < arrays.length ; n++) {
+//			arr = arrays[n];
+//		
+//
+//			// just remove this incase of tests 
+//		}
+//			
 
 //		for (YifyMovie movie : movies) {
 //			String genres = "";

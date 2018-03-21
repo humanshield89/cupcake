@@ -30,8 +30,8 @@ import javax.imageio.ImageIO;
  */
 public class R {
 	public static final Font NORMAL_FONT = new Font("Arial", Font.BOLD, 12);
-	public static final Font MOVIE_TITLE_FONT = new Font("Arial", Font.BOLD, 16);
-	public static final Font VIEWS_FONT = new Font("Arial", Font.PLAIN, 8);
+	public static final Font MOVIE_TITLE_FONT = new Font("Arial", Font.BOLD, 12);
+	public static final Font VIEWS_FONT = new Font("Arial", Font.PLAIN, 10);
 	public static final Font DESCRIPTION_FONT = new Font("Arial", Font.BOLD, 12);
 	public static final Font GENRE_FONT = new Font("Arial", Font.BOLD, 10);
 
