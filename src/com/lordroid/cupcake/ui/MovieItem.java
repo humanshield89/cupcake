@@ -31,7 +31,10 @@ public class MovieItem extends JPanel {
 			//this.repaint();
 			BufferedImage img = null;
 			try {
-				img = coverImage.getSubimage(0, 145, 230, 200);
+				if(entered)
+					img = coverImage.getSubimage(0, 145, 230, 200);
+				else
+					img = coverImage.getSubimage(0, infoPanY, 230, 200);
 			} catch (Exception e) {
 				
 			}
@@ -196,6 +199,8 @@ public class MovieItem extends JPanel {
 					//revalidate();
 				}
 				infoPan.repaint();
+				repaint();
+				revalidate();
 			}
 
 			public void mousePressed(MouseEvent arg0) {
@@ -226,8 +231,13 @@ public class MovieItem extends JPanel {
 			}
 		}
 		g2d.drawImage(coverImage, 0, 0, this);
-		g2d.drawImage(R.BORDER_IMAGE, this.getWidth(), this.getHeight(),this);
-		infoPan.setBackground(new Color(0,0,0,122));
+		g2d.drawImage(R.BORDER_IMAGE, 0, 0,this);
+		g2d.setColor(new Color(254,254,254,122));
+		if (entered){
+			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+		
+		//infoPan.setBackground(new Color(0,0,0,122));
 		//revalidate();
 	}
 }
