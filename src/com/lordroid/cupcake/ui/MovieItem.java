@@ -52,6 +52,10 @@ public class MovieItem extends JPanel {
 			g2d.drawImage(img, 0, 0, this);
 			
 			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+			if (entered){
+				g2d.setColor(new Color(254,254,254,60));
+				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+			}
 		}
 	};
 	private final int infoPanX;
