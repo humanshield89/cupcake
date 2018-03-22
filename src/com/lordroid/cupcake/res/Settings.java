@@ -33,8 +33,8 @@ public class Settings {
 	public static final String[] SORT_BY_COMBO_ARRAY = { "Added date", "Year",
 			"Title", "Rating", "Most Watched", "Most Liked" };
 
-	public static final String[] MINIMUM_RATING_COMBO_ARRAY = { "All ratings",
-			" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 " };
+	public static final String[] MINIMUM_RATING_COMBO_ARRAY = { "All",
+			"1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+" };
 	public static final String[] GENRES_COMBO_ARRAY = { "All","Action", "Adventure",
 			"Animation", "Biography", "Comedy", "Crime", "Documentary",
 			"Drama", "Family", "Fantasy", "Film Noir", "History", "Horror",
@@ -44,7 +44,9 @@ public class Settings {
 	public static final String[] QUALITY_COMBO = {"All","720p","1080p","3D"};
 	public static final int[] MAX_RESULT_PER_SEARCH = {10,15,20,25,30,35,40,45,50};
 	
-	
+	public static final String[] ORDER_KEYS = {"desc","asc"};
+	public static final String[] ORDER_COMBO = {"Descending","Ascending"};
+
 	public static int getCurrentQuality() {
 		return 0;
 	}
@@ -91,6 +93,11 @@ public class Settings {
 		return 1;
 	}
 
+	public static int getCurrentOrder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public static void setCurrentQuality(int quality) {
 		// TODO Auto-generated method stub
 		
@@ -107,6 +114,11 @@ public class Settings {
 	}
 
 	public static void setCurrentminRating(int minRating) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void setCurrentOrder(int order) {
 		// TODO Auto-generated method stub
 		
 	}

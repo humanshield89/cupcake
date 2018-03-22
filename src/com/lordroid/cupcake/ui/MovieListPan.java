@@ -1,6 +1,7 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,10 +37,14 @@ public class MovieListPan extends JPanel implements ActionListener {
 	private JPanel seachPanContainer = new JPanel();
 	// sort by components
 	private JLabel sortByLabel = new JLabel("Sort by : ");
-	JComboBox<String> sortByCombo = new JComboBox<String>(
+	private JComboBox<String> sortByCombo = new JComboBox<String>(
 			Settings.SORT_BY_COMBO_ARRAY);
+	//order components
+	private JLabel orderLab = new JLabel("Order : ");
+	private JComboBox<String> orderCombo = new JComboBox<String>(Settings.ORDER_COMBO);
+	
 	// minimum ratting components
-	private JLabel minimumRatingLab = new JLabel("Minimum rating : ");
+	private JLabel minimumRatingLab = new JLabel("rating : ");
 	private JComboBox<String> minRatingCombo = new JComboBox<String>(
 			Settings.MINIMUM_RATING_COMBO_ARRAY);
 	// genre component
@@ -76,12 +81,14 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	private int maxPage;
 
+	private int order;
 	public MovieListPan() {
 		// initialize default or previously selected values
 		sortByCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
 		minRatingCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
 		genreCombo.setSelectedIndex(Settings.getCurrentGenre());
 		qualityCombo.setSelectedIndex(Settings.getCurrentQuality());
+		orderCombo.setSelectedIndex(Settings.getCurrentOrder());
 		searchField.setText(SEARHC_DEFAULT_TEXT);
 		searchField.setPreferredSize(new Dimension(148, 23));
 
@@ -96,6 +103,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 		seachPanContainer.add(qualityCombo);
 		seachPanContainer.add(sortByLabel);
 		seachPanContainer.add(sortByCombo);
+		seachPanContainer.add(orderLab);
+		seachPanContainer.add(orderCombo);
 		seachPanContainer.add(searchField);
 		seachPanContainer.add(searchBtn);
 
@@ -103,6 +112,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 		movieListContainer.setOpaque(false);
 		movieListContainer.setLayout(new ModifiedFlowLayout());
 		scrollPan = new JScrollPane(movieListContainer);
+		movieListContainer.setBackground(Color.BLACK);
+		scrollPan.setBackground(Color.GRAY);
 		scrollPan.getVerticalScrollBar().setUnitIncrement(20);
 		seachPanContainer.setBorder(BorderFactory
 				.createTitledBorder("Search Options"));
@@ -154,7 +165,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		movieListContainer.remove(loadMoreBtn);
 		page++;
 		String url = JSONComunicator.getJsonQueryUrl(page, quality, minRating,
-				term, genre, sortBy);
+				term, genre, sortBy,order);
 		App.LOGGER.info(url);
 		// let's JSON
 		JSONObject obj = null;
@@ -232,12 +243,14 @@ public class MovieListPan extends JPanel implements ActionListener {
 		genre = this.genreCombo.getSelectedIndex();
 		term = this.searchField.getText();
 		minRating = this.minRatingCombo.getSelectedIndex();
+		order = this.orderCombo.getSelectedIndex();
 		Settings.setCurrentQuality(quality);
 		Settings.setCurrentSortBy(sortBy);
 		Settings.setCurrentGenre(genre);
 		Settings.setCurrentminRating(minRating);
+		Settings.setCurrentOrder(order);
 		String url = JSONComunicator.getJsonQueryUrl(page, quality, minRating,
-				term, genre, sortBy);
+				term, genre, sortBy,order);
 		App.LOGGER.info(url);
 		// let's JSON
 		JSONObject obj = null;

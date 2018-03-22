@@ -26,7 +26,7 @@ public class JSONComunicator {
 	}
 
 	public static JSONObject readJsonFromUrl(String url) throws IOException,
-			JSONException, Exception{
+			JSONException, Exception {
 		// InputStream is = new URL(url).openStream();
 		URL u = new URL(url);
 		HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
@@ -54,33 +54,42 @@ public class JSONComunicator {
 		}
 	}
 
-	public static String getJsonQueryUrl( int page, int quality,
-			int minimumRating, String queryTerm, int genre, int sortBy) {
-		int limit = Settings.MAX_RESULT_PER_SEARCH[Settings.getMaxSearchItemsPerPage()];
+	public static String getJsonQueryUrl(int page, int quality,
+			int minimumRating, String queryTerm, int genre, int sortBy,
+			int order) {
+		int limit = Settings.MAX_RESULT_PER_SEARCH[Settings
+				.getMaxSearchItemsPerPage()];
 		String query = API_URL + YifyS.REQUEST_LIMIT_KEY + limit + "&"
 				+ YifyS.REQUEST_PAGE_KEY + page + "&"
-				+ YifyS.REQUEST_MINIM_RATING_KEY + minimumRating+"&"+YifyS.REQUEST_SORT_BY_KEY+Settings.SORT_BY_KEY_ARRAY[sortBy];
-		
+				+ YifyS.REQUEST_MINIM_RATING_KEY + minimumRating + "&"
+				+ YifyS.REQUEST_SORT_BY_KEY
+				+ Settings.SORT_BY_KEY_ARRAY[sortBy] + "&"
+				+ YifyS.REQUEST_ORDER_BY_KEY + Settings.ORDER_KEYS[order];
+
 		if (quality != 0) {
-			// if user chose a quality add it to the url 
-			query = query + "&" +YifyS.REQUEST_QUALITY_KEY+Settings.QUALITY_COMBO[quality];
+			// if user chose a quality add it to the url
+			query = query + "&" + YifyS.REQUEST_QUALITY_KEY
+					+ Settings.QUALITY_COMBO[quality];
 		}
 
 		if (genre != 0) {
 			// add it the the query url
-			query = query + "&" + YifyS.REQUEST_GENRE_KEY+Settings.GENRES_COMBO_ARRAY[genre];
+			query = query + "&" + YifyS.REQUEST_GENRE_KEY
+					+ Settings.GENRES_COMBO_ARRAY[genre];
 		}
-		if (!queryTerm.equals(null) && !queryTerm.equals("") && !queryTerm.equals(MovieListPan.SEARHC_DEFAULT_TEXT)){
-			// add query term 
-			String queryTermFormated= "";
-			for (int i = 0 ; i < queryTerm.length() ; i++){
-				if(queryTerm.charAt(i)== ' '){
-					queryTermFormated= queryTermFormated + "+";
+		if (!queryTerm.equals(null) && !queryTerm.equals("")
+				&& !queryTerm.equals(MovieListPan.SEARHC_DEFAULT_TEXT)) {
+			// add query term
+			String queryTermFormated = "";
+			for (int i = 0; i < queryTerm.length(); i++) {
+				if (queryTerm.charAt(i) == ' ') {
+					queryTermFormated = queryTermFormated + "+";
 				} else {
 					queryTermFormated = queryTermFormated + queryTerm.charAt(i);
 				}
 			}
-			query = query + "&"+ YifyS.REQUEST_QUERY_TERM_KEY+queryTermFormated;
+			query = query + "&" + YifyS.REQUEST_QUERY_TERM_KEY
+					+ queryTermFormated;
 		}
 		return query;
 

@@ -19,6 +19,10 @@
 package com.lordroid.cupcake;
 
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -84,13 +88,31 @@ public class App {
 		System.out.println(PathUtils.getExcutionPath());
 		//JSonTest.main(args);
 		MovieListPan pan = new MovieListPan();
-		JFrame frame = new JFrame();
+		final JFrame frame = new JFrame();
 		frame.add(pan);
 		frame.setSize(900, 600);
 		frame.setMinimumSize(new Dimension(860,550));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pan.search();
+		frame.addPropertyChangeListener(new PropertyChangeListener(){
+
+			public void propertyChange(PropertyChangeEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(""+frame.getWidth()+"x"+frame.getHeight());
+			}
+			
+		});
+		frame.addWindowStateListener(new WindowStateListener(){
+
+			public void windowStateChanged(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(""+frame.getWidth()+"x"+frame.getHeight());
+			}
+
+
+			
+		});
 //		new NativeDiscovery().discover();
 //		LOGGER.info("initializing libvlc...");
 		
