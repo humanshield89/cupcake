@@ -7,8 +7,8 @@ public class YifyS {
 	public static final String REQUEST_LIMIT_KEY = "limit=";
 	public static final String REQUEST_PAGE_KEY = "page=";
 	public static final String REQUEST_QUALITY_KEY = "quality=";
-	public static final String REQUEST_MINIM_RATING_KEY = " minimum_rating=";
-	public static final String REQUEST_QUERY_TERM_KEY = " query_term=";
+	public static final String REQUEST_MINIM_RATING_KEY = "minimum_rating=";
+	public static final String REQUEST_QUERY_TERM_KEY = "query_term=";
 	public static final String REQUEST_GENRE_KEY = "genre=";
 	public static final String REQUEST_SORT_BY_KEY = "sort_by=";
 	public static final String REQUEST_ORDER_BY_KEY = "order_by=";

@@ -52,12 +52,12 @@ public class TimeUtils {
 			return String.format("%.1f", viewD)+"M";
 		} else if (views / 1000 >= 1) {
 			viewD = ((double) views) / 1000;
-			return String.format("%.1f", viewD)+"K";
+			return String.format("%.0f", viewD)+"K";
 		}
 		
 		
 		
-		return views+"";
+		return ">1k";
 		
 	}
 }

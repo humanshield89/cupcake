@@ -34,6 +34,7 @@
             <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/vlcj-3.10.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/weblaf-1.28.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/xstream-1.4.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/HumanShield85/workspace/cupcakeant/libs/gson-2.8.2.jar"/>
         </jar>
     </target>
 </project>

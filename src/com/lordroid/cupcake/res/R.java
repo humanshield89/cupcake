@@ -34,6 +34,7 @@ public class R {
 	public static final Font VIEWS_FONT = new Font("Arial", Font.PLAIN, 10);
 	public static final Font DESCRIPTION_FONT = new Font("Arial", Font.BOLD, 12);
 	public static final Font GENRE_FONT = new Font("Arial", Font.BOLD, 10);
+	public static final Font LOAD_MORE_FONT = new Font("Arial", Font.BOLD, 18);
 
 
 	public static final Image ICON = getIcon("icon.png");

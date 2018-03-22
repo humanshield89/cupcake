@@ -61,7 +61,7 @@ public class YifyMovie {
 			// TODO Auto-generated catch block
 			movie = movieArg;
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			movie = movieArg;
 			e.printStackTrace();
@@ -200,9 +200,10 @@ public class YifyMovie {
 	public void cacheCoverImageMedium() {
 
 		if (!isCoverMediumBeingCached) {
-//			new Thread(new Runnable() {
-//
-//				public void run() {
+			new Thread(new Runnable() {
+
+				public void run() {
+					isCoverMediumBeingCached = true;
 					// TODO Auto-generated method stub medium-cover.jpg
 					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
@@ -227,9 +228,10 @@ public class YifyMovie {
 					}
 					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
-//				}
-//
-//			}).start();
+					isCoverMediumBeingCached = false;
+				}
+
+			}).start();
 		}
 
 	}

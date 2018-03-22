@@ -27,6 +27,7 @@ import com.lordroid.cupcake.utils.PathUtils;
  * 
  */
 public class S {
+	
 	public static final String SYSTEM_TMP_FOLDER = System
 			.getProperty("java.io.tmpdir") + "cupcake" + File.separator;
 	public static final File DEFAULT_BG = new File(PathUtils.getExcutionPath()
@@ -53,5 +54,6 @@ public class S {
 	public static final String[] SUB_EXT = { "srt", "vtt" };
 	public static final File DEFAULT_COVER = new File(PathUtils.getExcutionPath()
 			+ File.separator + "resources" + File.separator + "default_cover_medium.jpg");
+	
 
 }

@@ -39,8 +39,8 @@ public class HttpsDownloadUtility {
 		if (responseCode == HttpsURLConnection.HTTP_OK) {
 			String fileName = "";
 			String disposition = httpConn.getHeaderField("Content-Disposition");
-			String contentType = httpConn.getContentType();
-			int contentLength = httpConn.getContentLength();
+//			String contentType = httpConn.getContentType();
+//			int contentLength = httpConn.getContentLength();
 
 			if (disposition != null) {
 				// extracts file name from header field
@@ -76,10 +76,10 @@ public class HttpsDownloadUtility {
 			outputStream.close();
 			inputStream.close();
 
-			App.LOGGER.info("File downloaded");
+			App.LOGGER.debug("File downloaded");
 		} else {
 
-			App.LOGGER.info("No file to download. Server replied HTTP code: "
+			App.LOGGER.debug("No file to download. Server replied HTTP code: "
 					+ responseCode);
 		}
 		httpConn.disconnect();

@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -20,13 +20,15 @@ import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
-public class MovieItem extends JPanel{
-
+public class MovieItem extends JPanel {
+	MovieItem thisPan ;
 	private final YifyMovie movie ;
 	private BufferedImage coverImage ;
+	private boolean isImageCached = false;
 	private JPanel infoPan = new JPanel(){
 		public void paintComponent(Graphics g){
 			//Graphics2D g2 = (Graphics2D) g;
+			//this.repaint();
 			BufferedImage img = null;
 			try {
 				img = coverImage.getSubimage(0, 145, 230, 200);
@@ -78,12 +80,14 @@ public class MovieItem extends JPanel{
 	private final int infoPanHoveredY;
 	
 	public MovieItem(YifyMovie moviearg) {
-		
+		 thisPan = this;
 		this.movie = moviearg;
 		try {
 			coverImage = ImageIO.read(movie.getCoverImageFileMedium());
+			this.isImageCached = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			this.isImageCached = false;
 			try {
 				coverImage = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("default_cover_medium.jpg"));
 			} catch (Exception e1) {
@@ -178,8 +182,8 @@ public class MovieItem extends JPanel{
 				if (entered ) {
 					infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
 					infoPan.repaint();
-					System.out.println("stuck here !");
-					//revalidate();
+					repaint();
+					revalidate();
 				}
 				
 			}
@@ -209,11 +213,15 @@ public class MovieItem extends JPanel{
 	
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		if (!movie.isCoverMediumCached()) {
+		if (!this.isImageCached) {
+			System.out.println("updating image");
 			try {
 				coverImage = ImageIO.read(movie.getCoverImageFileMedium());
-			} catch (IOException e) {
+				isImageCached =true;
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
+				isImageCached =false;
+
 				e.printStackTrace();
 			}
 		}

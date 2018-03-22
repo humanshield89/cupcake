@@ -16,8 +16,7 @@ public class JSonTest {
 	static long start;
 	static long end;
 
-	public static void main(String[] args) throws IOException,
-			InterruptedException {
+	public static void main(String[] args) throws JSONException, Exception {
 		System.out.println("Start time " + System.currentTimeMillis());
 		start = System.currentTimeMillis();
 		JFrame frame = new JFrame ();
@@ -54,7 +53,7 @@ public class JSonTest {
 		JSONArray arrays[] = new JSONArray[10];
 		arrays[0] = arr;
 		int n = 1;
-		for (int i = 2 ; i < 144 ; i++){
+		for (int i = 2 ; i < 3 ; i++){
 			json = JSONComunicator
 					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"+"&page="+i);
 			data = (JSONObject) json.getJSONObject("data");
