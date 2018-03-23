@@ -3,7 +3,9 @@ package com.lordroid.cupcake.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,6 +22,10 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.alee.laf.WebLookAndFeel;
+import com.alee.laf.button.WebButton;
+import com.alee.laf.combobox.WebComboBox;
+import com.alee.laf.panel.WebPanel;
 import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Settings;
@@ -36,17 +42,30 @@ public class MovieListPan extends JPanel implements ActionListener {
 	private ArrayList<YifyMovie> moviesList = new ArrayList<YifyMovie>();
 
 	// JPanel mainContainer = new JPa
-	private JPanel seachPanContainer = new JPanel();
+	private WebPanel seachPanContainer = new WebPanel(){
+		public void paintComponent(Graphics g){
+			int i = 0;
+			int n = 0;
+			while (n < this.getHeight()) {
+				i = 0;
+				while (i < this.getWidth()){
+					g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
+					i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
+				}
+				n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
+			}
+		}
+	};
 	// sort by components
 	private JLabel sortByLabel = new JLabel("Sort by : ");
-	private JComboBox<String> sortByCombo = new JComboBox<String>(
+	private WebComboBox sortByCombo = new WebComboBox(
 			Settings.SORT_BY_COMBO_ARRAY);
 	//order components
 	private JLabel orderLab = new JLabel("Order : ");
 	private JComboBox<String> orderCombo = new JComboBox<String>(Settings.ORDER_COMBO);
 	
 	// minimum ratting components
-	private JLabel minimumRatingLab = new JLabel("rating : ");
+	private JLabel minimumRatingLab = new JLabel("Rating : ");
 	private JComboBox<String> minRatingCombo = new JComboBox<String>(
 			Settings.MINIMUM_RATING_COMBO_ARRAY);
 	// genre component
@@ -59,16 +78,30 @@ public class MovieListPan extends JPanel implements ActionListener {
 			Settings.QUALITY_COMBO);
 
 	private JTextField searchField = new JTextField();
-	private JButton searchBtn = new JButton("Search");
+	private WebButton searchBtn = new WebButton("Search");
 
-	private JPanel movieListContainer = new JPanel();
+	private JPanel movieListContainer = new JPanel(){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+				int i = 0;
+				int n = 0;
+				while (n < this.getHeight()) {
+					i = 0;
+					while (i < this.getWidth()){
+						g.drawImage(R.LIST_BACKGROUND_IMG, i, n, this);
+						i = i + R.LIST_BACKGROUND_IMG.getWidth(this);
+					}
+					n = n + R.LIST_BACKGROUND_IMG.getHeight(this);
+				}
+		}
+	};
 	private JScrollPane scrollPan;
 
-	private JButton loadMoreBtn = new JButton("Load more");
+	private LoadMoreLab loadMoreBtn = new LoadMoreLab();
 
 	private JLabel noResult = new JLabel("No results found try with diferent search options");
 	private JLabel noResponse = new JLabel("Couldn't fetch data from remote server please check your connection");
-	private JLabel noMoreentriesLab = new JLabel("No more entrie to show /End of list ");
+	private JLabel noMoreentriesLab = new JLabel("No more entries to show /End of list ");
 	
 	private int page;
 
@@ -86,6 +119,26 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	private int order;
 	public MovieListPan() {
+		//sortByCombo.setBackground(Color.BLACK);
+		//seachPanContainer.set
+		//searchBtn.setTopBgColor(new Color(50,50,50,60));
+		//searchBtn.setBottomBgColor(new Color(254,254,254,60));
+		
+//		loadMoreBtn.setTopBgColor(new Color(50,50,50,60));
+//		loadMoreBtn.setBottomBgColor(new Color(254,254,254,60));
+//		loadMoreBtn.setTopSelectedBgColor(new Color(50,50,50,120));
+//		loadMoreBtn.setBottomSelectedBgColor(new Color(254,254,254,120));
+//		loadMoreBtn.setAnimate(true);
+		//sortByCombo.get
+		
+		
+		seachPanContainer.setLayout(new FlowLayout());
+		seachPanContainer.setBackground(Color.BLACK);
+		genreLab.setForeground(Color.WHITE);
+		minimumRatingLab.setForeground(Color.WHITE);
+		qualityLab.setForeground(Color.WHITE);
+		sortByLabel.setForeground(Color.WHITE);
+		orderLab.setForeground(Color.WHITE);
 		// initialize default or previously selected values
 		sortByCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
 		minRatingCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
@@ -113,15 +166,15 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 		// movie list container init
 		movieListContainer.setOpaque(false);
-		movieListContainer.setLayout(new ModifiedFlowLayout());
+		movieListContainer.setLayout(new ModifiedFlowLayout(ModifiedFlowLayout.CENTER,10,20));
 		scrollPan = new JScrollPane(movieListContainer);
 		this.scrollPan.setOpaque(false);
 		movieListContainer.setBackground(Color.BLACK);
 		scrollPan.setBackground(Color.GRAY);
 		scrollPan.getVerticalScrollBar().setUnitIncrement(20);
-		seachPanContainer.setBorder(BorderFactory
-				.createTitledBorder("Search Options"));
-
+		//seachPanContainer.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+		//BorderFactory
+		//.createTitledBorder("Search Options")
 		this.add(this.seachPanContainer, BorderLayout.NORTH);
 		this.add(scrollPan, BorderLayout.CENTER);
 
@@ -215,8 +268,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 		if (movies != null && movies.length() > 0) {
 			// TODO : keep track of elements ? a List maybe 
 			for (int i = 0; i < movies.length(); i++) {
-				movieListContainer.add(new MovieItem(new YifyMovie(
-						(JSONObject) movies.get(i))));
+				movieListContainer.add(new MovieShadowPan(new MovieItem(new YifyMovie(
+						(JSONObject) movies.get(i)))));
 				movieListContainer.revalidate();
 				JScrollBar vertical = scrollPan.getVerticalScrollBar();
 				vertical.setValue( vertical.getMaximum() );
@@ -224,9 +277,9 @@ public class MovieListPan extends JPanel implements ActionListener {
 			}
 
 			if (page < maxPage) {
-				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
-				loadMoreBtn.setPreferredSize(new Dimension(
-						this.getWidth() - 30, 40));
+//				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
+//				loadMoreBtn.setPreferredSize(new Dimension(
+//						this.getWidth() - 30, 40));
 				movieListContainer.add(loadMoreBtn);
 			}
 		} else {
@@ -328,15 +381,15 @@ public class MovieListPan extends JPanel implements ActionListener {
 		if (movies != null && movies.length() > 0) {
 			for (int i = 0; i < movies.length(); i++) {
 
-				movieListContainer.add(new MovieItem(new YifyMovie(
-						(JSONObject) movies.get(i))));
+				movieListContainer.add(new MovieShadowPan(new MovieItem(new YifyMovie(
+						(JSONObject) movies.get(i)))));
 				movieListContainer.revalidate();
 
 			}
 			if (page < maxPage && maxPage != 0) {
-				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
-				loadMoreBtn.setPreferredSize(new Dimension(
-						this.getWidth() - 30, 40));
+//				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
+//				loadMoreBtn.setPreferredSize(new Dimension(
+//						this.getWidth() - 30, 40));
 				movieListContainer.add(loadMoreBtn);
 			} else {
 				noMoreEntries();

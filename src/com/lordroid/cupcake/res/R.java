@@ -74,7 +74,16 @@ public class R {
 	public static final Image PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
 
 	
-	public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
+	//public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
+	public static final Image LIST_BACKGROUND_IMG = getIcon("wood.png");
+	public static final Image MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
+	public static final Image SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
+	
+	public static final Image LOAD_MORE_BACK = getIcon("Load_More.png");
+	public static final Image LOAD_MORE_BACK_HOVERED = getIcon("Load_More_border.png");
+	public static final Image LOAD_MORE_BACK_PRESSED = getIcon("Load_More_border_pressed.png");
+
+
 
 	
 	private static Image getIcon(String file) {
