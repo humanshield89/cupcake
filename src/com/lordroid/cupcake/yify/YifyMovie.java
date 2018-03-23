@@ -53,6 +53,7 @@ public class YifyMovie {
 	private boolean has3d = false;
 
 	public YifyMovie(JSONObject movieArg) {
+		long start = System.currentTimeMillis();
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
 		try {
@@ -122,6 +123,8 @@ public class YifyMovie {
 		cacheCoverImageMedium();
 		sortTorrentsBySize();
 		setAvailableQualities();
+		long end = System.currentTimeMillis();
+		System.out.println("[YIFY Movie] total time to create movie = "+(end-start));
 	}
 
 	private void setAvailableQualities() {

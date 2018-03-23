@@ -5,11 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -17,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.lordroid.cupcake.res.R;
+import com.lordroid.cupcake.utils.GaussianFilter;
 import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
@@ -25,6 +24,8 @@ public class MovieItem extends JPanel {
 	private final YifyMovie movie ;
 	private BufferedImage coverImage ;
 	private boolean isImageCached = false;
+	private BufferedImage blurryImage ;
+	private boolean isBluredCached = false;
 	private JPanel infoPan = new JPanel(){
 		public void paintComponent(Graphics g){
 			//Graphics2D g2 = (Graphics2D) g;
@@ -32,7 +33,7 @@ public class MovieItem extends JPanel {
 			BufferedImage img = null;
 			try {
 				if(entered)
-					img = coverImage.getSubimage(0, 145, 230, 200);
+					img = blurryImage.getSubimage(0, 145, 230, 200);
 				else
 					img = coverImage.getSubimage(0, infoPanY, 230, 200);
 			} catch (Exception e) {
@@ -52,10 +53,10 @@ public class MovieItem extends JPanel {
 			g2d.drawImage(img, 0, 0, this);
 			
 			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-			if (entered){
-				g2d.setColor(new Color(254,254,254,60));
-				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-			}
+//			if (entered){
+//				g2d.setColor(new Color(254,254,254,60));
+//				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+//			}
 		}
 	};
 	private final int infoPanX;
@@ -102,6 +103,10 @@ public class MovieItem extends JPanel {
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+		}
+		if (isImageCached){
+			blurryImage = new GaussianFilter(10).filter(coverImage, blurryImage);
+			isBluredCached = true;
 		}
 		this.setSize(230, 345);
 		this.setPreferredSize(new Dimension(230,345));
@@ -234,13 +239,23 @@ public class MovieItem extends JPanel {
 				e.printStackTrace();
 			}
 		}
-		g2d.drawImage(coverImage, 0, 0, this);
-		g2d.drawImage(R.BORDER_IMAGE, 0, 0,this);
-		g2d.setColor(new Color(254,254,254,122));
-		if (entered){
-			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		if (isImageCached){
+			if (!isBluredCached){
+				long start = System.currentTimeMillis();
+				blurryImage = new GaussianFilter(10).filter(coverImage, blurryImage);
+				isBluredCached = true;
+				long end = System.currentTimeMillis();
+				System.out.println("total bluring time = "+(end-start));
+			}
 		}
-		
+
+		if (!entered){
+			//g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+			g2d.drawImage(coverImage, 0, 0, this);
+		} else {
+			g2d.drawImage(blurryImage, 0, 0, this);
+		}
+		g2d.drawImage(R.BORDER_IMAGE, 0, 0,this);
 		//infoPan.setBackground(new Color(0,0,0,122));
 		//revalidate();
 	}

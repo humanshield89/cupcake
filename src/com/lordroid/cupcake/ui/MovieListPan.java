@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -112,6 +113,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		movieListContainer.setOpaque(false);
 		movieListContainer.setLayout(new ModifiedFlowLayout());
 		scrollPan = new JScrollPane(movieListContainer);
+		this.scrollPan.setOpaque(false);
 		movieListContainer.setBackground(Color.BLACK);
 		scrollPan.setBackground(Color.GRAY);
 		scrollPan.getVerticalScrollBar().setUnitIncrement(20);
@@ -201,6 +203,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 				movies = data.getJSONArray("movies");
 			} catch (JSONException e) {
 				e.printStackTrace();
+				
 				movieListContainer.add(this.noResult);
 				this.searchBtn.setEnabled(true);
 				return;
@@ -212,13 +215,16 @@ public class MovieListPan extends JPanel implements ActionListener {
 			return;
 		}
 		if (movies != null && movies.length() > 0) {
+			// TODO : keep track of elements ? a List maybe 
 			for (int i = 0; i < movies.length(); i++) {
-
 				movieListContainer.add(new MovieItem(new YifyMovie(
 						(JSONObject) movies.get(i))));
 				movieListContainer.revalidate();
+				JScrollBar vertical = scrollPan.getVerticalScrollBar();
+				vertical.setValue( vertical.getMaximum() );
 
 			}
+
 			if (page < maxPage) {
 				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
 				loadMoreBtn.setPreferredSize(new Dimension(

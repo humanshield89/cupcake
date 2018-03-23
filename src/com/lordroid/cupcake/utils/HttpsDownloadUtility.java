@@ -86,4 +86,42 @@ public class HttpsDownloadUtility {
 
 		return new File(saveFilePath);
 	}
+	
+	
+	public static boolean downloadFileToDest(String fileURL, String saveDir)
+			throws IOException {
+		new File(saveDir).getParentFile().mkdirs();
+		String saveFilePath = null;
+		URL url = new URL(fileURL);
+		HttpsURLConnection httpConn = (HttpsURLConnection) url.openConnection();
+		int responseCode = httpConn.getResponseCode();
+
+		// always check HTTP response code first
+		if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+			InputStream inputStream = httpConn.getInputStream();
+			saveFilePath = saveDir ;
+			System.out.println(saveFilePath);
+			// opens an output stream to save into file
+			FileOutputStream outputStream = new FileOutputStream(new File(saveFilePath).getAbsolutePath());
+
+			int bytesRead = -1;
+			byte[] buffer = new byte[BUFFER_SIZE];
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+			}
+
+			outputStream.close();
+			inputStream.close();
+
+			App.LOGGER.debug("File downloaded");
+		} else {
+
+			App.LOGGER.debug("No file to download. Server replied HTTP code: "
+					+ responseCode);
+		}
+		httpConn.disconnect();
+
+		return true;
+	}
 }
