@@ -70,6 +70,8 @@ public class R {
 	public static final Image STATUS_MEDIUM = getIcon("status_medium.png");
 	public static final Image STATUS_POOR = getIcon("status_poor.png");
 	public static final Image BORDER_IMAGE = getIcon("border.png");
+	public static final Image PLAY_NOW_BTN_ICON = getIcon("playNow_btn.png");
+	public static final Image PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
 
 	
 	public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");

@@ -1,6 +1,7 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,7 +20,7 @@ import com.lordroid.cupcake.utils.GaussianFilter;
 import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
-public class MovieItem extends JPanel {
+public class MovieItem extends JPanel implements MouseListener{
 	MovieItem thisPan ;
 	private final YifyMovie movie ;
 	private BufferedImage coverImage ;
@@ -81,6 +82,7 @@ public class MovieItem extends JPanel {
 	private JLabel lab1080p = new JLabel(new ImageIcon(R.QUALITY_1080P));
 	private JLabel lab3d = new JLabel(new ImageIcon(R.QUALITY_3D));
 	
+	private PlayNowBtn playNowbtn = new PlayNowBtn();
 	
 	//private JLabel ratingIcon ;
 	
@@ -174,55 +176,19 @@ public class MovieItem extends JPanel {
 		infoPanX = 0;
 		infoPanHoveredY = 145;
 		infoPanWitdh = 230;
+		
+		playNowbtn.setBounds(15, 40, 200, 81);
+		playNowbtn.setVisible(false);
 		//infoPanHeight = 629;
 		//infoPanHeighthHovered = this.getHeight();
 		//infoPan.setBackground(new Color(0,0,0,122));
 		this.setLayout(null);
 		this.add(infoPan);
+		this.add(playNowbtn);
 		//this.setBackground(Color.BLACK);
 		
-		this.addMouseListener(new MouseListener(){
-
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				entered = true;
-				if (entered ) {
-					infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
-					infoPan.repaint();
-					repaint();
-					revalidate();
-				}
-				
-			}
-
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				entered = false;
-				if (!entered ){
-					infoPan.setBounds(0, infoPanY, 230, 200);
-					//revalidate();
-				}
-				infoPan.repaint();
-				repaint();
-				revalidate();
-			}
-
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
+		this.addMouseListener(this);
+		playNowbtn.addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -258,5 +224,64 @@ public class MovieItem extends JPanel {
 		g2d.drawImage(R.BORDER_IMAGE, 0, 0,this);
 		//infoPan.setBackground(new Color(0,0,0,122));
 		//revalidate();
+	}
+
+	
+	
+	
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		entered = true;
+
+		if (entered ) {
+			infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
+			if(!playNowbtn.isVisible())
+			playNowbtn.setVisible(true);
+			infoPan.repaint();
+			repaint();
+			//revalidate();
+		}
+		if (arg0.getSource().equals(playNowbtn)) {
+			playNowbtn.hovered = true;
+			playNowbtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			playNowbtn.repaint();
+		}
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		entered = false;
+
+
+		if (arg0.getSource().equals(playNowbtn)) {
+			playNowbtn.hovered = false;
+			playNowbtn.setCursor(Cursor.getDefaultCursor());
+			playNowbtn.repaint();
+		} else {
+			if (!entered ){
+				playNowbtn.setVisible(false);
+				infoPan.setBounds(0, infoPanY, 230, 200);
+				//revalidate();
+			}
+		}
+		infoPan.repaint();
+		repaint();
+		//revalidate();
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
