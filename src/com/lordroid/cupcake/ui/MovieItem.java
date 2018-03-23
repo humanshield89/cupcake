@@ -6,9 +6,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -16,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.lordroid.cupcake.res.R;
+import com.lordroid.cupcake.utils.DesktopUtils;
 import com.lordroid.cupcake.utils.GaussianFilter;
 import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
@@ -189,6 +194,19 @@ public class MovieItem extends JPanel implements MouseListener{
 		
 		this.addMouseListener(this);
 		playNowbtn.addMouseListener(this);
+		playNowbtn.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO send the user to the player 
+//				try {
+//					DesktopUtils.openWebpage(new URL(movie.getYoutubeTrailerURL()));
+//				} catch (MalformedURLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+			
+		});
 	}
 	
 	public void paintComponent(Graphics g) {

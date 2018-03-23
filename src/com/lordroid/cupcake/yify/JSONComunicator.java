@@ -10,18 +10,20 @@ import java.net.UnknownHostException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+
 import com.lordroid.cupcake.res.Settings;
 import com.lordroid.cupcake.ui.MovieListPan;
 
 public class JSONComunicator {
 	private static final String API_URL = "https://yts.am/api/v2/list_movies.json?";
 
-	private static String readAll(Reader rd) throws IOException {
+	private static String readAll(BufferedReader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		int cp;
-		while ((cp = rd.read()) != -1) {
-			sb.append((char) cp);
+		String line = null;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line);
 		}
+		
 		return sb.toString();
 	}
 
@@ -46,8 +48,9 @@ public class JSONComunicator {
 		try {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 			String jsonText = readAll(rd);
-			// System.out.print(jsonText);
 			JSONObject json = new JSONObject(jsonText);
+			is.close();
+			c.disconnect();
 			return json;
 		} finally {
 			is.close();

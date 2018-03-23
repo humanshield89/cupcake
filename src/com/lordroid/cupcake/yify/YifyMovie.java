@@ -9,6 +9,7 @@ import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 
 public class YifyMovie {
+	long end;
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
 	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
@@ -56,18 +57,21 @@ public class YifyMovie {
 		long start = System.currentTimeMillis();
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
-		try {
-			movie = JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			movie = movieArg;
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			movie = movieArg;
-			e.printStackTrace();
-		}
-		
+		// TODO find a faster way to do this
+		// 300 to 500 miliseconds to get the downlowd count is expensive and not worth it at all 
+//		try {
+//			movie = JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			movie = movieArg;
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			movie = movieArg;
+//			e.printStackTrace();
+//		}
+		end = System.currentTimeMillis();
+		System.out.println("[YIFY Movie] total time to grab JSON file  = "+(end-start));
 		this.url = movie.getString(YifyS.RESPONSE_URL_KEY);
 		this.imdbCode = movie.getString(YifyS.RESPONSE_IMDB_CODE_KEY);
 		this.title = movie.getString(YifyS.RESPONSE_TITLE_KEY);
@@ -78,8 +82,8 @@ public class YifyMovie {
 		this.rating = movie.getDouble(YifyS.RESPONSE_RATING_KEY);
 		
 		this.runtime = movie.getInt(YifyS.RESPONSE_RUNTIME_KEY);
-		this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
-		this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+		//this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		//this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
 		try {
 		JSONArray genreJSON = movieArg.getJSONArray(YifyS.RESPONSE_GENRES_KEY);
 		for (int i = 0; i < genreJSON.length(); i++) {
@@ -123,7 +127,7 @@ public class YifyMovie {
 		cacheCoverImageMedium();
 		sortTorrentsBySize();
 		setAvailableQualities();
-		long end = System.currentTimeMillis();
+		end = System.currentTimeMillis();
 		System.out.println("[YIFY Movie] total time to create movie = "+(end-start));
 	}
 
