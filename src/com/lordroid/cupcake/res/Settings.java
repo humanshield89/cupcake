@@ -25,7 +25,7 @@ import com.lordroid.cupcake.yify.YifyS;
  * 
  */
 public class Settings {
-	
+
 	public static final String[] SORT_BY_KEY_ARRAY = { YifyS.SORT_DATE_ADDED,
 			YifyS.SORT_YEAR, YifyS.SORT_TITLE, YifyS.SORT_RATING,
 			YifyS.SORT_DOWNLOAD_COUNT, YifyS.SORT_LIKE_COUNT };
@@ -33,24 +33,26 @@ public class Settings {
 	public static final String[] SORT_BY_COMBO_ARRAY = { "Added date", "Year",
 			"Title", "Rating", "Most Watched", "Most Liked" };
 
-	public static final String[] MINIMUM_RATING_COMBO_ARRAY = { "All",
-			"1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+" };
-	public static final String[] GENRES_COMBO_ARRAY = { "All","Action", "Adventure",
-			"Animation", "Biography", "Comedy", "Crime", "Documentary",
-			"Drama", "Family", "Fantasy", "Film Noir", "History", "Horror",
-			"Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Short",
-			"Sport", "Superhero", "Thriller", "War", "Western" };
+	public static final String[] MINIMUM_RATING_COMBO_ARRAY = { "All", "1+",
+			"2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+" };
+	public static final String[] GENRES_COMBO_ARRAY = { "All", "Action",
+			"Adventure", "Animation", "Biography", "Comedy", "Crime",
+			"Documentary", "Drama", "Family", "Fantasy", "Film Noir",
+			"History", "Horror", "Music", "Musical", "Mystery", "Romance",
+			"Sci-Fi", "Short", "Sport", "Superhero", "Thriller", "War",
+			"Western" };
 
-	public static final String[] QUALITY_COMBO = {"All","720p","1080p","3D"};
-	public static final int[] MAX_RESULT_PER_SEARCH = {10,15,20,25,30,35,40,45,50};
-	
-	public static final String[] ORDER_KEYS = {"desc","asc"};
-	public static final String[] ORDER_COMBO = {"Descending","Ascending"};
+	public static final String[] QUALITY_COMBO = { "All", "720p", "1080p", "3D" };
+	public static final int[] MAX_RESULT_PER_SEARCH = { 10, 15, 20, 25, 30, 35,
+			40, 45, 50 };
+
+	public static final String[] ORDER_KEYS = { "desc", "asc" };
+	public static final String[] ORDER_COMBO = { "Descending", "Ascending" };
 
 	public static int getCurrentQuality() {
 		return 0;
 	}
-	
+
 	public static int getCurrentMinimumRating() {
 		return 0;
 	}
@@ -62,9 +64,9 @@ public class Settings {
 
 	public static int getCurrentGenre() {
 		return 0;
-		
+
 	}
-	
+
 	public static void setDefaultSubtittleEncoding() {
 		// TODO : do something
 
@@ -87,39 +89,39 @@ public class Settings {
 		// TODO do something with this to store it to a file and restore on boot
 
 	}
-	
+
 	public static int getMaxSearchItemsPerPage() {
-		
-		return 1;
+
+		return 8;
 	}
 
 	public static int getCurrentOrder() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	public static void setCurrentQuality(int quality) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void setCurrentSortBy(int sortBy) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void setCurrentGenre(int genre) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void setCurrentminRating(int minRating) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void setCurrentOrder(int order) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

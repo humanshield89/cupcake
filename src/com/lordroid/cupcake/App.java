@@ -82,28 +82,27 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-		//JSonTest.main(args);
+		// JSonTest.main(args);
 		MovieListPan pan = new MovieListPan();
 		JFrame frame = new JFrame();
 		frame.add(pan);
 		frame.setSize(1000, 600);
-		frame.setMinimumSize(new Dimension(1000,600));
+		frame.setMinimumSize(new Dimension(1000, 600));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pan.search();
 
+		// new NativeDiscovery().discover();
+		// LOGGER.info("initializing libvlc...");
 
-//		new NativeDiscovery().discover();
-//		LOGGER.info("initializing libvlc...");
-		
-//		SwingUtilities.invokeLater(new Runnable() {
-//
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				new Frame();
-//			}
-//
-//		});
+		// SwingUtilities.invokeLater(new Runnable() {
+		//
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// new Frame();
+		// }
+		//
+		// });
 
 		// initVlcJ();
 		// new MainFram();

@@ -1,5 +1,6 @@
 package com.lordroid.cupcake.ui;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -10,18 +11,20 @@ import javax.swing.JButton;
 
 import com.lordroid.cupcake.res.R;
 
-public class LoadMoreLab extends JButton implements MouseListener{
-	
-	public LoadMoreLab () {
+@SuppressWarnings("serial")
+public class LoadMoreLab extends JButton implements MouseListener {
+
+	public LoadMoreLab() {
 		super(new ImageIcon(R.LOAD_MORE_BACK));
-		//this = new JLabel();
-		this.setPreferredSize(new Dimension(250,365));
+		// this = new JLabel();
+		this.setPreferredSize(new Dimension(250, 365));
 		this.addMouseListener(this);
+		this.setBackground(new Color(0, 0, 0, 0));
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
@@ -46,8 +49,5 @@ public class LoadMoreLab extends JButton implements MouseListener{
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(R.LOAD_MORE_BACK_HOVERED));
 	}
-	
-	
-	
-	
+
 }

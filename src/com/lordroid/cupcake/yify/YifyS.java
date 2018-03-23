@@ -69,6 +69,5 @@ public class YifyS {
 	public static final String RESPONSE_TORRENT_UPLOADED_LONG_KEY = "date_uploaded_unix";
 	public static final String RESPONSE_LIKE_COUNT_KEY = "like_count";
 	public static final String RESPONSE_DOWNLOAD_COUNT_KEY = "download_count";
-	
 
 }

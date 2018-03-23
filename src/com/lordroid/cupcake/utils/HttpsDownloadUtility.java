@@ -39,8 +39,8 @@ public class HttpsDownloadUtility {
 		if (responseCode == HttpsURLConnection.HTTP_OK) {
 			String fileName = "";
 			String disposition = httpConn.getHeaderField("Content-Disposition");
-//			String contentType = httpConn.getContentType();
-//			int contentLength = httpConn.getContentLength();
+			// String contentType = httpConn.getContentType();
+			// int contentLength = httpConn.getContentLength();
 
 			if (disposition != null) {
 				// extracts file name from header field
@@ -86,8 +86,7 @@ public class HttpsDownloadUtility {
 
 		return new File(saveFilePath);
 	}
-	
-	
+
 	public static boolean downloadFileToDest(String fileURL, String saveDir)
 			throws IOException {
 		new File(saveDir).getParentFile().mkdirs();
@@ -100,10 +99,11 @@ public class HttpsDownloadUtility {
 		if (responseCode == HttpsURLConnection.HTTP_OK) {
 
 			InputStream inputStream = httpConn.getInputStream();
-			saveFilePath = saveDir ;
+			saveFilePath = saveDir;
 			System.out.println(saveFilePath);
 			// opens an output stream to save into file
-			FileOutputStream outputStream = new FileOutputStream(new File(saveFilePath).getAbsolutePath());
+			FileOutputStream outputStream = new FileOutputStream(new File(
+					saveFilePath).getAbsolutePath());
 
 			int bytesRead = -1;
 			byte[] buffer = new byte[BUFFER_SIZE];

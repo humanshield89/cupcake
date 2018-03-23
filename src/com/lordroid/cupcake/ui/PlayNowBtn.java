@@ -7,6 +7,7 @@ import javax.swing.JButton;
 
 import com.lordroid.cupcake.res.R;
 
+@SuppressWarnings("serial")
 public class PlayNowBtn extends JButton {
 
 	/**
@@ -17,23 +18,25 @@ public class PlayNowBtn extends JButton {
 	}
 
 	boolean hovered = false;
+
 	public PlayNowBtn() {
 		super();
 
 	}
-	
+
 	/**
-	 * @param hovered the hovered to set
+	 * @param hovered
+	 *            the hovered to set
 	 */
 	public void setHovered(boolean hovered) {
 		this.hovered = hovered;
 		this.setBorder(BorderFactory.createBevelBorder(6));
 	}
 
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g) {
 		if (!hovered)
 			g.drawImage(R.PLAY_NOW_BTN_ICON, 0, 0, this);
-		else 
+		else
 			g.drawImage(R.PLAY_NOW_BTN_HOVERED_ICON, 0, 0, this);
 	}
 }

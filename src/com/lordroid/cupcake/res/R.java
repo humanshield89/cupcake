@@ -19,7 +19,7 @@
 package com.lordroid.cupcake.res;
 
 import java.awt.Font;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -36,58 +36,53 @@ public class R {
 	public static final Font GENRE_FONT = new Font("Arial", Font.BOLD, 10);
 	public static final Font LOAD_MORE_FONT = new Font("Arial", Font.BOLD, 18);
 
+	public static final BufferedImage ICON = getIcon("icon.png");
 
-	public static final Image ICON = getIcon("icon.png");
+	public static final BufferedImage PLAY_BTN_ICON = getIcon("play.png");
+	public static final BufferedImage PAUSE_BTN_ICON = getIcon("pause.png");
+	public static final BufferedImage SKIP_BTN_ICON = getIcon("skip.png");
+	public static final BufferedImage REWIND_BTN_ICON = getIcon("rewind.png");
+	public static final BufferedImage VOLUME_LOW = getIcon("low_volume.png");
+	public static final BufferedImage VOLUME_MEDIUM = getIcon("medium_volume.png");
+	public static final BufferedImage VOLUME_FULL = getIcon("full_volume.png");
+	public static final BufferedImage VOLUME_MUTED = getIcon("muted.png");
+	public static final BufferedImage FULL_SCREEN = getIcon("tgl_fullscreen.png");
+	public static final BufferedImage EXIT_FULL_SCREEN = getIcon("exut_full_screen.png");
+	public static final BufferedImage VOLUME_DOWN = getIcon("volumeDown.png");
+	public static final BufferedImage VOLUME_UP = getIcon("volumeUp.png");
 
-	public static final Image PLAY_BTN_ICON = getIcon("play.png");
-	public static final Image PAUSE_BTN_ICON = getIcon("pause.png");
-	public static final Image SKIP_BTN_ICON = getIcon("skip.png");
-	public static final Image REWIND_BTN_ICON = getIcon("rewind.png");
-	public static final Image VOLUME_LOW = getIcon("low_volume.png");
-	public static final Image VOLUME_MEDIUM = getIcon("medium_volume.png");
-	public static final Image VOLUME_FULL = getIcon("full_volume.png");
-	public static final Image VOLUME_MUTED = getIcon("muted.png");
-	public static final Image FULL_SCREEN = getIcon("tgl_fullscreen.png");
-	public static final Image EXIT_FULL_SCREEN = getIcon("exut_full_screen.png");
-	public static final Image VOLUME_DOWN = getIcon("volumeDown.png");
-	public static final Image VOLUME_UP = getIcon("volumeUp.png");
+	public static final BufferedImage QUALITY_3D = getIcon("3D.png");
+	public static final BufferedImage QUALITY_720P = getIcon("720p.png");
+	public static final BufferedImage QUALITY_1080P = getIcon("1080p.png");
 
-	public static final Image QUALITY_3D = getIcon("3D.png");
-	public static final Image QUALITY_720P = getIcon("720p.png");
-	public static final Image QUALITY_1080P = getIcon("1080p.png");
-	
-	public static final Image IMDB_ICON = getIcon("imdb2.png");
-	public static final Image VIEWS_ICON = getIcon("views2.png");
-	public static final Image GENRE_ICON = getIcon("genre.png");
-	
-	public static final Image RATING_G = getIcon("ratting_g.png");
-	public static final Image RATING_PG = getIcon("ratting_PG.png");
-	public static final Image RATING_PG13 = getIcon("ratting_pg-13.png");
-	public static final Image RATING_R16 = getIcon("ratting_R-16.png");
-	public static final Image RATING_R18 = getIcon("ratting_R-18.png");
-	
-	public static final Image STATUS_GOOD = getIcon("status_good.png");
-	public static final Image STATUS_MEDIUM = getIcon("status_medium.png");
-	public static final Image STATUS_POOR = getIcon("status_poor.png");
-	public static final Image BORDER_IMAGE = getIcon("border.png");
-	public static final Image PLAY_NOW_BTN_ICON = getIcon("playNow_btn.png");
-	public static final Image PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
+	public static final BufferedImage IMDB_ICON = getIcon("imdb2.png");
+	public static final BufferedImage VIEWS_ICON = getIcon("views2.png");
+	public static final BufferedImage GENRE_ICON = getIcon("genre.png");
 
-	
-	//public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
-	public static final Image LIST_BACKGROUND_IMG = getIcon("wood.png");
-	public static final Image MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
-	public static final Image SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
-	
-	public static final Image LOAD_MORE_BACK = getIcon("Load_More.png");
-	public static final Image LOAD_MORE_BACK_HOVERED = getIcon("Load_More_border.png");
-	public static final Image LOAD_MORE_BACK_PRESSED = getIcon("Load_More_border_pressed.png");
+	public static final BufferedImage RATING_G = getIcon("ratting_g.png");
+	public static final BufferedImage RATING_PG = getIcon("ratting_PG.png");
+	public static final BufferedImage RATING_PG13 = getIcon("ratting_pg-13.png");
+	public static final BufferedImage RATING_R16 = getIcon("ratting_R-16.png");
+	public static final BufferedImage RATING_R18 = getIcon("ratting_R-18.png");
 
+	public static final BufferedImage STATUS_GOOD = getIcon("status_good.png");
+	public static final BufferedImage STATUS_MEDIUM = getIcon("status_medium.png");
+	public static final BufferedImage STATUS_POOR = getIcon("status_poor.png");
+	public static final BufferedImage BORDER_IMAGE = getIcon("border.png");
+	public static final BufferedImage PLAY_NOW_BTN_ICON = getIcon("playNow_btn.png");
+	public static final BufferedImage PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
 
+	// public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
+	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("wood.png");
+	public static final BufferedImage MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
+	public static final BufferedImage SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
 
-	
-	private static Image getIcon(String file) {
-		Image image = null;
+	public static final BufferedImage LOAD_MORE_BACK = getIcon("Load_More.png");
+	public static final BufferedImage LOAD_MORE_BACK_HOVERED = getIcon("Load_More_border.png");
+	public static final BufferedImage LOAD_MORE_BACK_PRESSED = getIcon("Load_More_border_pressed.png");
+
+	private static BufferedImage getIcon(String file) {
+		BufferedImage image = null;
 		try {
 
 			image = ImageIO.read(Thread.currentThread().getContextClassLoader()

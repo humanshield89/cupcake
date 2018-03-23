@@ -44,20 +44,18 @@ public class TimeUtils {
 
 		return "   " + hh + ":" + mm + ":" + ss + "  ";
 	}
-	
-	public static String getFormatedViewCount (long views) {
+
+	public static String getFormatedViewCount(long views) {
 		double viewD;
-		if (views/1000000 >= 1) {
+		if (views / 1000000 >= 1) {
 			viewD = ((double) views) / 1000000;
-			return String.format("%.1f", viewD)+"M";
+			return String.format("%.1f", viewD) + "M";
 		} else if (views / 1000 >= 1) {
 			viewD = ((double) views) / 1000;
-			return String.format("%.0f", viewD)+"K";
+			return String.format("%.0f", viewD) + "K";
 		}
-		
-		
-		
+
 		return ">1k";
-		
+
 	}
 }

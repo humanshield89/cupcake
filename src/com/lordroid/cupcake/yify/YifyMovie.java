@@ -11,7 +11,8 @@ import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 public class YifyMovie {
 	long end;
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
-	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
+	// private static final String MOVIE_DETAILS_API =
+	// "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
 	private String url;
 	private String imdbCode;
@@ -40,15 +41,15 @@ public class YifyMovie {
 	private File tmpFolder;
 	private File bgImageFile;
 	private File CoverImageFileMedium;
-	//private File coverImageFileLarge;
+	// private File coverImageFileLarge;
 	private boolean isBGCached = false;
 	private boolean isBGBEingCached = false;
 	private boolean isCoverMediumCached = false;
 	private boolean isCoverMediumBeingCached = false;
 
-	//private boolean isCoverLargeCached = false;
-	//private boolean isCoverLargeBeingCached = false;
-	
+	// private boolean isCoverLargeCached = false;
+	// private boolean isCoverLargeBeingCached = false;
+
 	private boolean has720p = false;
 	private boolean has1080p = false;
 	private boolean has3d = false;
@@ -58,20 +59,23 @@ public class YifyMovie {
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
 		// TODO find a faster way to do this
-		// 300 to 500 miliseconds to get the downlowd count is expensive and not worth it at all 
-//		try {
-//			movie = JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			movie = movieArg;
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			movie = movieArg;
-//			e.printStackTrace();
-//		}
+		// 300 to 500 miliseconds to get the downlowd count is expensive and not
+		// worth it at all
+		// try {
+		// movie =
+		// JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
+		// } catch (JSONException e) {
+		// // TODO Auto-generated catch block
+		// movie = movieArg;
+		// e.printStackTrace();
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// movie = movieArg;
+		// e.printStackTrace();
+		// }
 		end = System.currentTimeMillis();
-		System.out.println("[YIFY Movie] total time to grab JSON file  = "+(end-start));
+		System.out.println("[YIFY Movie] total time to grab JSON file  = "
+				+ (end - start));
 		this.url = movie.getString(YifyS.RESPONSE_URL_KEY);
 		this.imdbCode = movie.getString(YifyS.RESPONSE_IMDB_CODE_KEY);
 		this.title = movie.getString(YifyS.RESPONSE_TITLE_KEY);
@@ -80,22 +84,24 @@ public class YifyMovie {
 		this.slug = movie.getString(YifyS.RESPONSE_SLUG_KEY);
 		this.year = movie.getInt(YifyS.RESPONSE_YEAR_KEY);
 		this.rating = movie.getDouble(YifyS.RESPONSE_RATING_KEY);
-		
+
 		this.runtime = movie.getInt(YifyS.RESPONSE_RUNTIME_KEY);
-		//this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
-		//this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+		// this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		// this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
 		try {
-		JSONArray genreJSON = movieArg.getJSONArray(YifyS.RESPONSE_GENRES_KEY);
-		for (int i = 0; i < genreJSON.length(); i++) {
-			genre.add(genreJSON.getString(i));
-		}
+			JSONArray genreJSON = movieArg
+					.getJSONArray(YifyS.RESPONSE_GENRES_KEY);
+			for (int i = 0; i < genreJSON.length(); i++) {
+				genre.add(genreJSON.getString(i));
+			}
 		} catch (Exception e) {
 			genre.add("unknown");
 		}
 		try {
 			this.descriptionShort = movie.getString(YifyS.RESPONSE_SUMMARY_KEY);
-			this.descriptionFull = movie.getString(YifyS.RESPONSE_SUMMARY_FULL_KEY);
-		} catch(Exception E){
+			this.descriptionFull = movie
+					.getString(YifyS.RESPONSE_SUMMARY_FULL_KEY);
+		} catch (Exception E) {
 			this.descriptionShort = movie.getString("description_intro");
 			this.descriptionFull = movie.getString("description_full");
 		}
@@ -117,27 +123,28 @@ public class YifyMovie {
 				torrents.add(new YifyTorrent(torrentsJSON.getJSONObject(i)));
 			}
 		} catch (Exception e) {
-			
+
 		}
 
 		tmpFolder = new File(S.SYSTEM_TMP_FOLDER + this.id + File.separator);
 		tmpFolder.mkdirs();
-		System.out.println("ratting = "+this.MPARating);
+		System.out.println("ratting = " + this.MPARating);
 		cacheBgImage();
 		cacheCoverImageMedium();
 		sortTorrentsBySize();
 		setAvailableQualities();
 		end = System.currentTimeMillis();
-		System.out.println("[YIFY Movie] total time to create movie = "+(end-start));
+		System.out.println("[YIFY Movie] total time to create movie = "
+				+ (end - start));
 	}
 
 	private void setAvailableQualities() {
 		// TODO Auto-generated method stub
-		// no need to look forward there is no torrents 
+		// no need to look forward there is no torrents
 		if (this.torrents.isEmpty())
 			return;
-		for (YifyTorrent t : torrents ){
-			if (t.getQuality().equals(YifyS.QUALITY_720P) ) {
+		for (YifyTorrent t : torrents) {
+			if (t.getQuality().equals(YifyS.QUALITY_720P)) {
 				this.has720p = true;
 			} else if (t.getQuality().equals(YifyS.QUALITY_1080P)) {
 				this.has1080p = true;
@@ -155,16 +162,16 @@ public class YifyMovie {
 
 		do {
 			swaped = false;
-			for (int i = 0 ; i< torrents.size()-1 ; i++) {
+			for (int i = 0; i < torrents.size() - 1; i++) {
 				YifyTorrent prev = torrents.get(i);
-				YifyTorrent next = torrents.get(i+1);
+				YifyTorrent next = torrents.get(i + 1);
 				if (prev.getSizeInBytes() > next.getSizeInBytes()) {
 					torrents.set(i, next);
-					torrents.set(i+1, prev);
+					torrents.set(i + 1, prev);
 					swaped = true;
-				}			
+				}
 			}
-			
+
 		} while (swaped);
 	}
 
@@ -368,6 +375,7 @@ public class YifyMovie {
 	public int getDownloadCount() {
 		return downloadCount;
 	}
+
 	/**
 	 * @return the bgImage
 	 */
@@ -445,12 +453,13 @@ public class YifyMovie {
 	public Boolean getIsBGCached() {
 		return isBGCached;
 	}
+
 	/**
 	 * @return the coverImageFileMedium
 	 */
 	public File getCoverImageFileMedium() {
 		if (!isCoverMediumCached) {
-			if (!this.isCoverMediumBeingCached){
+			if (!this.isCoverMediumBeingCached) {
 				this.cacheCoverImageMedium();
 			}
 		}

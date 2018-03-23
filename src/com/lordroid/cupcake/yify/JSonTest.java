@@ -2,8 +2,6 @@ package com.lordroid.cupcake.yify;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,22 +17,24 @@ public class JSonTest {
 	public static void main(String[] args) throws JSONException, Exception {
 		System.out.println("Start time " + System.currentTimeMillis());
 		start = System.currentTimeMillis();
-		JFrame frame = new JFrame ();
+		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200,700);
-		JPanel pan = new JPanel ();
+		frame.setSize(1200, 700);
+		JPanel pan = new JPanel();
 		pan.setOpaque(false);
-		//pan.setPreferredSize(new Dimension(frame.getWidth(),frame.getHeight()));
+		// pan.setPreferredSize(new
+		// Dimension(frame.getWidth(),frame.getHeight()));
 		JScrollPane scrollPane = new JScrollPane(pan);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		//scrollPane.add(pan);
+		// scrollPane.add(pan);
 		pan.setLayout(new ModifiedFlowLayout(ModifiedFlowLayout.CENTER, 10, 20));
 		pan.setBackground(Color.GRAY);
-		//scrollPane.setPreferredSize(new Dimension(frame.getWidth(),frame.getHeight()));
-		//pan.setLayout(new FlowLayout());
-		frame.add(scrollPane,BorderLayout.CENTER);
+		// scrollPane.setPreferredSize(new
+		// Dimension(frame.getWidth(),frame.getHeight()));
+		// pan.setLayout(new FlowLayout());
+		frame.add(scrollPane, BorderLayout.CENTER);
 		frame.setVisible(true);
 		// TODO Auto-generated method stub
 		// File json = new File("a.json");
@@ -53,15 +53,16 @@ public class JSonTest {
 		JSONArray arrays[] = new JSONArray[10];
 		arrays[0] = arr;
 		int n = 1;
-		for (int i = 2 ; i < 3 ; i++){
+		for (int i = 2; i < 3; i++) {
 			json = JSONComunicator
-					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"+"&page="+i);
+					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"
+							+ "&page=" + i);
 			data = (JSONObject) json.getJSONObject("data");
 			arr = data.getJSONArray("movies");
 			arrays[n] = arr;
 			for (int i1 = 0; i1 < arr.length(); i1++) {
 				YifyMovie m = new YifyMovie(arr.getJSONObject(i1));
-				//movies.add(m);
+				// movies.add(m);
 				pan.add(new MovieItem(m));
 
 				// JSONObject movie = arr.getJSONObject(i);
@@ -76,7 +77,8 @@ public class JSonTest {
 				// String image = movie.getString("background_image");
 				// System.out.println(image);
 				// URL u = new URL(image);
-				// HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+				// HttpsURLConnection c = (HttpsURLConnection)
+				// u.openConnection();
 				// c.setRequestMethod("GET");
 				// c.setRequestProperty("Content-length", "0");
 				// c.setUseCaches(false);
@@ -97,58 +99,58 @@ public class JSonTest {
 				// out.close();
 				// is.close();
 				// c.disconnect();
-				
-				//frame.pack();
+
+				// frame.pack();
 				pan.revalidate();
 			}
 			n++;
 		}
-		//ArrayList<YifyMovie> movies = new ArrayList<YifyMovie>();
+		// ArrayList<YifyMovie> movies = new ArrayList<YifyMovie>();
 
+		// for ( n = 0 ; n < arrays.length ; n++) {
+		// arr = arrays[n];
+		//
+		//
+		// // just remove this incase of tests
+		// }
+		//
 
-//		for ( n = 0 ; n < arrays.length ; n++) {
-//			arr = arrays[n];
-//		
-//
-//			// just remove this incase of tests 
-//		}
-//			
-
-//		for (YifyMovie movie : movies) {
-//			String genres = "";
-//			for (String str : movie.getGenre()) {
-//				genres = str +" ";
-//			}
-//			System.out
-//					.println("=========================================================");
-//			System.out.println("Title       :   " + movie.getTitle());
-//			System.out.println("Title long  :   " + movie.getTitleLong());
-//			System.out.println("Title eng   :   "+ movie.getTitleEnglish());
-//			System.out.println("Id          :   " + movie.getId());
-//			System.out.println("likes       :   " + movie.getLikeCount());
-//			System.out.println("downloads   :   " + movie.getDownloadCount());
-//			System.out.println("BG image    :   "+ movie.getBgImageOriginalURL());
-//			System.out.println("bg image    :   " + movie.getBgImageURL());
-//			System.out.println("cover L     :   "+movie.getCoverLargeURL());
-//			System.out.println("cover M     :   "+ movie.getCoverMediumURL());
-//			System.out.println("cover S     :   "+ movie.getCoverSmallURL());
-//			System.out.println("desc full   :   "+ movie.getDescriptionFull());
-//			System.out.println("desc short  :   "+ movie.getDescriptionShort());
-//			System.out.println("imdbcode    :   " + movie.getImdbCode());
-//			System.out.println("language    :   " + movie.getLanguage());
-//			System.out.println("MPA rating  :   " + movie.getMPARating());
-//			System.out.println("imdb rating :   " + movie.getRating());
-//			System.out.println("Total time  :   " + movie.getRuntime());
-//			System.out.println("Slug        :   " + movie.getSlug());
-//			System.out.println("state       :   " + movie.getState());
-//			System.out.println("URL         :   " + movie.getUrl());
-//			System.out.println("Year        :   " + movie.getYear());
-//			System.out.println("Trailer     :   "+ movie.getYoutubeTrailerURL());
-//			System.out.println("genres     :   "+ genres);
-//			System.out
-//					  .println("=========================================================");
-//			
-//		}
+		// for (YifyMovie movie : movies) {
+		// String genres = "";
+		// for (String str : movie.getGenre()) {
+		// genres = str +" ";
+		// }
+		// System.out
+		// .println("=========================================================");
+		// System.out.println("Title       :   " + movie.getTitle());
+		// System.out.println("Title long  :   " + movie.getTitleLong());
+		// System.out.println("Title eng   :   "+ movie.getTitleEnglish());
+		// System.out.println("Id          :   " + movie.getId());
+		// System.out.println("likes       :   " + movie.getLikeCount());
+		// System.out.println("downloads   :   " + movie.getDownloadCount());
+		// System.out.println("BG image    :   "+
+		// movie.getBgImageOriginalURL());
+		// System.out.println("bg image    :   " + movie.getBgImageURL());
+		// System.out.println("cover L     :   "+movie.getCoverLargeURL());
+		// System.out.println("cover M     :   "+ movie.getCoverMediumURL());
+		// System.out.println("cover S     :   "+ movie.getCoverSmallURL());
+		// System.out.println("desc full   :   "+ movie.getDescriptionFull());
+		// System.out.println("desc short  :   "+ movie.getDescriptionShort());
+		// System.out.println("imdbcode    :   " + movie.getImdbCode());
+		// System.out.println("language    :   " + movie.getLanguage());
+		// System.out.println("MPA rating  :   " + movie.getMPARating());
+		// System.out.println("imdb rating :   " + movie.getRating());
+		// System.out.println("Total time  :   " + movie.getRuntime());
+		// System.out.println("Slug        :   " + movie.getSlug());
+		// System.out.println("state       :   " + movie.getState());
+		// System.out.println("URL         :   " + movie.getUrl());
+		// System.out.println("Year        :   " + movie.getYear());
+		// System.out.println("Trailer     :   "+ movie.getYoutubeTrailerURL());
+		// System.out.println("genres     :   "+ genres);
+		// System.out
+		// .println("=========================================================");
+		//
+		// }
 		// Thread.sleep(5000);
 		// System.out.println(HttpsDownloadUtility.downloadFile("https://yts.am/torrent/download/5D14C2E9E8577402F91B6A4C638E22DAA4930E23",
 		// "").getAbsolutePath());

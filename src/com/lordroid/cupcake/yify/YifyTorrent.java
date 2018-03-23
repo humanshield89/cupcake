@@ -18,10 +18,13 @@ public class YifyTorrent {
 		this.seeds = torrent.getInt(YifyS.RESPONSE_TORRENT_SEEDS_KEY);
 		this.peers = torrent.getInt(YifyS.RESPONSE_TORRENT_PEERS_KEY);
 		this.size = torrent.getString(YifyS.RESPONSE_TORRENT_SIZE_STRING_KEY);
-		this.sizeInBytes = torrent.getLong(YifyS.RESPONSE_TORRENT_SIZE_BYTE_KEY);
-		this.uploadDate = torrent.getString(YifyS.RESPONSE_TORRENT_UPLOADED_STRING_KEY);
-		this.dateUploadedMilis = torrent.getLong(YifyS.RESPONSE_TORRENT_UPLOADED_LONG_KEY);
-		
+		this.sizeInBytes = torrent
+				.getLong(YifyS.RESPONSE_TORRENT_SIZE_BYTE_KEY);
+		this.uploadDate = torrent
+				.getString(YifyS.RESPONSE_TORRENT_UPLOADED_STRING_KEY);
+		this.dateUploadedMilis = torrent
+				.getLong(YifyS.RESPONSE_TORRENT_UPLOADED_LONG_KEY);
+
 	}
 
 	/**
