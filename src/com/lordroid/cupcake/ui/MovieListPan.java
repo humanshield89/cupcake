@@ -3,6 +3,7 @@ package com.lordroid.cupcake.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -67,7 +68,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	private JLabel noResult = new JLabel("No results found try with diferent search options");
 	private JLabel noResponse = new JLabel("Couldn't fetch data from remote server please check your connection");
-
+	private JLabel noMoreentriesLab = new JLabel("No more entrie to show /End of list ");
+	
 	private int page;
 
 	private int quality;
@@ -185,16 +187,14 @@ public class MovieListPan extends JPanel implements ActionListener {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			movieListContainer.add(this.noResponse);
-			this.searchBtn.setEnabled(true);
+			noResponse();
 			return;
 		}
 		if (obj != null) {
 			data = obj.getJSONObject(YifyS.RESPONSE_DATA_KEY);
 		} else {
 			// TODO : something went wrong handle it
-			movieListContainer.add(this.noResponse);
-			this.searchBtn.setEnabled(true);
+			noResponse();
 			return;
 		}
 
@@ -204,14 +204,12 @@ public class MovieListPan extends JPanel implements ActionListener {
 			} catch (JSONException e) {
 				e.printStackTrace();
 				
-				movieListContainer.add(this.noResult);
-				this.searchBtn.setEnabled(true);
+				noResults();
 				return;
 			}
 		} else {
 			// TODO : something went wrong handle it
-			movieListContainer.add(this.noResult);
-			this.searchBtn.setEnabled(true);
+			noResults();
 			return;
 		}
 		if (movies != null && movies.length() > 0) {
@@ -239,6 +237,25 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	}
 
+	private void noResults() {
+		// TODO Auto-generated method stub
+		movieListContainer.add(this.noResult);
+		this.searchBtn.setEnabled(true);
+	}
+
+	private void noResponse() {
+		// TODO Auto-generated method stub
+		movieListContainer.add(this.noResponse);
+		this.searchBtn.setEnabled(true);
+	}
+	
+	private void noMoreEntries() {
+		// TODO Auto-generated method stub
+		noMoreentriesLab.setPreferredSize(new Dimension(movieListContainer.getWidth()/2,40));
+		noMoreentriesLab.setFont(new Font("Aril",Font.BOLD,25));
+		movieListContainer.add(noMoreentriesLab);
+	}
+	
 	public void search() {
 		// TODO Auto-generated method stub
 		this.searchBtn.setEnabled(false);
@@ -316,11 +333,13 @@ public class MovieListPan extends JPanel implements ActionListener {
 				movieListContainer.revalidate();
 
 			}
-			if (page < maxPage) {
+			if (page < maxPage && maxPage != 0) {
 				loadMoreBtn.setFont(R.LOAD_MORE_FONT);
 				loadMoreBtn.setPreferredSize(new Dimension(
 						this.getWidth() - 30, 40));
 				movieListContainer.add(loadMoreBtn);
+			} else {
+				noMoreEntries();
 			}
 		} else {
 			// TODO : something went wrong handle it
@@ -328,6 +347,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 		}
 		this.searchBtn.setEnabled(true);
 	}
+
+
 
 	public void actionPerformed(ActionEvent event) {
 		// TODO Auto-generated method stub
