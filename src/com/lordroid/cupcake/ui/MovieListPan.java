@@ -24,6 +24,7 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.panel.WebPanel;
 import com.lordroid.cupcake.App;
+import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Settings;
 import com.lordroid.cupcake.yify.JSONArray;
@@ -36,7 +37,7 @@ import com.lordroid.cupcake.yify.YifyS;
 @SuppressWarnings("serial")
 public class MovieListPan extends JPanel implements ActionListener {
 	public static final String SEARHC_DEFAULT_TEXT = "Search Title/imdbCode ...";
-
+	private final ListPanWatcher listWatcher;
 	private ArrayList<YifyMovie> moviesList = new ArrayList<YifyMovie>();
 
 	// JPanel mainContainer = new JPa
@@ -121,8 +122,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	private int order;
 
-	public MovieListPan() {
-
+	public MovieListPan( ListPanWatcher watcher ) {
+		this.listWatcher = watcher;
 		seachPanContainer.setLayout(new FlowLayout());
 
 		genreLab.setForeground(Color.WHITE);
@@ -260,8 +261,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		if (movies != null && movies.length() > 0) {
 			// TODO : keep track of elements ? a List maybe
 			for (int i = 0; i < movies.length(); i++) {
-				movieListContainer.add(new MovieShadowPan(new MovieItem(
-						new YifyMovie((JSONObject) movies.get(i)))));
+				this.addMovieItem((JSONObject) movies.get(i));
 				movieListContainer.revalidate();
 				JScrollBar vertical = scrollPan.getVerticalScrollBar();
 				vertical.setValue(vertical.getMaximum());
@@ -282,6 +282,12 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	}
 
+	private void addMovieItem(JSONObject obj){
+		MovieItem mv = new MovieItem(
+				new YifyMovie(obj));
+		mv.addListPanWatcher(listWatcher);
+		movieListContainer.add(new MovieShadowPan(mv));
+	}
 	private void noResults() {
 		// TODO Auto-generated method stub
 		movieListContainer.add(this.noResult);
@@ -374,8 +380,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		if (movies != null && movies.length() > 0) {
 			for (int i = 0; i < movies.length(); i++) {
 
-				movieListContainer.add(new MovieShadowPan(new MovieItem(
-						new YifyMovie((JSONObject) movies.get(i)))));
+				this.addMovieItem((JSONObject) movies.get(i));
 				movieListContainer.revalidate();
 
 			}

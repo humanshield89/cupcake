@@ -1,29 +1,38 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.lordroid.cupcake.controlers.ListPanWatcher;
+import com.lordroid.cupcake.controlers.WatchableListPan;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.utils.GaussianFilter;
 import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
 @SuppressWarnings("serial")
-public class MovieItem extends JPanel implements MouseListener {
+public class MovieItem extends JPanel implements MouseListener ,WatchableListPan,ActionListener{
+	public static final int PLAY_ACTION = 0;
+	public static final int DETAILS_ACTION = 2;
+	public static final int LATER_ACTION = 1;
+	
+	
+	ArrayList<ListPanWatcher> watchersList  = new ArrayList<ListPanWatcher>();
 	MovieItem thisPan;
 	private final YifyMovie movie;
 	private BufferedImage coverImage;
@@ -200,6 +209,14 @@ public class MovieItem extends JPanel implements MouseListener {
 
 		this.addMouseListener(this);
 		initToolTip();
+		initActions();
+	}
+
+	private void initActions() {
+		// TODO Auto-generated method stub
+		for (MovieItemButton b : itemButtons){
+			b.addActionListener(this);
+		}
 	}
 
 	private void initToolTip() {
@@ -308,5 +325,32 @@ public class MovieItem extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public MovieItem addListPanWatcher(ListPanWatcher lw) {
+		this.watchersList.add(lw);
+		return this;
+	}
+
+	public void removeListPanWatcher(ListPanWatcher lw) {
+		this.watchersList.remove(lw);
+	}
+
+	public void updateListWatchers(int action) {
+		for (ListPanWatcher w : watchersList) {
+			w.ListActionPerformed(this.movie, action);
+		}
+	}
+
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		MovieItemButton source = (MovieItemButton) arg0.getSource();
+		if (source.equals(itemButtons[0])){
+			this.updateListWatchers(PLAY_ACTION);
+		} else if (source.equals(itemButtons[1])) {
+			this.updateListWatchers(LATER_ACTION);
+		} else if (source.equals(itemButtons[2])) {
+			this.updateListWatchers(DETAILS_ACTION);
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package com.lordroid.cupcake.ui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -10,8 +9,7 @@ import com.lordroid.cupcake.res.R;
 
 @SuppressWarnings("serial")
 public class MovieShadowPan extends JPanel {
-
-	public MovieShadowPan(Component c) {
+	public MovieShadowPan(MovieItem c) {
 		c.setBounds(0, 0, 230, 345);
 		this.setLayout(null);
 		this.add(c);
@@ -21,4 +19,6 @@ public class MovieShadowPan extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(R.MOVIE_SHADOW_BG, 0, 0, this);
 	}
+
+
 }

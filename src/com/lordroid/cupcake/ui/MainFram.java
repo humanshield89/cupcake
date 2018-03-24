@@ -18,12 +18,17 @@
  */
 package com.lordroid.cupcake.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.res.Strings;
+import com.lordroid.cupcake.yify.YifyMovie;
 
 public class MainFram extends JFrame {
 
@@ -31,18 +36,53 @@ public class MainFram extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private JPanel contentPan = new JPanel();
+	private MovieListPan movieListPan ;
 	public MainFram() {
+		// TODO : change this 
+		
+		// initializing components 
+		movieListPan = new MovieListPan(new ListPanWatcher(){
+
+			public void ListActionPerformed(YifyMovie movie, int action) {
+				// TODO Auto-generated method stub
+
+					// TODO Auto-generated method stub
+					System.out.println("Action performed on "+movie.getTitle()+" Action value is : "+action);
+				}
+			
+			
+		});
+		
+		// window properties 
 		int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-		// this.setLocationRelativeTo(null);
-		this.setSize(900, 600);
+		this.setSize(1000, 600);
+		this.setMinimumSize(new Dimension(1000, 600));
 		this.setLocation(new Point((screenWidth - this.getWidth()) / 2,
 				(screenHeight - this.getHeight()) / 2));
-
 		this.setVisible(true);
 		this.setTitle(Strings.getTitle() + Strings.getVersion());
+		
+		
+		// layouts 
+		contentPan.setLayout(new BorderLayout());
+		
+		
+		this.setContentPane(contentPan);
+		initMovieListPan();
 	}
+	
+	public void initMovieListPan() {
+		this.getContentPane().removeAll();
+		this.setContentPane(contentPan);
+		contentPan.add(movieListPan,BorderLayout.CENTER);
+		contentPan.revalidate();
+	}
+	
+	
+	
+	
+
 
 }
