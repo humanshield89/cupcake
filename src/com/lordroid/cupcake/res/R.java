@@ -69,10 +69,7 @@ public class R {
 	public static final BufferedImage STATUS_MEDIUM = getIcon("status_medium.png");
 	public static final BufferedImage STATUS_POOR = getIcon("status_poor.png");
 	public static final BufferedImage BORDER_IMAGE = getIcon("border.png");
-	public static final BufferedImage PLAY_NOW_BTN_ICON = getIcon("playNow_btn.png");
-	public static final BufferedImage PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
 
-	// public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
 	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("wood.jpg");
 	public static final BufferedImage MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
 	public static final BufferedImage SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
@@ -81,6 +78,22 @@ public class R {
 	public static final BufferedImage LOAD_MORE_BACK_HOVERED = getIcon("Load_More_border.png");
 	public static final BufferedImage LOAD_MORE_BACK_PRESSED = getIcon("Load_More_border_pressed.png");
 
+	public static final BufferedImage PLAY_NOW_BTN = getIcon("watch_now.png");
+	public static final BufferedImage PLAY_NOW_BTN_HOVERED = getIcon("watch_now_hovered.png");
+	public static final BufferedImage PLAY_NOW_BTN_PRESSED = getIcon("watch_now_pressed.png");
+	
+	public static final BufferedImage PLAY_LATER_BTN = getIcon("watch_later.png");
+	public static final BufferedImage PLAY_LATER_BTN_HOVERED = getIcon("watch_later_hovered.png");
+	public static final BufferedImage PLAY_LATER_BTN_PRESSED = getIcon("watch_later_pressed.png");
+
+	public static final BufferedImage DETAILS_BTN = getIcon("watch_Details.png");
+	public static final BufferedImage DETAILS_BTN_HOVERED = getIcon("watch_Details_hovered.png");
+	public static final BufferedImage DETAILS_BTN_PRESSED = getIcon("watch_Details_pressed.png");
+
+	public static final BufferedImage[][] MOVIE_ITEM_BUTTON_IMAGES = {{PLAY_NOW_BTN,PLAY_NOW_BTN_HOVERED,PLAY_NOW_BTN_PRESSED}
+											,{PLAY_LATER_BTN,PLAY_LATER_BTN_HOVERED,PLAY_LATER_BTN_PRESSED},
+											{DETAILS_BTN,DETAILS_BTN_HOVERED,DETAILS_BTN_PRESSED}};
+	
 	private static BufferedImage getIcon(String file) {
 		BufferedImage image = null;
 		try {

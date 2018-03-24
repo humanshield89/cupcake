@@ -1,21 +1,21 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.Color;
-import java.awt.Cursor;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.utils.GaussianFilter;
@@ -80,8 +80,8 @@ public class MovieItem extends JPanel implements MouseListener {
 	private JLabel lab1080p = new JLabel(new ImageIcon(R.QUALITY_1080P));
 	private JLabel lab3d = new JLabel(new ImageIcon(R.QUALITY_3D));
 
-	private PlayNowBtn playNowbtn = new PlayNowBtn();
-
+	// private PlayNowBtn playNowbtn = new PlayNowBtn();
+	private MovieItemButton[] itemButtons = {new MovieItemButton(0),new MovieItemButton(1),new MovieItemButton(2)}; 
 	// private JLabel ratingIcon ;
 
 	// private final int infoPanHoveredX;
@@ -118,12 +118,14 @@ public class MovieItem extends JPanel implements MouseListener {
 		this.infoPan.setBounds(0, this.getHeight() - 71, 230, 200);
 		infoPan.setLayout(null);
 
-		titleLab.setText("<html><u><b>" + movie.getTitleLong()
-				+ "<b></u></html>");
+		titleLab.setText("<html><h3 style='text-align: center;'><u>" + movie.getTitleLong()
+				+ "</u></h3></html>");
 		titleLab.setForeground(Color.WHITE);
 		titleLab.setFont(R.MOVIE_TITLE_FONT);
-		titleLab.setBounds(2, 2, 200, 45);
-
+		titleLab.setBounds(2, 2, 228, 45);
+		titleLab.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLab.setVerticalAlignment(SwingConstants.CENTER);
+		
 		imdbIcon.setBounds(12, 49, 60, 20);
 		imdbRatingLab.setText("<html><b>" + movie.getRating() + "</b></html>");
 		imdbRatingLab.setForeground(Color.WHITE);
@@ -178,32 +180,47 @@ public class MovieItem extends JPanel implements MouseListener {
 		infoPanY = this.getHeight() - 71;
 		infoPanHoveredY = 145;
 
-		playNowbtn.setBounds(15, 40, 200, 81);
-		playNowbtn.setVisible(false);
+		// buttons 
+		itemButtons[0].setBounds(36, 10, 157, 40);
+		itemButtons[1].setBounds(36, 55, 157, 40);
+		itemButtons[2].setBounds(36, 100, 157, 40);
+		
+		
 		// infoPanHeight = 629;
 		// infoPanHeighthHovered = this.getHeight();
 		// infoPan.setBackground(new Color(0,0,0,122));
 		this.setLayout(null);
 		this.add(infoPan);
-		this.add(playNowbtn);
+		for (MovieItemButton btn : itemButtons){
+			this.add(btn);
+			btn.setVisible(false);
+			btn.addMouseListener(this);
+		}
 		// this.setBackground(Color.BLACK);
 
 		this.addMouseListener(this);
-		playNowbtn.addMouseListener(this);
-		playNowbtn.addActionListener(new ActionListener() {
+		initToolTip();
+	}
 
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO send the user to the player
-				// try {
-				// DesktopUtils.openWebpage(new
-				// URL(movie.getYoutubeTrailerURL()));
-				// } catch (MalformedURLException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-			}
-
-		});
+	private void initToolTip() {
+		
+		// TODO find some why to work around the flikering cause by mouse hovered over this components
+		// being reported to the panel as exited 
+//		this.descriText.setToolTipText("Movie short description");
+//		descriText.addMouseListener(this);
+//		this.genreText.setToolTipText("Movie genre ");
+//		genreText.addMouseListener(this);
+//		this.imdbIcon.setToolTipText("IMDB rating ");
+//		imdbIcon.addMouseListener(this);
+//		this.viewsIcon.setToolTipText("Number of views based on torrent download count");
+//		viewsIcon.addMouseListener(this);
+//		this.lab1080p.setToolTipText("This movie is available in 1080p quality");
+//		lab1080p.addMouseListener(this);
+//		this.lab720p.setToolTipText("This movie is available in 720p quality");
+//		lab720p.addMouseListener(this);
+//		this.lab3d.setToolTipText("This movie is available in 3D");
+//		lab3d.addMouseListener(this);
+		
 	}
 
 	public void paintComponent(Graphics g) {
@@ -239,8 +256,7 @@ public class MovieItem extends JPanel implements MouseListener {
 			g2d.drawImage(R.BORDER_IMAGE, 0, 0, this);
 		}
 
-		// infoPan.setBackground(new Color(0,0,0,122));
-		// revalidate();
+
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
@@ -251,38 +267,34 @@ public class MovieItem extends JPanel implements MouseListener {
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		entered = true;
-
+		
 		if (entered) {
 			infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
-			if (!playNowbtn.isVisible())
-				playNowbtn.setVisible(true);
+			for (MovieItemButton btn : itemButtons) 
+				btn.setVisible(true);
 			infoPan.repaint();
 			repaint();
 			// revalidate();
 		}
-		if (arg0.getSource().equals(playNowbtn)) {
-			playNowbtn.hovered = true;
-			playNowbtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			playNowbtn.repaint();
-		}
+
 	}
 
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
-		entered = false;
-
-		if (arg0.getSource().equals(playNowbtn)) {
-			playNowbtn.hovered = false;
-			playNowbtn.setCursor(Cursor.getDefaultCursor());
-			playNowbtn.repaint();
-		} else {
-			if (!entered) {
-				playNowbtn.setVisible(false);
-				infoPan.setBounds(0, infoPanY, 230, 200);
-				// revalidate();
-			}
+		if (arg0.getSource().equals(itemButtons[0]) || arg0.getSource().equals(itemButtons[1]) || arg0.getSource().equals(itemButtons[1])
+				/* || arg0.getSource().equals(descriText) || arg0.getSource().equals(this.lab1080p) || arg0.getSource().equals(this.lab720p) || arg0.getSource().equals(this.lab3d)
+			|| arg0.getSource().equals(genreText) || arg0.getSource().equals(this.imdbIcon) || arg0.getSource().equals(viewsIcon) */) {
+			
+			return;
 		}
+		entered = false;
+		
+		if (!entered) {
+			infoPan.setBounds(0, infoPanY, 230, 200);
+			for (MovieItemButton btn : itemButtons) 
+				btn.setVisible(false);
+		}
+
 		infoPan.repaint();
 		repaint();
 		// revalidate();
