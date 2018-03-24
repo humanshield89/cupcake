@@ -11,8 +11,8 @@ import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 public class YifyMovie {
 	long end;
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
-	// private static final String MOVIE_DETAILS_API =
-	// "https://yts.am/api/v2/movie_details.json?movie_id=";
+	private static final String MOVIE_DETAILS_API =
+	 "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
 	private String url;
 	private String imdbCode;
@@ -58,21 +58,7 @@ public class YifyMovie {
 		long start = System.currentTimeMillis();
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
-		// TODO find a faster way to do this
-		// 300 to 500 miliseconds to get the downlowd count is expensive and not
-		// worth it at all
-		// try {
-		// movie =
-		// JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
-		// } catch (JSONException e) {
-		// // TODO Auto-generated catch block
-		// movie = movieArg;
-		// e.printStackTrace();
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// movie = movieArg;
-		// e.printStackTrace();
-		// }
+
 		end = System.currentTimeMillis();
 		System.out.println("[YIFY Movie] total time to grab JSON file  = "
 				+ (end - start));
@@ -175,6 +161,26 @@ public class YifyMovie {
 		} while (swaped);
 	}
 
+	
+	public void loadExtras(){
+		// TODO find a faster way to do this
+		// 300 to 500 miliseconds to get the downlowd count is expensive 
+		 try {
+		 JSONObject movie =
+		 JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
+		 this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+		 this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		 } catch (JSONException e) {
+		 // TODO Auto-generated catch block
+		 
+		 e.printStackTrace();
+		 } catch (Exception e) {
+		 // TODO Auto-generated catch block
+		
+		 e.printStackTrace();
+		 }
+	}
+	
 	public void cacheBgImage() {
 		if (!isBGBEingCached) {
 			new Thread(new Runnable() {

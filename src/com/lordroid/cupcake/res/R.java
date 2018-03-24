@@ -73,7 +73,7 @@ public class R {
 	public static final BufferedImage PLAY_NOW_BTN_HOVERED_ICON = getIcon("playNow_btn_hovered.png");
 
 	// public static final Image DETAILS_TEXT_AREA = getIcon("textarea.png");
-	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("wood.png");
+	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("wood.jpg");
 	public static final BufferedImage MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
 	public static final BufferedImage SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
 
