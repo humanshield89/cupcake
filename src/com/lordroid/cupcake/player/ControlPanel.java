@@ -386,7 +386,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
-	public void remove(Watcher w) {
+	public void removeWatcher(Watcher w) {
 		// TODO Auto-generated method stub
 		watchers.remove(w);
 	}

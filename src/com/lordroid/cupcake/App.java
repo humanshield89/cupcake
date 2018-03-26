@@ -18,19 +18,19 @@
  */
 package com.lordroid.cupcake;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import bt.Bt;
 import bt.data.Storage;
@@ -44,7 +44,7 @@ import bt.torrent.TorrentSessionState;
 import com.alee.laf.WebLookAndFeel;
 import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
-import com.lordroid.cupcake.ui.MovieListPan;
+import com.lordroid.cupcake.ui.MainFram;
 import com.lordroid.cupcake.utils.PathUtils;
 import com.sun.jna.NativeLibrary;
 
@@ -83,26 +83,20 @@ public class App {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
 		// JSonTest.main(args);
-		MovieListPan pan = new MovieListPan();
-		JFrame frame = new JFrame();
-		frame.add(pan);
-		frame.setSize(1000, 600);
-		frame.setMinimumSize(new Dimension(1000, 600));
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pan.search();
+		
 
-		// new NativeDiscovery().discover();
+
+		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
 
-		// SwingUtilities.invokeLater(new Runnable() {
-		//
-		// public void run() {
-		// // TODO Auto-generated method stub
-		// new Frame();
-		// }
-		//
-		// });
+		 SwingUtilities.invokeLater(new Runnable() {
+		
+		 public void run() {
+		 // TODO Auto-generated method stub
+				MainFram frame = new MainFram();
+				frame.setVisible(true);		 }
+		
+		 });
 
 		// initVlcJ();
 		// new MainFram();

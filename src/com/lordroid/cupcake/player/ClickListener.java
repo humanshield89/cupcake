@@ -54,7 +54,7 @@ class BackgroundClickHandler extends SwingWorker<Integer, Integer> implements
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
-	public void remove(Watcher w) {
+	public void removeWatcher(Watcher w) {
 		// TODO Auto-generated method stub
 		this.watchers.remove(w);
 	}

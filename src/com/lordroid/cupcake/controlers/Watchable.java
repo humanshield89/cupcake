@@ -26,7 +26,7 @@ public interface Watchable {
 
 	public void addWatcher(Watcher wcher);
 
-	public void remove(Watcher w);
+	public void removeWatcher(Watcher w);
 
 	public void updateWatchers(int message);
 }

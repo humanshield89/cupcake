@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lordroid.cupcake.res.S;
+import com.lordroid.cupcake.res.Settings;
 import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 
 public class YifyMovie {
@@ -512,6 +513,23 @@ public class YifyMovie {
 	 */
 	public boolean isHas3d() {
 		return has3d;
+	}
+
+	public YifyTorrent getTorrent(int quality) {
+		if (quality == -1){
+			for (YifyTorrent t : torrents){
+				if (t.getQuality().equals(Settings.getCurrentDefaultPlayQuality())){
+					return t;
+				}
+			}
+		} else {
+			for (YifyTorrent t : torrents ){
+				if (t.getQuality().equals(Settings.DEFAULT_PLAY_QUALITY[quality])){
+					return t;
+				}
+			}
+		}
+		return null;
 	}
 
 }

@@ -25,7 +25,9 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -42,23 +44,30 @@ import uk.co.caprica.vlcj.player.TrackDescription;
 import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.videosurface.CanvasVideoSurface;
+import bt.torrent.TorrentSessionState;
 
+import com.lordroid.cupcake.Test;
+import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.Watchable;
 import com.lordroid.cupcake.controlers.Watcher;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.res.Settings;
+import com.lordroid.cupcake.ui.BufferingPanel;
 import com.lordroid.cupcake.utils.FileDrop;
 import com.lordroid.cupcake.utils.StringUtils;
 import com.lordroid.cupcake.utils.TimeUtils;
+import com.lordroid.cupcake.yify.JSONException;
 
-public class MediaPlayer extends JPanel implements Watchable, Watcher {
+public class MediaPlayer extends JPanel implements Watchable, Watcher ,Consumer<TorrentSessionState> {
 	/**
 	 * 
 	 */
+	YifyMovieTorrent torrent ;
+	boolean TorrentStartedPlaying = false;
 	private static final long serialVersionUID = 1L;
 	private static Logger LOGGER = LoggerFactory.getLogger(MediaPlayer.class);
-
+	private final BufferingPanel buffPan = new BufferingPanel();
 	private final JFrame frame;
 	static String[] argument_libvlc = { "--subsdec-encoding="
 			+ Settings.getDefaultSubtittleEncoding() };
@@ -89,6 +98,10 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	private long lastRewind = 0L;
 	private long lastRewindTime = 0L;
 
+	private long torrentStartTime = 0L;
+	
+	
+	
 	private String currentTitle = "No media";
 
 	private boolean wasPlaying;
@@ -101,8 +114,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 		mediaPlayer.setVideoSurface(videoSurface);
 		mediaPlayerComponent.setVideoSurface(videoSurface);
 
-		this.add(mediaPlayerComponent, BorderLayout.CENTER);
-		this.add(controlPanel, BorderLayout.SOUTH);
+		//this.add(mediaPlayerComponent, BorderLayout.CENTER);
+		//this.add(controlPanel, BorderLayout.SOUTH);
 		mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
 				new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
 					@Override
@@ -158,10 +171,39 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 
 		});
 		this.mediaPlayerComponent.getMediaPlayer().setVolume(
-				Settings.getCurrentVolume());
+				Settings.getCurrentVolume()*2);
 
 	}
 
+	public void setTorrent(YifyMovieTorrent torrent){
+		TorrentStartedPlaying = false;
+		this.torrent = torrent;
+		torrent.start(this);
+		this.setBufferingView();
+		torrentStartTime = System.currentTimeMillis();
+	}
+	
+	public void setPlayerView() {
+		try {
+		this.remove(buffPan);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.add(mediaPlayerComponent, BorderLayout.CENTER);
+		this.add(controlPanel, BorderLayout.SOUTH);
+		this.revalidate();
+	}
+	
+	public void setBufferingView(){
+		try {
+		this.remove(mediaPlayerComponent);
+		this.remove(controlPanel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.add(buffPan , BorderLayout.CENTER);
+		this.revalidate();
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -607,7 +649,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
-	public void remove(Watcher w) {
+	public void removeWatcher(Watcher w) {
 		this.watchers.remove(w);
 	}
 
@@ -765,7 +807,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 			}
 		}
 		controlPanel.getCurrentVolume().setText("" + (volume / 2));
-		Settings.setCurrentVolume();
+		Settings.setCurrentVolume(volume/2);
 	}
 
 	/**
@@ -801,6 +843,56 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher {
 	public void updateWatchers(int message) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void accept(TorrentSessionState arg0) {
+		// TODO Auto-generated method stub
+		//arg0.get
+		long totalSize = this.torrent.getYiFyTorrent().getSizeInBytes();
+		int totalNumberOfpeices = arg0.getPiecesTotal();
+		int downloadedPeices = arg0.getPiecesComplete();
+		long downloadedSize = (downloadedPeices * totalSize) / totalNumberOfpeices;
+		long downSizeForSpeedCal = arg0.getDownloaded();
+		int peers = arg0.getConnectedPeers().size();
+		long totalTime = System.currentTimeMillis() - this.torrentStartTime;
+		double speed = ( (double) downSizeForSpeedCal/1024 ) /(double) (totalTime/1000);
+		String[] values = {""+peers,""+speed,""+downloadedSize/1024/1024};
+		this.buffPan.updateValues(values);
+		System.out.println("peers = "+peers+"    speed = "+speed+"    downloaded = "+downloadedSize+" time = "+totalTime);
+		// total peices ===> torrent.getTorrent.getSize(
+		// all downloaded ===> ? 
+		/// ? = downloaded * size / peices;
+
+		System.out.println("total peices : "+arg0.getPiecesTotal()+"downloaded  "+arg0.getDownloaded());
+		if(!TorrentStartedPlaying)
+		if ( (totalTime >= 60000 && downloadedSize >= 5000) || (downloadedSize/1024/1024 >= 20) ) {
+				this.setVideo(this.torrent.getVideo().getAbsolutePath());
+				this.setPlayerView();
+				this.play();
+				TorrentStartedPlaying = true;
+				getSubtitle(torrent);
+		}
+	}
+
+	private void getSubtitle(YifyMovieTorrent arg) {
+		// TODO Auto-generated method stub
+		File sub = null;
+		try {
+			sub = Test.main(arg.getMovie());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(sub != null)
+		this.setSubtitle(sub);
+		
 	}
 
 }

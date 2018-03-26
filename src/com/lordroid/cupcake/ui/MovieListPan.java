@@ -137,6 +137,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		genreCombo.setSelectedIndex(Settings.getCurrentGenre());
 		qualityCombo.setSelectedIndex(Settings.getCurrentQuality());
 		orderCombo.setSelectedIndex(Settings.getCurrentOrder());
+		
 		searchField.setText(SEARHC_DEFAULT_TEXT);
 		searchField.setPreferredSize(new Dimension(148, 23));
 
@@ -206,7 +207,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 			}
 
 		});
-		// search ();
+		search ();
 	}
 
 	private void getNextPage() {

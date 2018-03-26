@@ -22,11 +22,16 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.ListPanWatcher;
+import com.lordroid.cupcake.player.MediaPlayer;
+import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Strings;
 import com.lordroid.cupcake.yify.YifyMovie;
 
@@ -38,7 +43,58 @@ public class MainFram extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPan = new JPanel();
 	private MovieListPan movieListPan ;
+	private final MediaPlayer player = new MediaPlayer(this);
 	public MainFram() {
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowListener(){
+
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				MediaPlayer.getMediaplayerfactory().release();
+				System.exit(0);
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		
+		this.setIconImage(R.ICON);
 		// TODO : change this 
 		
 		// initializing components 
@@ -49,6 +105,10 @@ public class MainFram extends JFrame {
 
 					// TODO Auto-generated method stub
 					System.out.println("Action performed on "+movie.getTitle()+" Action value is : "+action);
+					if (action == MovieItem.PLAY_ACTION){
+						initPlayerView();
+						player.setTorrent(new YifyMovieTorrent(movie ,YifyMovieTorrent.USE_DEFAULT_SETTINGS));
+					}
 				}
 			
 			
@@ -71,6 +131,7 @@ public class MainFram extends JFrame {
 		
 		this.setContentPane(contentPan);
 		initMovieListPan();
+		
 	}
 	
 	public void initMovieListPan() {
@@ -80,7 +141,12 @@ public class MainFram extends JFrame {
 		contentPan.revalidate();
 	}
 	
-	
+	public void initPlayerView(){
+		this.getContentPane().removeAll();
+		this.setContentPane(contentPan);
+		contentPan.add(player, BorderLayout.CENTER);
+		contentPan.revalidate();
+	}
 	
 	
 

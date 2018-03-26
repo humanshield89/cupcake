@@ -18,6 +18,7 @@
  */
 package com.lordroid.cupcake.res;
 
+import com.lordroid.cupcake.utils.PropReader;
 import com.lordroid.cupcake.yify.YifyS;
 
 /**
@@ -26,6 +27,7 @@ import com.lordroid.cupcake.yify.YifyS;
  */
 public class Settings {
 
+	
 	public static final String[] SORT_BY_KEY_ARRAY = { YifyS.SORT_DATE_ADDED,
 			YifyS.SORT_YEAR, YifyS.SORT_TITLE, YifyS.SORT_RATING,
 			YifyS.SORT_DOWNLOAD_COUNT, YifyS.SORT_LIKE_COUNT };
@@ -48,80 +50,123 @@ public class Settings {
 
 	public static final String[] ORDER_KEYS = { "desc", "asc" };
 	public static final String[] ORDER_COMBO = { "Descending", "Ascending" };
-
+	public static final String[] DEFAULT_PLAY_QUALITY = {"720p","1080p","3d"};
+	
 	public static int getCurrentQuality() {
-		return 0;
+		Integer i = new Integer(PropReader.getProp("CurrentFilterQuality", S.CONFIG_FILE));
+		return i;
 	}
 
 	public static int getCurrentMinimumRating() {
-		return 0;
+		Integer i = new Integer(PropReader.getProp("currentMiniRating", S.CONFIG_FILE));
+		return i;
 	}
 
 	public static int getCurrentSortBy() {
-
-		return 0;
+		Integer i = new Integer(PropReader.getProp("currentSortBy", S.CONFIG_FILE));
+		return i;
 	}
 
 	public static int getCurrentGenre() {
-		return 0;
+		Integer i = new Integer(PropReader.getProp("CurrentGenre", S.CONFIG_FILE));
+		return i;
 
 	}
 
-	public static void setDefaultSubtittleEncoding() {
-		// TODO : do something
-
+	public static String getCurrentDefaultPlayQuality(){
+		Integer i = new Integer(PropReader.getProp("CurrentDefaultPlayQuality", S.CONFIG_FILE));
+		return DEFAULT_PLAY_QUALITY[i];
 	}
 
 	public static String getDefaultSubtittleEncoding() {
+		
 
-		return "Windows-1256";
+		return PropReader.getProp("DefaultSubtittleEncoding", S.CONFIG_FILE);
 	}
 
 	public static int getCurrentVolume() {
 		// TODO extenrnalize those
-		return 75;
+		Integer i = new Integer(PropReader.getProp("CurrentVolume", S.CONFIG_FILE));
+		return i;
+	}
+	
+	public static int getMaxSearchItemsPerPage() {
+		Integer i = new Integer(PropReader.getProp("MaxSearchItemsPerPage", S.CONFIG_FILE));
+		return i;
 	}
 
 	/**
 	 * 
+	 * @return indexOfCurrentOrder
 	 */
-	public static void setCurrentVolume() {
-		// TODO do something with this to store it to a file and restore on boot
-
-	}
-
-	public static int getMaxSearchItemsPerPage() {
-
-		return 8;
-	}
-
 	public static int getCurrentOrder() {
-		// TODO Auto-generated method stub
-		return 0;
+		Integer i = new Integer(PropReader.getProp("CurrentOrder", S.CONFIG_FILE));
+		return i;
+	}
+	
+	/**
+	 * 
+	 * @param str
+	 */
+	public static void setDefaultSubtittleEncoding(String str) {
+		// TODO : do something
+		PropReader.writeProp("DefaultSubtittleEncoding", str, S.CONFIG_FILE);
 	}
 
+	/**
+	 * 
+	 * @param i
+	 */
+	public static void setCurrentVolume(int i ) {
+		PropReader.writeProp("CurrentVolume", i+"", S.CONFIG_FILE);
+	}
+
+
+	/**
+	 * 
+	 * @param quality
+	 */
 	public static void setCurrentQuality(int quality) {
-		// TODO Auto-generated method stub
-
+		PropReader.writeProp("CurrentFilterQuality", quality+"", S.CONFIG_FILE);
 	}
 
+	/**
+	 * 
+	 * @param sortBy
+	 */
 	public static void setCurrentSortBy(int sortBy) {
-		// TODO Auto-generated method stub
-
+		PropReader.writeProp("currentSortBy", sortBy+"", S.CONFIG_FILE);
 	}
 
+	/**
+	 * 
+	 * @param genre
+	 */
 	public static void setCurrentGenre(int genre) {
-		// TODO Auto-generated method stub
-
+		PropReader.writeProp("CurrentGenre", genre+"", S.CONFIG_FILE);
 	}
 
+	/**
+	 * 
+	 * @param minRating
+	 */
 	public static void setCurrentminRating(int minRating) {
-		// TODO Auto-generated method stub
-
+		PropReader.writeProp("currentMiniRating", minRating+"", S.CONFIG_FILE);
 	}
 
+	/**
+	 * 
+	 * @param order
+	 */
 	public static void setCurrentOrder(int order) {
-		// TODO Auto-generated method stub
-
+		PropReader.writeProp("CurrentOrder", order+"", S.CONFIG_FILE);
+	}
+	
+	/**
+	 * 
+	 * @param index
+	 */
+	public static void setDefaultPlayQuality(int index ){
+		PropReader.writeProp("CurrentDefaultPlayQuality", index+"", S.CONFIG_FILE);
 	}
 }
