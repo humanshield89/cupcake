@@ -137,6 +137,12 @@ public class MainFram extends JFrame {
 	public void initMovieListPan() {
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
+		try {
+			player.torrent.stopTorrent();
+			player.getMediaPlayerComponent().getMediaPlayer().pause();
+		} catch (Exception e) {
+			
+		}
 		contentPan.add(movieListPan,BorderLayout.CENTER);
 		contentPan.revalidate();
 	}

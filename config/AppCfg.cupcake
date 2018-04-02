@@ -7,4 +7,5 @@ DefaultSubtittleEncoding=Windows-1256
 CurrentVolume=75
 MaxSearchItemsPerPage=1
 CurrentOrder=0
+CurrentMaxCacheSize=2147483648
 

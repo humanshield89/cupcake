@@ -97,6 +97,7 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 	private final int infoPanHoveredY;
 
 	public MovieItem(YifyMovie moviearg) {
+		//JList list = new JList(JList.);
 		thisPan = this;
 		this.movie = moviearg;
 		try {
@@ -190,9 +191,9 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 		infoPanHoveredY = 145;
 
 		// buttons 
-		itemButtons[0].setBounds(36, 10, 157, 40);
-		itemButtons[1].setBounds(36, 55, 157, 40);
-		itemButtons[2].setBounds(36, 100, 157, 40);
+		itemButtons[0].setBounds(15, 10, 200, 35);
+		itemButtons[1].setBounds(15, 55, 200, 35);
+		itemButtons[2].setBounds(15, 100, 200, 35);
 		
 		
 		// infoPanHeight = 629;

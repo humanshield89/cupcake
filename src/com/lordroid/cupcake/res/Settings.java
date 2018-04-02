@@ -52,6 +52,11 @@ public class Settings {
 	public static final String[] ORDER_COMBO = { "Descending", "Ascending" };
 	public static final String[] DEFAULT_PLAY_QUALITY = {"720p","1080p","3d"};
 	
+	public static long getCurrentMaxCacheSize(){
+		long l = new Long(PropReader.getProp("CurrentMaxCacheSize", S.CONFIG_FILE));
+		return l;
+	}
+	
 	public static int getCurrentQuality() {
 		Integer i = new Integer(PropReader.getProp("CurrentFilterQuality", S.CONFIG_FILE));
 		return i;
@@ -168,5 +173,10 @@ public class Settings {
 	 */
 	public static void setDefaultPlayQuality(int index ){
 		PropReader.writeProp("CurrentDefaultPlayQuality", index+"", S.CONFIG_FILE);
+	}
+	
+	public static void getCurrentMaxCacheSize(long size){
+		PropReader.writeProp("CurrentDefaultPlayQuality", size+"", S.CONFIG_FILE);
+
 	}
 }

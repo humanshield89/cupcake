@@ -23,8 +23,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.function.Consumer;
 
-import javax.swing.JPanel;
-
 import bt.Bt;
 import bt.data.Storage;
 import bt.data.file.FileSystemStorage;
@@ -42,19 +40,20 @@ import com.lordroid.cupcake.utils.FileUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 import com.lordroid.cupcake.yify.YifyTorrent;
 
-public class YifyMovieTorrent  implements Runnable{
+public class YifyMovieTorrent implements Runnable {
 	public static final int USE_DEFAULT_SETTINGS = -1;
 	public static final int USE_720P = 0;
 	public static final int USE_1080P = 1;
 	public static final int USE_3D = 2;
-	Consumer<TorrentSessionState> watcher ;
+	Consumer<TorrentSessionState> watcher;
+	BtClient client;
 	private final Config config = new Config() {
 		@Override
 		public int getNumOfHashingThreads() {
 			return Runtime.getRuntime().availableProcessors() * 2;
 		}
 	};
-	
+
 	Module dhtModule = new DHTModule(new DHTConfig() {
 		@Override
 		public boolean shouldUseRouterBootstrap() {
@@ -63,74 +62,93 @@ public class YifyMovieTorrent  implements Runnable{
 	});
 	private final YifyTorrent yiFyTorrent;
 	private final YifyMovie movie;
+
 	/**
 	 * @return the yiFyTorrent
 	 */
 	public YifyTorrent getYiFyTorrent() {
 		return yiFyTorrent;
 	}
+
 	/**
 	 * @return the movie
 	 */
 	public YifyMovie getMovie() {
 		return movie;
 	}
+
 	/**
 	 * @return the downloadFolder
 	 */
 	public File getDownloadFolder() {
 		return downloadFolder;
 	}
+
 	private final File downloadFolder;
-	
-	
-	// components 
-	public YifyMovieTorrent(YifyMovie movieArg ,int quality){
+
+	// components
+	public YifyMovieTorrent(YifyMovie movieArg, int quality) {
 		this.movie = movieArg;
 		this.yiFyTorrent = movie.getTorrent(quality);
-		downloadFolder = movie.getTmpFolder();
-		
+		downloadFolder = movie.getDownlodFolder();
+
 	}
-	public File getVideo(){
-		File video = FileUtils.searchrecursively(downloadFolder, ".mp4").get(0);
-		
+
+	public File getVideo() {
+		File video;
+
+		try {
+			video = FileUtils.searchrecursively(downloadFolder, ".mp4").get(0);
+		} catch (Exception e) {
+			try {
+				video = FileUtils.searchrecursively(downloadFolder, ".mkv")
+						.get(0);
+			} catch (Exception ex) {
+				video = FileUtils.searchrecursively(downloadFolder, ".avi")
+						.get(0);
+			}
+		}
 		return video;
-		
+
 	}
-	
-	public void start(Consumer<TorrentSessionState> watcher){
+
+	public void start(Consumer<TorrentSessionState> watcher) {
 		this.watcher = watcher;
 		run();
 	}
+
 	public void run() {
 		// TODO Auto-generated method stub
 		PeerExchangeConfig configEx = new PeerExchangeConfig() {
-		    @Override
-		    public int getMinEventsPerMessage() {
-		        // don't send PEX message if there are less than 50 added/dropped peer events
-		        return 50;
-		    }
+			@Override
+			public int getMinEventsPerMessage() {
+				// don't send PEX message if there are less than 50
+				// added/dropped peer events
+				return 50;
+			}
 		};
 
 		PeerExchangeModule customModule = new PeerExchangeModule(configEx);
-		BtClient client;
+		
 		Storage storage = new FileSystemStorage(downloadFolder.toPath());
 		try {
-			client = Bt.client().config(config)
-					.storage(storage)
-					.torrent(new URL(yiFyTorrent.getUrl()))
-					.autoLoadModules().module(dhtModule).module(customModule).stopWhenDownloaded()
-					.sequentialSelector().build();
-			client.startAsync(watcher,1000L);
+			client = Bt.client().config(config).storage(storage)
+					.torrent(new URL(yiFyTorrent.getUrl())).autoLoadModules()
+					.module(dhtModule).module(customModule)
+					.stopWhenDownloaded().sequentialSelector().build();
+			client.startAsync(watcher, 1000L);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
-			// mostly because the url isn't good 
+			// mostly because the url isn't good
 			//
-			App.LOGGER.error("Error while trying URL = "+yiFyTorrent.getUrl());
+			App.LOGGER
+					.error("Error while trying URL = " + yiFyTorrent.getUrl());
 			e.printStackTrace();
 		}
 	}
 	
-	
-	
+	public void stopTorrent() {
+		client.stop();
+		
+	}
 }

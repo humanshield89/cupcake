@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bt.torrent.TorrentSessionState;
-
 import com.alee.laf.progressbar.WebProgressBar;
 
 public class BufferingPanel extends JPanel{
@@ -40,7 +38,7 @@ public class BufferingPanel extends JPanel{
 		return progress;
 	}
 	
-	private JLabel peersLab = new JLabel("00"){
+	private JLabel peersLab = new JLabel("0"){
 	
 		@Override
 		public void setText(String text){
@@ -48,13 +46,19 @@ public class BufferingPanel extends JPanel{
 		}
 	};
 
-	private JLabel currentDownSpeed = new JLabel("0 kB/s"){
+	private JLabel currentDownSpeed = new JLabel("0"){
 		@Override
 		public void setText(String text){
-			super.setText("Average Speed : "+text+" KB/S");
+			String str = text;
+			try {
+				str = text.substring(0, text.lastIndexOf("."));
+			} catch (Exception e){
+				
+			}
+			super.setText("Average Speed : "+str+" KB/S");
 		}
 	};
-	private JLabel buffred = new JLabel("0 MB"){
+	private JLabel buffred = new JLabel("0"){
 		@Override
 		public void setText(String text){
 			super.setText("Buffred : "+text+" MB");

@@ -32,6 +32,7 @@ public class S {
 	
 	public static final String SYSTEM_TMP_FOLDER = System
 			.getProperty("java.io.tmpdir") + "cupcake" + File.separator;
+	public static final String MOVIE_DOWNLOAD_FOLDER = SYSTEM_TMP_FOLDER+File.separator+"DownloadedMovies";
 	public static final File DEFAULT_BG = new File(PathUtils.getExcutionPath()
 			+ File.separator + "resources" + File.separator + "defaultBG.jpg");
 	public static final String NATIVE_LIB_FOLDER = "native";

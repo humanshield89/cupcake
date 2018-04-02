@@ -39,7 +39,7 @@ public class YifyMovie {
 	private String coverLargeURL;
 	private String state;
 	private ArrayList<YifyTorrent> torrents = new ArrayList<YifyTorrent>();
-	private File tmpFolder;
+	private File ImgtmpFolder;
 	private File bgImageFile;
 	private File CoverImageFileMedium;
 	// private File coverImageFileLarge;
@@ -102,7 +102,7 @@ public class YifyMovie {
 		this.coverSmallURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_S_KEY);
 		this.coverMediumURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_M_KEY);
 		this.coverLargeURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_L_KEY);
-		this.state = movieArg.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
+		//this.state = movieArg.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
 		try {
 			JSONArray torrentsJSON = movie
 					.getJSONArray(YifyS.RESPONSE_TORRENTS_KEY);
@@ -113,8 +113,8 @@ public class YifyMovie {
 
 		}
 
-		tmpFolder = new File(S.SYSTEM_TMP_FOLDER + this.id + File.separator);
-		tmpFolder.mkdirs();
+		ImgtmpFolder = new File(S.SYSTEM_TMP_FOLDER+"cachedresources" +File.separator+ this.id + File.separator);
+		ImgtmpFolder.mkdirs();
 		System.out.println("ratting = " + this.MPARating);
 		cacheBgImage();
 		cacheCoverImageMedium();
@@ -189,11 +189,11 @@ public class YifyMovie {
 				public void run() {
 					// TODO Auto-generated method stub
 					isBGBEingCached = true;
-					if (!new File(tmpFolder.getAbsolutePath() + File.separator
+					if (!new File(ImgtmpFolder.getAbsolutePath() + File.separator
 							+ "background.jpg").exists()) {
 						try {
 							bgImageFile = HttpsDownloadUtility.downloadFile(
-									bgImageURL, tmpFolder.getAbsolutePath());
+									bgImageURL, ImgtmpFolder.getAbsolutePath());
 							isBGCached = true;
 						} catch (IOException e) {
 							bgImageFile = S.DEFAULT_BG;
@@ -206,7 +206,7 @@ public class YifyMovie {
 						}
 					} else {
 						// System.out.println("no need to cache ");
-						bgImageFile = new File(tmpFolder.getAbsolutePath()
+						bgImageFile = new File(ImgtmpFolder.getAbsolutePath()
 								+ File.separator + "background.jpg");
 						isBGCached = true;
 					}
@@ -226,13 +226,13 @@ public class YifyMovie {
 				public void run() {
 					isCoverMediumBeingCached = true;
 					// TODO Auto-generated method stub medium-cover.jpg
-					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
+					isCoverMediumCached = new File(ImgtmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
 					if (!isCoverMediumCached) {
 						try {
 							CoverImageFileMedium = HttpsDownloadUtility
 									.downloadFile(coverMediumURL,
-											tmpFolder.getAbsolutePath());
+											ImgtmpFolder.getAbsolutePath());
 						} catch (IOException e) {
 							CoverImageFileMedium = S.DEFAULT_COVER;
 							e.printStackTrace();
@@ -242,12 +242,12 @@ public class YifyMovie {
 						}
 					} else {
 						System.out.println("no need to cache ");
-						CoverImageFileMedium = new File(tmpFolder
+						CoverImageFileMedium = new File(ImgtmpFolder
 								.getAbsolutePath()
 								+ File.separator
 								+ "medium-cover.jpg");
 					}
-					isCoverMediumCached = new File(tmpFolder.getAbsolutePath()
+					isCoverMediumCached = new File(ImgtmpFolder.getAbsolutePath()
 							+ File.separator + "medium-cover.jpg").exists();
 					isCoverMediumBeingCached = false;
 				}
@@ -443,10 +443,14 @@ public class YifyMovie {
 	/**
 	 * @return the tmpFolder
 	 */
-	public File getTmpFolder() {
-		return tmpFolder;
+	public File getImgTmpFolder() {
+		return ImgtmpFolder;
 	}
 
+	public File getDownlodFolder(){
+		return new File(S.MOVIE_DOWNLOAD_FOLDER+File.separator+id);
+	}
+	
 	/**
 	 * @return the bgImageFile
 	 */
