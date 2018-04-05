@@ -158,11 +158,11 @@ public class MovieListPan extends JPanel implements ActionListener {
 		seachPanContainer.add(searchBtn);
 
 		// movie list container init
-		movieListContainer.setOpaque(true);
+		movieListContainer.setOpaque(false);
 		movieListContainer.setLayout(new ModifiedFlowLayout(
 				ModifiedFlowLayout.CENTER, 10, 20));
 		scrollPan = new JScrollPane(movieListContainer);
-		this.scrollPan.setOpaque(true);
+		this.scrollPan.setOpaque(false);
 		scrollPan.getVerticalScrollBar().setUnitIncrement(20);
 		this.add(this.seachPanContainer, BorderLayout.NORTH);
 		this.add(scrollPan, BorderLayout.CENTER);

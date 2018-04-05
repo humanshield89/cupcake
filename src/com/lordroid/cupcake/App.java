@@ -45,6 +45,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.ui.MainFram;
+import com.lordroid.cupcake.utils.Os;
 import com.lordroid.cupcake.utils.PathUtils;
 import com.sun.jna.NativeLibrary;
 

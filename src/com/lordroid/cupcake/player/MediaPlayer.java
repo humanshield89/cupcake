@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -67,6 +68,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	/**
 	 * 
 	 */
+	public static final int TORRENT = 1;
+	//public static final int VIDEO = 2;
+	
 	public YifyMovieTorrent torrent;
 	boolean TorrentStartedPlaying = false;
 	
@@ -86,7 +90,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	public static MediaPlayerFactory getMediaplayerfactory() {
 		return mediaPlayerFactory;
 	}
-
+	private int currentlyPlayingSource = 0;
 	private static final EmbeddedMediaPlayer mediaPlayer = mediaPlayerFactory
 			.newEmbeddedMediaPlayer();
 	private Canvasx mediaPlayerComponent = new Canvasx(mediaPlayer);
@@ -110,6 +114,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	private boolean wasPlaying;
 	private boolean mouseOncontrol = false;
+	//private boolean mediaLoaded = false;
 
 	public MediaPlayer(MainFram frame) {
 		this.frame = frame;
@@ -130,7 +135,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 					@Override
 					protected void afterExitFullScreen() {
-						controlPanel.setVisible(true);
+						//controlPanel.setVisible(true);
 						// statusBar.setVisible(true);
 					}
 
@@ -165,7 +170,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				}
 
 				if (video) {
-					setVideo(files[i].getAbsolutePath());
+					setCurrentVideo(files[i].getAbsolutePath());
 					play();
 				}
 				if (subtitle) {
@@ -179,7 +184,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		
 
 	}
-
+	
+	
 	public void setTorrent(YifyMovieTorrent torrent) {
 		TorrentStartedPlaying = false;
 		this.torrent = torrent;
@@ -190,7 +196,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	public void setPlayerView() {
 		try {
-			this.remove(buffPan);
+			this.removeAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -202,9 +208,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	public void setBufferingView() {
 		try {
-			this.remove(backPanel);
-			this.remove(mediaPlayerComponent);
-			this.remove(controlPanel);
+			this.removeAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -241,6 +245,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	private void showControls(boolean bool) {
 
 		controlPanel.setVisible(bool);
+		this.backPanel.setVisible(bool);
 	}
 
 	private void initActionListners() {
@@ -608,10 +613,11 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayerComponent.getMediaPlayer().setVolume(
 				controlPanel.getVolumeControl().getValue() * 2);
 		if (this.newMedia == 0) {
-			// this.mediaPlayerComponent.getMediaPlayer().
-			LOGGER.info(new File("G:/a.srt").getAbsolutePath());
-			this.mediaPlayerComponent.getMediaPlayer().playMedia(
-					this.video.getAbsolutePath());
+				this.mediaPlayerComponent.getMediaPlayer().playMedia(
+				this.video.getAbsolutePath());
+			
+
+			
 			// this.mediaPlayerComponent.getMediaPlayer().setSubTitleFile(new
 			// File("G:/a.srt"));
 
@@ -676,14 +682,18 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.lastRewindTime = System.currentTimeMillis();
 	}
 
+	public void setVideoToPlay(String str) {
+		this.video = new File(str);
+	}
 	/**
 	 * @param str
 	 *            the video to set
 	 */
-	public void setVideo(String str) {
+	public void setCurrentVideo(String str) {
 		this.newMedia = 0;
 		this.video = new File(str);
 		LOGGER.info("video set to " + str);
+		
 		// this.mediaPlayerComponent.getMediaPlayer().setMedia(this.video.getAbsolutePath());
 		// App.LOGGER.info("total time is  "+mediaPlayerComponent.getMediaPlayer().getLength());
 
@@ -882,7 +892,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		if (!TorrentStartedPlaying)
 			if ((totalTime >= 60000 && downloadedSize >= totalSize * 5 / 100)
 					|| (downloadedSize / 1024 / 1024 >= 20)) {
-				this.setVideo(this.torrent.getVideo().getAbsolutePath());
+				this.setVideoToPlay(this.torrent.getVideo().getAbsolutePath());
+				this.currentlyPlayingSource = TORRENT;
 				this.setPlayerView();
 				this.play();
 				TorrentStartedPlaying = true;

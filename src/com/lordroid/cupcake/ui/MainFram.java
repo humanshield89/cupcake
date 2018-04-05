@@ -19,13 +19,19 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.lordroid.cupcake.bt.YifyMovieTorrent;
@@ -33,6 +39,7 @@ import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.player.MediaPlayer;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Strings;
+import com.lordroid.cupcake.utils.DesktopUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
 public class MainFram extends JFrame {
@@ -44,6 +51,15 @@ public class MainFram extends JFrame {
 	private JPanel contentPan = new JPanel();
 	private MovieListPan movieListPan ;
 	private final MediaPlayer player = new MediaPlayer(this);
+	JMenuBar mainMenu = new JMenuBar();
+	JMenu fileMenu = new JMenu("File");
+	JMenu openMenu = new JMenu("Open");
+	JMenu editMenu = new JMenu("Edit");
+	JMenuItem settingsMenuItem = new JMenuItem("Settings");
+	JMenuItem openVideoMenuItem = new JMenuItem("Video File");
+	JMenuItem openTorrentMenuItem = new JMenuItem("Torrent File");
+	JMenuItem exitMenuItem = new JMenuItem("Exit");
+
 	public MainFram() {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowListener(){
@@ -63,9 +79,9 @@ public class MainFram extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				MediaPlayer.getMediaplayerfactory().release();
-				System.exit(0);
+				systemExit();
 			}
+
 
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
@@ -108,6 +124,16 @@ public class MainFram extends JFrame {
 					if (action == MovieItem.PLAY_ACTION){
 						initPlayerView();
 						player.setTorrent(new YifyMovieTorrent(movie ,YifyMovieTorrent.USE_DEFAULT_SETTINGS));
+					} else if (action == MovieItem.LATER_ACTION) {
+						//initPlayerView();
+						//player.setYoutube(movie.getYoutubeTrailerURL());
+						try {
+							DesktopUtils.openWebpage(new URL(movie.getYoutubeTrailerURL()));
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						
+						}
 					}
 				}
 			
@@ -132,17 +158,37 @@ public class MainFram extends JFrame {
 		this.setContentPane(contentPan);
 		initMovieListPan();
 		
+		// menu bar 
+		mainMenu.add(fileMenu);
+		fileMenu.add(openMenu);
+		openMenu.add(openVideoMenuItem);
+		openMenu.add(openTorrentMenuItem);
+		fileMenu.add(exitMenuItem);
+		editMenu.add(settingsMenuItem);
+		mainMenu.add(editMenu);
+		this.setJMenuBar(mainMenu);
 	}
 	
+	protected void systemExit() {
+		// TODO Auto-generated method stub
+		MediaPlayer.getMediaplayerfactory().release();
+		System.exit(0);
+		
+	}
+
 	public void initMovieListPan() {
+	
+		try {
+			player.getMediaPlayerComponent().getMediaPlayer().pause();
+			player.getMediaPlayerComponent().getMediaPlayer().stop();
+			player.getMediaPlayerComponent().getMediaPlayer().setPlaySubItems(false);
+			
+			player.torrent.stopTorrent();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
-		try {
-			player.torrent.stopTorrent();
-			player.getMediaPlayerComponent().getMediaPlayer().pause();
-		} catch (Exception e) {
-			
-		}
 		contentPan.add(movieListPan,BorderLayout.CENTER);
 		contentPan.revalidate();
 	}

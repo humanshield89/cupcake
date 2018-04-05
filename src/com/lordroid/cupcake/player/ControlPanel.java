@@ -183,6 +183,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	private JPanel controlsContainer = new JPanel();
 
 	public ControlPanel() {
+		
 		this.currentVolume.setFont(R.NORMAL_FONT);
 		progress.setDrawProgress(true);
 		progress.setTrackBgTop(new Color(135, 124, 176));
@@ -286,7 +287,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		rewindBtn.addActionListener(new BtnActionListner());
 
 		// progress.setMaximum(100);
-
+		this.setOpaque(true);
 	}
 
 	/**
