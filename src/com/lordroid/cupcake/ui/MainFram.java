@@ -188,6 +188,7 @@ public class MainFram extends JFrame {
 		// actions 
 		playerViewMenuItem.addActionListener(new MenuActionListener());
 		MovieListViewMenuItem.addActionListener(new MenuActionListener());
+		exitMenuItem.addActionListener(new MenuActionListener());
 	}
 	
 	protected void systemExit() {
@@ -240,6 +241,8 @@ public class MainFram extends JFrame {
 				initPlayerView();
 			} else if (source.equals(MovieListViewMenuItem)){
 				initMovieListPan();
+			} else if (source.equals(exitMenuItem)){
+				systemExit();
 			}
 		}
 		

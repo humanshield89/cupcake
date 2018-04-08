@@ -141,10 +141,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	public MediaPlayer(MainFram frame) {
 		this.frame = frame;
 		// menu items
-		// this.mediaPlayerComponent.add
-		// this.add(menu);
-		//menu.setBackground(new Color(254, 254, 254, 0));
-		//subtitlesMenu.setBackground(new Color(254, 254, 254, 0));
 		menu.setLightWeightPopupEnabled(false);
 		menu.add(subtitlesMenu);
 		subtitlesMenu.add(lang1Menu);
@@ -153,6 +149,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		subtitlesMenu.add(localSubsMenu);
 		subtitlesMenu.add(localSubPicker);
 
+		
+		
 		backPanel = new MediaBackButtonPan(frame);
 		this.setLayout(new BorderLayout());
 		mediaPlayer.setVideoSurface(videoSurface);
@@ -238,6 +236,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.add(mediaPlayerComponent, BorderLayout.CENTER);
 		this.add(controlPanel, BorderLayout.SOUTH);
 		this.revalidate();
+		controlPanel.repaint();
+		backPanel.repaint();
 	}
 
 	public void setBufferingView() {
@@ -249,6 +249,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.add(backPanel, BorderLayout.NORTH);
 		this.add(buffPan, BorderLayout.CENTER);
 		this.revalidate();
+		buffPan.repaint();
+		backPanel.repaint();
 	}
 
 	/*
@@ -1069,7 +1071,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			if(list2 != null)
 			for (int i =0 ; i < list2.size() ; i++) {
 				SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),this);
-				this.lang1Menu.add(item);
+				this.lang2Menu.add(item);
 				if(i == 0 && !defaultSubSelected){
 					// TODO make it better 
 					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
@@ -1079,7 +1081,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			if(list3 != null)
 			for (int i =0 ; i < list3.size() ; i++) {
 				SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),this);
-				this.lang1Menu.add(item);
+				this.lang3Menu.add(item);
 				if(i == 0 && !defaultSubSelected){
 					// TODO make it better 
 					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
