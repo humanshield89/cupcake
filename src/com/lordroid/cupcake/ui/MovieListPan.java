@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -38,7 +37,7 @@ import com.lordroid.cupcake.yify.YifyS;
 public class MovieListPan extends JPanel implements ActionListener {
 	public static final String SEARHC_DEFAULT_TEXT = "Search Title/imdbCode ...";
 	private final ListPanWatcher listWatcher;
-	private ArrayList<YifyMovie> moviesList = new ArrayList<YifyMovie>();
+	//private ArrayList<YifyMovie> moviesList = new ArrayList<YifyMovie>();
 
 	// JPanel mainContainer = new JPa
 	private WebPanel seachPanContainer = new WebPanel() {

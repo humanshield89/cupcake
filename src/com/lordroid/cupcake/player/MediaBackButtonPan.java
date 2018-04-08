@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 
 import com.lordroid.cupcake.ui.MainFram;
 
+@SuppressWarnings("serial")
 public class MediaBackButtonPan extends JPanel {
+
 	private JButton backBtn = new JButton("<< Back to Movie List");
 	
 	public MediaBackButtonPan(final MainFram frame) {

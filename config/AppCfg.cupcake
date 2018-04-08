@@ -1,3 +1,4 @@
+# do not edit manually 
 currentMiniRating=0
 currentSortBy=0
 CurrentFilterQuality=0
@@ -8,4 +9,6 @@ CurrentVolume=75
 MaxSearchItemsPerPage=1
 CurrentOrder=0
 CurrentMaxCacheSize=2147483648
-
+SubtitleLang1=2
+SubtitleLang2=3
+SubtitleLang3=0

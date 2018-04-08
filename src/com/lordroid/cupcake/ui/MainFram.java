@@ -19,10 +19,11 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
@@ -50,15 +51,25 @@ public class MainFram extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPan = new JPanel();
 	private MovieListPan movieListPan ;
-	private final MediaPlayer player = new MediaPlayer(this);
-	JMenuBar mainMenu = new JMenuBar();
+	private MediaPlayer player = new MediaPlayer(this);
+	public JMenuBar mainMenu = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
 	JMenu openMenu = new JMenu("Open");
 	JMenu editMenu = new JMenu("Edit");
+	JMenu aboutMenu = new JMenu("About");
+	JMenu viewMenuItem = new JMenu("View");
+	
 	JMenuItem settingsMenuItem = new JMenuItem("Settings");
 	JMenuItem openVideoMenuItem = new JMenuItem("Video File");
 	JMenuItem openTorrentMenuItem = new JMenuItem("Torrent File");
 	JMenuItem exitMenuItem = new JMenuItem("Exit");
+	
+	JMenuItem aboutCupcakeMenuItem = new JMenuItem("About Cupcake");
+	JMenuItem licenseMenuItem = new JMenuItem("License");
+	JMenuItem librariesMenuItem = new JMenuItem("Used Libraries");
+	
+	JMenuItem playerViewMenuItem = new JMenuItem("Player View");
+	JMenuItem MovieListViewMenuItem = new JMenuItem("Movie List View");
 
 	public MainFram() {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -157,16 +168,26 @@ public class MainFram extends JFrame {
 		
 		this.setContentPane(contentPan);
 		initMovieListPan();
-		
+
 		// menu bar 
 		mainMenu.add(fileMenu);
-		fileMenu.add(openMenu);
-		openMenu.add(openVideoMenuItem);
-		openMenu.add(openTorrentMenuItem);
+		//fileMenu.add(openMenu);
+		fileMenu.add(openVideoMenuItem);
+		fileMenu.add(openTorrentMenuItem);
 		fileMenu.add(exitMenuItem);
 		editMenu.add(settingsMenuItem);
 		mainMenu.add(editMenu);
+		mainMenu.add(viewMenuItem);
+		viewMenuItem.add(playerViewMenuItem);
+		viewMenuItem.add(MovieListViewMenuItem);
+		mainMenu.add(aboutMenu);
+		aboutMenu.add(aboutCupcakeMenuItem);
+		aboutMenu.add(librariesMenuItem);
+		aboutMenu.add(licenseMenuItem);
 		this.setJMenuBar(mainMenu);
+		// actions 
+		playerViewMenuItem.addActionListener(new MenuActionListener());
+		MovieListViewMenuItem.addActionListener(new MenuActionListener());
 	}
 	
 	protected void systemExit() {
@@ -181,7 +202,7 @@ public class MainFram extends JFrame {
 		try {
 			player.getMediaPlayerComponent().getMediaPlayer().pause();
 			player.getMediaPlayerComponent().getMediaPlayer().stop();
-			player.getMediaPlayerComponent().getMediaPlayer().setPlaySubItems(false);
+			player.getMediaPlayerComponent().getMediaPlayer().setFullScreen(false);
 			
 			player.torrent.stopTorrent();
 		} catch (Exception e) {
@@ -190,17 +211,37 @@ public class MainFram extends JFrame {
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
 		contentPan.add(movieListPan,BorderLayout.CENTER);
+		this.setTitle("Cupcake "+ "Movie list ");
 		contentPan.revalidate();
+		playerViewMenuItem.setEnabled(true);
+		MovieListViewMenuItem.setEnabled(false);
 	}
 	
 	public void initPlayerView(){
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
+		//player = new MediaPlayer(this);
 		contentPan.add(player, BorderLayout.CENTER);
+		this.setTitle("Cupcake ");
+		player.revalidate();
 		contentPan.revalidate();
+		playerViewMenuItem.setEnabled(false);
+		MovieListViewMenuItem.setEnabled(true);
 	}
 	
 	
 
+	class MenuActionListener implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			Object source = arg0.getSource();
+			if(source.equals(playerViewMenuItem)){
+				initPlayerView();
+			} else if (source.equals(MovieListViewMenuItem)){
+				initMovieListPan();
+			}
+		}
+		
+	}
 }

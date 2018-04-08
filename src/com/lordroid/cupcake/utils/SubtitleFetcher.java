@@ -38,7 +38,9 @@ import com.lordroid.cupcake.yify.YifyMovie;
  * 
  */
 public class SubtitleFetcher {
-
+	public static final String[] SUBTITLE_LANGUAGES_NAMES = {"English","Deutsch","Arabic","French","Espanol","Italiano","Português","rusian"};
+	public static final String[] SUBTITLE_LANGUAGES_CODES = {"eng","ger","ara","fre","spa","ita","por","rus"};
+	
 	public static File unGzip(File infile, boolean deleteGzipfileOnSuccess)
 			throws IOException {
 		GZIPInputStream gin = new GZIPInputStream(new FileInputStream(infile));
@@ -89,6 +91,12 @@ public class SubtitleFetcher {
 		String url = sub.getSubDownloadLink();
 		
 		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie.getDownlodFolder().getAbsolutePath()), true);
+	}
+	
+	public static File getSubtitle(SubtitleInfo sub , File movie) throws IOException{
+		String url = sub.getSubDownloadLink();
+		
+		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie.getAbsolutePath()), true);
 	}
 	
 	public static void main(String args[]) {

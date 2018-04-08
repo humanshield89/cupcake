@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import com.alee.laf.progressbar.WebProgressBar;
 
+@SuppressWarnings("serial")
 public class BufferingPanel extends JPanel{
 	
 	/**

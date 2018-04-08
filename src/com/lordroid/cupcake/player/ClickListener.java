@@ -107,6 +107,8 @@ public class ClickListener extends MouseAdapter implements Watcher {
 				doubleClick(e);
 				// Do what you want with double click
 			}
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			
 		}
 
 	}

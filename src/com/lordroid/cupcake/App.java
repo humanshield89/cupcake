@@ -24,6 +24,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -45,7 +47,6 @@ import com.alee.laf.WebLookAndFeel;
 import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.ui.MainFram;
-import com.lordroid.cupcake.utils.Os;
 import com.lordroid.cupcake.utils.PathUtils;
 import com.sun.jna.NativeLibrary;
 
@@ -83,9 +84,7 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-		// JSonTest.main(args);
-		
-
+		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
 
 		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
