@@ -725,7 +725,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		ArrayList<File> localSubs = FileUtils.searchrecursively(
 				video.getParentFile(), "srt");
 		this.localSubsMenu.removeAll();
-		this.lang1Menu.removeAll();
+		lang1Menu.removeAll();
+		lang2Menu.removeAll();
+		lang3Menu.removeAll();
 		for (File f : localSubs) {
 			localSubsMenu.add(new LocalSubtitleFileMenuItem(f, this));
 		}
@@ -744,9 +746,11 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		}
 
 		subtitleWorker = new Thread(new Runnable() {
-
+			boolean subtitleSet = false;
 			@Override
 			public void run() {
+
+
 				// TODO Auto-generated method stub
 				List<SubtitleInfo> subInfoList1 = null;
 				List<SubtitleInfo> subInfoList2 = null;
@@ -762,9 +766,15 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList1 != null)
-					for (SubtitleInfo subInfo : subInfoList1) {
-						lang1Menu.add(new SubtitleMenuItem(subInfo,
-								mediaPlayer2));
+					for (int i = 0 ; i < subInfoList1.size() ; i++) {
+						SubtitleInfo subInfo = subInfoList1.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						lang1Menu.add(subItem);
+						if(i == 0 && !subtitleSet){
+							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+							subtitleSet = true;
+							// TODO continue here 
+						}
 					}
 				// lang 2
 				try {
@@ -776,9 +786,14 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList2 != null)
-					for (SubtitleInfo subInfo : subInfoList2) {
-						lang2Menu.add(new SubtitleMenuItem(subInfo,
-								mediaPlayer2));
+					for (int i = 0 ; i < subInfoList2.size() ; i++) {
+						SubtitleInfo subInfo = subInfoList2.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						lang2Menu.add(subItem);
+						if(i == 0 && !subtitleSet){
+							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+							subtitleSet = true;
+						}
 					}
 				// lang3
 				try {
@@ -790,9 +805,14 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList3 != null)
-					for (SubtitleInfo subInfo : subInfoList3) {
-						lang3Menu.add(new SubtitleMenuItem(subInfo,
-								mediaPlayer2));
+					for (int i = 0 ; i < subInfoList3.size() ; i++) {
+						SubtitleInfo subInfo = subInfoList3.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						lang3Menu.add(subItem);
+						if(i == 0 && !subtitleSet){
+							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+							subtitleSet = true;
+						}
 					}
 			}
 
@@ -808,11 +828,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.newMedia = 0;
 		this.video = new File(str);
 		App.LOGGER.debug("video set to " + str);
-
-		// this.mediaPlayerComponent.getMediaPlayer().setMedia(this.video.getAbsolutePath());
-		// App.LOGGER.info("total time is  "+mediaPlayerComponent.getMediaPlayer().getLength());
-
-		// this.mediaPlayerComponent.getMediaPlayer().setV
 	}
 
 	/**
@@ -1047,7 +1062,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				this.lang1Menu.add(item);
 				if(i == 0 && !defaultSubSelected){
 					// TODO make it better 
-					item.actionPerformed(new ActionEvent(null, 0,null));
+					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
+					defaultSubSelected = true;
 				}
 			}
 			if(list2 != null)
@@ -1056,7 +1072,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				this.lang1Menu.add(item);
 				if(i == 0 && !defaultSubSelected){
 					// TODO make it better 
-					item.actionPerformed(new ActionEvent(null, 0,null));
+					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
+					defaultSubSelected = true;
 				}
 			}
 			if(list3 != null)
@@ -1065,7 +1082,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				this.lang1Menu.add(item);
 				if(i == 0 && !defaultSubSelected){
 					// TODO make it better 
-					item.actionPerformed(new ActionEvent(null, 0,null));
+					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
+					defaultSubSelected = true;
 				}
 			}
 			
