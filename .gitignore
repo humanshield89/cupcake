@@ -12,3 +12,7 @@ libs
 bin
 dependency-reduced-pom.xml
 build/*
+x64_installer/*
+x32_installer/*
+x64_vlclib/*
+x32_vlclib/*

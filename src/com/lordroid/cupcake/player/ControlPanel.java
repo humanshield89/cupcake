@@ -38,10 +38,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alee.laf.slider.WebSlider;
+import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.controlers.Watchable;
 import com.lordroid.cupcake.controlers.Watcher;
 import com.lordroid.cupcake.res.R;
@@ -55,7 +53,6 @@ import com.lordroid.cupcake.utils.TimeUtils;
  */
 public class ControlPanel extends JPanel implements Watcher, Watchable {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(ControlPanel.class);
 
 	public class BtnActionListner implements ActionListener {
 
@@ -68,11 +65,11 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		 */
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource().equals(playBtn)) {
-				LOGGER.debug("Play pressed ? ");
+				App.LOGGER.debug("Play pressed ? ");
 				updateWatchers(S.PLAY_BTN_PRESSED);
 			} else if (arg0.getSource().equals(skipBtn)) {
 				// perform action
-				LOGGER.debug("skip button pressed ");
+				App.LOGGER.debug("skip button pressed ");
 				updateWatchers(S.SKIP_BTN_PRESSED);
 
 			} else if (arg0.getSource().equals(rewindBtn)) {

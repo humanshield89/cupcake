@@ -20,11 +20,7 @@ package com.lordroid.cupcake;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.util.function.Consumer;
 
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
@@ -32,19 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
-import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import bt.Bt;
-import bt.data.Storage;
-import bt.data.file.FileSystemStorage;
-import bt.dht.DHTConfig;
-import bt.dht.DHTModule;
-import bt.runtime.BtClient;
-import bt.runtime.Config;
-import bt.torrent.TorrentSessionState;
 
 import com.alee.laf.WebLookAndFeel;
-import com.google.inject.Module;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.ui.MainFram;
 import com.lordroid.cupcake.utils.PathUtils;
@@ -67,14 +53,17 @@ public class App {
 
 	private static boolean initVlcJ() {
 		String ourLocation = PathUtils.getExcutionPath();
+		System.setProperty(
+				"VLC_PLUGIN_PATH",
+				new File(ourLocation +  File.separator + S.NATIVE_LIB_FOLDER + File.separator + "plugins").getAbsolutePath());
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
-				ourLocation + "/" + S.NATIVE_LIB_FOLDER);
+				new File(ourLocation +  File.separator + S.NATIVE_LIB_FOLDER).getAbsolutePath());
 		LOGGER.info("added " + ourLocation + File.separator
 				+ S.NATIVE_LIB_FOLDER + " to search path");
 
 		// boolean found = new NativeDiscovery().discover();
 
-		LOGGER.info("Libvlc found ! " + LibVlc.INSTANCE.libvlc_get_version());
+		LOGGER.info("Libvlc found ? " + LibVlc.INSTANCE.libvlc_get_version());
 
 		// TODO : find a better way to report found or not !
 		return true;
@@ -84,11 +73,11 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-		new NativeDiscovery().discover();
+		//new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
-
+		initVlcJ();
 		 SwingUtilities.invokeLater(new Runnable() {
 		
 		 public void run() {
@@ -98,64 +87,6 @@ public class App {
 		
 		 });
 
-		// initVlcJ();
-		// new MainFram();
-		// System.setProperty("java.net.preferIPv4Stack", "true");
-		// try {
-		// testBT();
-		// } catch (MalformedURLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-	}
-
-	public static void testBT() throws MalformedURLException {
-		Config config = new Config() {
-			@Override
-			public int getNumOfHashingThreads() {
-				return Runtime.getRuntime().availableProcessors() * 2;
-			}
-		};
-
-		// enable bootstrapping from public routers
-		Module dhtModule = new DHTModule(new DHTConfig() {
-			@Override
-			public boolean shouldUseRouterBootstrap() {
-				return true;
-			}
-		});
-
-		// get download directory
-		Path targetDirectory = new File("downloads").toPath();
-
-		// create file system based backend for torrent data
-		Storage storage = new FileSystemStorage(targetDirectory);
-
-		// create client with a private runtime
-		BtClient client = Bt.client().config(config)
-				.storage(storage)
-				// .magnet("magnet:?xt=urn:btih:af0d9aa01a9ae123a73802cfa58ccaf355eb19f1")
-				.torrent(new File("a.torrent").toURI().toURL())
-				.autoLoadModules().module(dhtModule).stopWhenDownloaded()
-				.sequentialSelector().build();
-
-		// launch
-		// client.startAsync().join();
-
-		client.startAsync(new Consumer<TorrentSessionState>() {
-
-			public void accept(TorrentSessionState arg0) {
-				// TODO Auto-generated method stub
-				System.out.println("downloaded = "
-						+ ((double) arg0.getPiecesComplete() / (double) arg0
-								.getPiecesTotal()) * 100 + " %");
-				System.out.println("uploaded = " + arg0.getUploaded());
-				System.out.println("downloaded  = " + arg0.getDownloaded());
-
-			}
-
-		}, 1000L).join();
 	}
 
 }
