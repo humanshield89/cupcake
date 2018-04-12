@@ -201,6 +201,9 @@ public class MovieListPan extends JPanel implements ActionListener {
 			}
 
 		});
+		// TODO : change this load a blank pannel with the frame size 
+		//        add a status panel on the south and display loading ... or something 
+		// like contacting
 		search ();
 	}
 
