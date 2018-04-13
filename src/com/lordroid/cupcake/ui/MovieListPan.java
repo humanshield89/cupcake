@@ -41,18 +41,18 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	// JPanel mainContainer = new JPa
 	private WebPanel seachPanContainer = new WebPanel() {
-		public void paintComponent(Graphics g) {
-			int i = 0;
-			int n = 0;
-			while (n < this.getHeight()) {
-				i = 0;
-				while (i < this.getWidth()) {
-					g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
-					i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
-				}
-				n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
-			}
-		}
+//		public void paintComponent(Graphics g) {
+//			int i = 0;
+//			int n = 0;
+//			while (n < this.getHeight()) {
+//				i = 0;
+//				while (i < this.getWidth()) {
+//					g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
+//					i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
+//				}
+//				n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
+//			}
+//		}
 	};
 	// sort by components
 	private JLabel sortByLabel = new JLabel("Sort by : ");
@@ -204,7 +204,9 @@ public class MovieListPan extends JPanel implements ActionListener {
 		// TODO : change this load a blank pannel with the frame size 
 		//        add a status panel on the south and display loading ... or something 
 		// like contacting
-		search ();
+		movieListContainer.add(new JPanel());
+		
+		this.actionPerformed(new ActionEvent(searchBtn, ActionEvent.ACTION_PERFORMED, "search"));
 	}
 
 	private void getNextPage() {
@@ -332,25 +334,13 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 		try {
 			obj = JSONComunicator.readJsonFromUrl(url);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			movieListContainer.add(this.noResponse);
-			this.searchBtn.setEnabled(true);
-			return;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			movieListContainer.add(this.noResponse);
-			this.searchBtn.setEnabled(true);
-			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			movieListContainer.add(this.noResponse);
 			this.searchBtn.setEnabled(true);
-			return;
-		}
+			return ;
+		} 
 		if (obj != null) {
 			data = obj.getJSONObject(YifyS.RESPONSE_DATA_KEY);
 			// maxPage = obj.getJSONObject("");
@@ -358,7 +348,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 			// TODO : something went wrong handle it
 			movieListContainer.add(this.noResponse);
 			this.searchBtn.setEnabled(true);
-			return;
+			return ;
 		}
 
 		if (data != null) {
@@ -369,7 +359,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 			} catch (JSONException e) {
 				movieListContainer.add(this.noResult);
 				this.searchBtn.setEnabled(true);
-				return;
+				return ;
 			}
 		} else {
 			// TODO : something went wrong handle it
@@ -383,9 +373,6 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 			}
 			if (page < maxPage && maxPage != 0) {
-				// loadMoreBtn.setFont(R.LOAD_MORE_FONT);
-				// loadMoreBtn.setPreferredSize(new Dimension(
-				// this.getWidth() - 30, 40));
 				movieListContainer.add(loadMoreBtn);
 			} else {
 				noMoreEntries();

@@ -19,6 +19,7 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -50,7 +51,7 @@ public class MainFram extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPan = new JPanel();
-	private MovieListPan movieListPan ;
+	public MovieListPan movieListPan ;
 	private MediaPlayer player = new MediaPlayer(this);
 	public JMenuBar mainMenu = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
@@ -72,6 +73,7 @@ public class MainFram extends JFrame {
 	JMenuItem MovieListViewMenuItem = new JMenuItem("Movie List View");
 
 	public MainFram() {
+		this.setBackground(Color.BLACK);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowListener(){
 
@@ -158,7 +160,7 @@ public class MainFram extends JFrame {
 		this.setMinimumSize(new Dimension(1000, 600));
 		this.setLocation(new Point((screenWidth - this.getWidth()) / 2,
 				(screenHeight - this.getHeight()) / 2));
-		this.setVisible(true);
+		//this.setVisible(true);
 		this.setTitle(Strings.getTitle() + Strings.getVersion());
 		
 		
@@ -167,7 +169,6 @@ public class MainFram extends JFrame {
 		
 		
 		this.setContentPane(contentPan);
-		initMovieListPan();
 
 		// menu bar 
 		mainMenu.add(fileMenu);
@@ -189,6 +190,9 @@ public class MainFram extends JFrame {
 		playerViewMenuItem.addActionListener(new MenuActionListener());
 		MovieListViewMenuItem.addActionListener(new MenuActionListener());
 		exitMenuItem.addActionListener(new MenuActionListener());
+		initMovieListPan();
+		this.setVisible(true);
+
 	}
 	
 	protected void systemExit() {
@@ -198,17 +202,20 @@ public class MainFram extends JFrame {
 		
 	}
 
+	
+	
 	public void initMovieListPan() {
 	
 		try {
 			player.getMediaPlayerComponent().getMediaPlayer().pause();
 			player.getMediaPlayerComponent().getMediaPlayer().stop();
 			player.getMediaPlayerComponent().getMediaPlayer().setFullScreen(false);
-			
+			if(player.torrent != null)
 			player.torrent.stopTorrent();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
 		contentPan.add(movieListPan,BorderLayout.CENTER);

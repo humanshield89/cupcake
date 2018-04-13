@@ -19,7 +19,6 @@
 package com.lordroid.cupcake.player;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -94,7 +93,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 	BasicSliderUI uix;
 	@SuppressWarnings("serial")
-	private WebSlider progress = new WebSlider() {
+	private JSlider progress = new JSlider() {
 		{
 			MouseListener[] listeners = getMouseListeners();
 			for (MouseListener l : listeners)
@@ -137,7 +136,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		}
 	};
 
-	private WebSlider volumeControl = new WebSlider(0, 100,
+	private JSlider volumeControl = new JSlider(0, 100,
 			Settings.getCurrentVolume());
 
 	private JButton playBtn = new JButton(new ImageIcon(R.PLAY_BTN_ICON));
@@ -182,10 +181,11 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	public ControlPanel() {
 		
 		this.currentVolume.setFont(R.NORMAL_FONT);
-		progress.setDrawProgress(true);
-		progress.setTrackBgTop(new Color(135, 124, 176));
-		progress.setDrawProgress(true);
-		progress.setTrackBgBottom(new Color(100, 124, 125));
+		// TODO 
+		//progress.setDrawProgress(true);
+		//progress.setTrackBgTop(new Color(135, 124, 176));
+		//progress.setDrawProgress(true);
+		///progress.setTrackBgBottom(new Color(100, 124, 125));
 		progress.setFocusable(false);
 		progress.setValue(0);
 
@@ -238,9 +238,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 			}
 
 			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// App.LOGGER.info("mouse moved");
-				// progress.setToolTipText(null);
+
 				Point p = e.getPoint();
 				progress.setToolTipText(TimeUtils.getLabelFormatedTime(uix
 						.valueForXPosition(p.x) * 1000));
@@ -249,12 +247,13 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		});
 		this.volumeBtn.addActionListener(new BtnActionListner());
 
-		volumeControl.setMinimumWidth(50);
+		//volumeControl.setMinimumWidth(50);
 		volumeControl.setMaximumSize(new Dimension(50, 20));
-		volumeControl.setMargin(0, 0, 0, 5);
-		volumeControl.setPreferredWidth(125);
-		volumeControl.setTrackBgBottom(new Color(100, 124, 125));
-		volumeControl.setTrackBgTop(new Color(135, 124, 176));
+		//volumeControl.setMargin(0, 0, 0, 5);
+		//volumeControl.setPreferredWidth(125);
+		// TODO
+		//volumeControl.setTrackBgBottom(new Color(100, 124, 125));
+		//volumeControl.setTrackBgTop(new Color(135, 124, 176));
 
 		controlsContainer.setLayout(new BorderLayout());
 
@@ -283,7 +282,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		skipBtn.addActionListener(new BtnActionListner());
 		rewindBtn.addActionListener(new BtnActionListner());
 
-		// progress.setMaximum(100);
+		progress.setMaximum(100);
 		this.setOpaque(true);
 	}
 
@@ -337,7 +336,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	/**
 	 * @return the progress
 	 */
-	public WebSlider getProgress() {
+	public JSlider getProgress() {
 
 		return progress;
 	}

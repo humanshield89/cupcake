@@ -70,7 +70,7 @@ public class R {
 	public static final BufferedImage STATUS_POOR = getIcon("status_poor.png");
 	public static final BufferedImage BORDER_IMAGE = getIcon("border.png");
 
-	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("wood.jpg");
+	public static final BufferedImage LIST_BACKGROUND_IMG = getIcon("black-linen.png");
 	public static final BufferedImage MOVIE_SHADOW_BG = getIcon("movie_item_shadow.png");
 	public static final BufferedImage SEARCH_BACKGROUND_IMG = getIcon("wood3.jpg");
 
