@@ -122,6 +122,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	// POPUP MENU
 	JPopupMenu menu = new JPopupMenu();
 	JMenu subtitlesMenu = new JMenu("Subtitles");
+	JMenu onlineSubMenu = new JMenu("Online Subtitles");
 	JMenu localSubsMenu = new JMenu("Local Subtitles");
 	JMenu lang1Menu = new JMenu(
 			SubtitleFetcher.SUBTITLE_LANGUAGES_NAMES[Settings
@@ -132,7 +133,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	JMenu lang3Menu = new JMenu(
 			SubtitleFetcher.SUBTITLE_LANGUAGES_NAMES[Settings
 					.getSubtitlesLang3()]);
-	JMenuItem localSubPicker = new JMenuItem("Local Subtitle File");
+	JMenuItem localSubPicker = new JMenuItem("Choose local Subtitle file");
 
 	Thread subtitleWorker;
 
@@ -141,9 +142,10 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		// menu items
 		menu.setLightWeightPopupEnabled(false);
 		menu.add(subtitlesMenu);
-		subtitlesMenu.add(lang1Menu);
-		subtitlesMenu.add(lang2Menu);
-		subtitlesMenu.add(lang3Menu);
+		subtitlesMenu.add(onlineSubMenu);
+		onlineSubMenu.add(lang1Menu);
+		onlineSubMenu.add(lang2Menu);
+		onlineSubMenu.add(lang3Menu);
 		subtitlesMenu.add(localSubsMenu);
 		subtitlesMenu.add(localSubPicker);
 

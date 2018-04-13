@@ -28,13 +28,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 import com.alee.laf.WebLookAndFeel;
+import com.alee.managers.style.StyleManager;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.ui.MainFram;
 import com.lordroid.cupcake.utils.PathUtils;
 import com.sun.jna.NativeLibrary;
+
+import de.sciss.submin.Submin;
 
 /**
  * Hello world!
@@ -49,6 +53,8 @@ public class App {
 				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
 		WebLookAndFeel.install();
 		WebLookAndFeel.initializeManagers();
+		Submin.install(true);
+		
 	}
 
 	private static boolean initVlcJ() {
@@ -75,18 +81,20 @@ public class App {
 		System.out.println(PathUtils.getExcutionPath());
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-		//new NativeDiscovery().discover();
+		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
-		initVlcJ();
+		// TODO
+		//initVlcJ();
 		 SwingUtilities.invokeLater(new Runnable() {
 		
 		 public void run() {
 		 // TODO Auto-generated method stub
 				MainFram frame = new MainFram();
-				frame.setVisible(true);		 }
+				frame.setVisible(true);		 
+				}
 		
 		 });
-
+		 
 	}
 
 }
