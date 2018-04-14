@@ -78,7 +78,7 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		
 
 		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
@@ -88,6 +88,7 @@ public class App {
 		
 		 public void run() {
 		 // TODO Auto-generated method stub
+			 	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				MainFram frame = new MainFram();
 				
 				//frame.getContentPane().revalidate();
