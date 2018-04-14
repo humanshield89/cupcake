@@ -32,28 +32,33 @@ public class MovieItemButton extends WebButton implements MouseListener {
 		this.setFocusable(false);
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(images[1]));
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 
+	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(images[0]));
 		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
+	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(images[2]));
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(images[1]));

@@ -37,7 +37,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 
-import com.alee.laf.slider.WebSlider;
 import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.controlers.Watchable;
 import com.lordroid.cupcake.controlers.Watcher;
@@ -61,6 +60,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
 		 * )
 		 */
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource().equals(playBtn)) {
 				App.LOGGER.debug("Play pressed ? ");
@@ -191,6 +191,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		this.fullScreen.addActionListener(new BtnActionListner());
 		volumeControl.addChangeListener(new ChangeListener() {
 
+			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
 				updateWatchers(S.VOLUME_UP_DOWN_PRESSED);
@@ -199,6 +200,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		});
 		progress.addMouseListener(new MouseListener() {
 
+			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				// updateWatchers(S.TIMER_CLICKED);
@@ -206,21 +208,25 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 				// .getValue() * 1000));
 			}
 
+			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mouseExited(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mousePressed(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				updateWatchers(S.TIMER_PRESSED);
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				updateWatchers(S.TIMER_RELEASED);
@@ -229,6 +235,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		});
 		progress.addMouseMotionListener(new MouseMotionListener() {
 
+			@Override
 			public void mouseDragged(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
@@ -236,6 +243,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 						.getValue() * 1000));
 			}
 
+			@Override
 			public void mouseMoved(MouseEvent e) {
 
 				Point p = e.getPoint();
@@ -299,6 +307,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 * com.lordroid.cupcake.controlers.Watchable#addWatcher(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void addWatcher(Watcher wcher) {
 		// TODO Auto-generated method stub
 		watchers.add(wcher);
@@ -382,6 +391,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void removeWatcher(Watcher w) {
 		// TODO Auto-generated method stub
 		watchers.remove(w);
@@ -394,6 +404,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 * com.lordroid.cupcake.controlers.Watcher#updateHundler(com.lordroid.cupcake
 	 * .controlers.Watchable)
 	 */
+	@Override
 	public void updateHundler(Watchable wble, int message) {
 		// TODO Auto-generated method stub
 
@@ -404,6 +415,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 * 
 	 * @see com.lordroid.cupcake.controlers.Watchable#updateWatchers()
 	 */
+	@Override
 	public void updateWatchers(int message) {
 		// TODO Auto-generated method stub
 		for (Watcher w : watchers) {

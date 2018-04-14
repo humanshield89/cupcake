@@ -41,6 +41,7 @@ public class MovieItem extends JPanel implements MouseListener,
 	private boolean isBluredCached = false;
 	private boolean selected = false;
 	private JPanel infoPan = new JPanel() {
+		@Override
 		public void paintComponent(Graphics g) {
 			BufferedImage img = null;
 			BufferedImage img2 = null;
@@ -230,6 +231,7 @@ public class MovieItem extends JPanel implements MouseListener,
 
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		if (!this.isImageCached) {
@@ -263,15 +265,18 @@ public class MovieItem extends JPanel implements MouseListener,
 
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		this.updateSelectionStatus(this);
 	}
 
+	@Override
 	public void mouseExited(MouseEvent arg0) {
 		if (arg0.getSource().equals(itemButtons[0])
 				|| arg0.getSource().equals(itemButtons[1])
@@ -316,31 +321,37 @@ public class MovieItem extends JPanel implements MouseListener,
 		return selected;
 	}
 
+	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public MovieItem addListPanWatcher(ListPanWatcher lw) {
 		this.watchersList.add(lw);
 		return this;
 	}
 
+	@Override
 	public void removeListPanWatcher(ListPanWatcher lw) {
 		this.watchersList.remove(lw);
 	}
 
+	@Override
 	public void updateListWatchers(int action) {
 		for (ListPanWatcher w : watchersList) {
 			w.ListActionPerformed(this.movie, action);
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		MovieItemButton source = (MovieItemButton) arg0.getSource();

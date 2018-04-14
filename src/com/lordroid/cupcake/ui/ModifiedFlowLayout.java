@@ -23,12 +23,14 @@ public class ModifiedFlowLayout extends FlowLayout {
 		super(align, hgap, vgap);
 	}
 
+	@Override
 	public Dimension minimumLayoutSize(Container target) {
 		// Size of largest component, so we can resize it in
 		// either direction with something like a split-pane.
 		return computeMinSize(target);
 	}
 
+	@Override
 	public Dimension preferredLayoutSize(Container target) {
 		return computeSize(target);
 	}

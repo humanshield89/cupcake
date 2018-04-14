@@ -50,6 +50,7 @@ public abstract class MouseMovementDetector {
 	public void start() {
 		if (!started) {
 			timer = new Timer(timeout, new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					timeout();
 				}

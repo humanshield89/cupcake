@@ -83,6 +83,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 	private WebButton searchBtn = new WebButton("Search");
 
 	private JPanel movieListContainer = new JPanel() {
+		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			int i = 0;
@@ -172,7 +173,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		// movie list container init
 		movieListContainer.setOpaque(false);
 		movieListContainer.setLayout(new ModifiedFlowLayout(
-				ModifiedFlowLayout.CENTER, 10, 20));
+				FlowLayout.CENTER, 10, 20));
 		scrollPan = new JScrollPane(movieListContainer);
 		this.scrollPan.setOpaque(false);
 		scrollPan.getVerticalScrollBar().setUnitIncrement(20);
@@ -185,6 +186,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		this.loadMoreBtn.addActionListener(this);
 		searchField.addMouseListener(new MouseListener() {
 
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				if (searchField.getText().equals(SEARHC_DEFAULT_TEXT)) {
@@ -194,21 +196,25 @@ public class MovieListPan extends JPanel implements ActionListener,
 				}
 			}
 
+			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 
@@ -227,6 +233,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		this.requestFocusInWindow();
 	}
 
+	@Override
 	public boolean isFocusTraversable() {
 		return true;
 	}
@@ -412,11 +419,13 @@ public class MovieListPan extends JPanel implements ActionListener,
 		this.currentlySelected = -999;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		// TODO Auto-generated method stub
 		if (event.getSource().equals(searchBtn)) {
 			new Thread(new Runnable() {
 
+				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					search();
@@ -426,6 +435,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		} else if (event.getSource().equals(loadMoreBtn)) {
 			new Thread(new Runnable() {
 
+				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					getNextPage();
@@ -469,7 +479,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 			moviesList.get(currentlySelected).setSelected(true);
 			this.requestFocus();
 		}
-		double rowsPerView = ((double) scrollPan.getViewport().getHeight() / 385.0) - 1;
+		double rowsPerView = (scrollPan.getViewport().getHeight() / 385.0) - 1;
 		JScrollBar vertical = scrollPan.getVerticalScrollBar();
 		int newValue = (int) ((((double) (currentlySelected / getNumberOfItemInRow())) * 385) - (385 * rowsPerView) / 2);
 		vertical.setValue(newValue);

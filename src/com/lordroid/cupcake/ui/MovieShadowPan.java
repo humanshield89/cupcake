@@ -16,6 +16,7 @@ public class MovieShadowPan extends JPanel {
 		this.setPreferredSize(new Dimension(250, 365));
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(R.MOVIE_SHADOW_BG, 0, 0, this);
 	}

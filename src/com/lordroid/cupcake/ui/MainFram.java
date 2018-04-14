@@ -35,6 +35,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.ListPanWatcher;
@@ -74,7 +75,7 @@ public class MainFram extends JFrame {
 
 	public MainFram() {
 		this.setBackground(Color.BLACK);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowListener() {
 
 			@Override
@@ -127,6 +128,7 @@ public class MainFram extends JFrame {
 		// initializing components
 		movieListPan = new MovieListPan(new ListPanWatcher() {
 
+			@Override
 			public void ListActionPerformed(YifyMovie movie, int action) {
 				// TODO Auto-generated method stub
 

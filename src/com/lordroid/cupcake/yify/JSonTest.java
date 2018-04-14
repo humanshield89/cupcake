@@ -2,6 +2,7 @@ package com.lordroid.cupcake.yify;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,7 +30,7 @@ public class JSonTest {
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		// scrollPane.add(pan);
-		pan.setLayout(new ModifiedFlowLayout(ModifiedFlowLayout.CENTER, 10, 20));
+		pan.setLayout(new ModifiedFlowLayout(FlowLayout.CENTER, 10, 20));
 		pan.setBackground(Color.GRAY);
 		// scrollPane.setPreferredSize(new
 		// Dimension(frame.getWidth(),frame.getHeight()));
@@ -48,7 +49,7 @@ public class JSonTest {
 				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
 		JSONObject json = JSONComunicator
 				.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50");
-		JSONObject data = (JSONObject) json.getJSONObject("data");
+		JSONObject data = json.getJSONObject("data");
 		JSONArray arr = data.getJSONArray("movies");
 		JSONArray arrays[] = new JSONArray[10];
 		arrays[0] = arr;
@@ -57,7 +58,7 @@ public class JSonTest {
 			json = JSONComunicator
 					.readJsonFromUrl("https://yts.am/api/v2/list_movies.json?limit=50&sort_by=year"
 							+ "&page=" + i);
-			data = (JSONObject) json.getJSONObject("data");
+			data = json.getJSONObject("data");
 			arr = data.getJSONArray("movies");
 			arrays[n] = arr;
 			for (int i1 = 0; i1 < arr.length(); i1++) {

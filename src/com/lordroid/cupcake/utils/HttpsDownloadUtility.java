@@ -37,7 +37,7 @@ public class HttpsDownloadUtility {
 		int responseCode = httpConn.getResponseCode();
 
 		// always check HTTP response code first
-		if (responseCode == HttpsURLConnection.HTTP_OK) {
+		if (responseCode == HttpURLConnection.HTTP_OK) {
 			String fileName = "";
 			String disposition = httpConn.getHeaderField("Content-Disposition");
 			// String contentType = httpConn.getContentType();
@@ -105,7 +105,7 @@ public class HttpsDownloadUtility {
 		int responseCode = httpConn.getResponseCode();
 
 		// always check HTTP response code first
-		if (responseCode == HttpsURLConnection.HTTP_OK) {
+		if (responseCode == HttpURLConnection.HTTP_OK) {
 			String fileName = "";
 			String disposition = httpConn.getHeaderField("Content-Disposition");
 			// String contentType = httpConn.getContentType();
@@ -165,7 +165,7 @@ public class HttpsDownloadUtility {
 		int responseCode = httpConn.getResponseCode();
 
 		// always check HTTP response code first
-		if (responseCode == HttpsURLConnection.HTTP_OK) {
+		if (responseCode == HttpURLConnection.HTTP_OK) {
 
 			InputStream inputStream = httpConn.getInputStream();
 			saveFilePath = saveDir;

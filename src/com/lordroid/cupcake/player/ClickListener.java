@@ -42,6 +42,7 @@ class BackgroundClickHandler extends SwingWorker<Integer, Integer> implements
 	 * com.lordroid.cupcake.controlers.Watchable#addWatcher(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void addWatcher(Watcher wcher) {
 		// TODO Auto-generated method stub
 		this.watchers.add(wcher);
@@ -54,6 +55,7 @@ class BackgroundClickHandler extends SwingWorker<Integer, Integer> implements
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void removeWatcher(Watcher w) {
 		// TODO Auto-generated method stub
 		this.watchers.remove(w);
@@ -64,6 +66,7 @@ class BackgroundClickHandler extends SwingWorker<Integer, Integer> implements
 	 * 
 	 * @see com.lordroid.cupcake.controlers.Watchable#updateWatchers(int)
 	 */
+	@Override
 	public void updateWatchers(int message) {
 		// TODO Auto-generated method stub
 		for (Watcher w : watchers) {
@@ -127,6 +130,7 @@ public class ClickListener extends MouseAdapter implements Watcher {
 	 * com.lordroid.cupcake.controlers.Watcher#updateHundler(com.lordroid.cupcake
 	 * .controlers.Watchable, int)
 	 */
+	@Override
 	public void updateHundler(Watchable wble, int message) {
 		// TODO Auto-generated method stub
 		singleClick(eventDummy);

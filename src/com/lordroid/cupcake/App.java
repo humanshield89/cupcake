@@ -31,7 +31,6 @@ import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
-import com.alee.laf.WebLookAndFeel;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.ui.MainFram;
 import com.lordroid.cupcake.utils.PathUtils;
@@ -86,6 +85,7 @@ public class App {
 		// initVlcJ();
 		SwingUtilities.invokeLater(new Runnable() {
 
+			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);

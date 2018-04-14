@@ -40,10 +40,8 @@ import javax.swing.JPopupMenu;
 import org.apache.xmlrpc.XmlRpcException;
 
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
-import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.TrackDescription;
 import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.videosurface.CanvasVideoSurface;
@@ -179,6 +177,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		// TODO : fix this srt , mp4
 		new FileDrop(this, new FileDrop.Listener() {
 
+			@Override
 			public void filesDropped(File[] files) {
 				boolean video = false;
 				boolean subtitle = false;
@@ -258,6 +257,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * com.lordroid.cupcake.controlers.Watchable#addWatcher(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void addWatcher(Watcher wcher) {
 		this.watchers.add(wcher);
 	}
@@ -396,144 +396,170 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(
 				new MediaPlayerEventListener() {
 
+					@Override
 					public void audioDeviceChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							String arg1) {
 
 					}
 
+					@Override
 					public void backward(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void buffering(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							float arg1) {
 
 					}
 
+					@Override
 					public void chapterChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void corked(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							boolean arg1) {
 
 					}
 
+					@Override
 					public void elementaryStreamAdded(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							int arg1, int arg2) {
 
 					}
 
+					@Override
 					public void elementaryStreamDeleted(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							int arg1, int arg2) {
 
 					}
 
+					@Override
 					public void elementaryStreamSelected(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							int arg1, int arg2) {
 
 					}
 
+					@Override
 					public void endOfSubItems(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void error(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void finished(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 						stop();
 					}
 
+					@Override
 					public void forward(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void lengthChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							long arg1) {
 
 					}
 
+					@Override
 					public void mediaChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							libvlc_media_t arg1, String arg2) {
 
 					}
 
+					@Override
 					public void mediaDurationChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							long arg1) {
 
 					}
 
+					@Override
 					public void mediaFreed(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void mediaMetaChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 						currentTitle = " | " + arg0.getMediaMeta().getTitle();
 						frame.setTitle("Cupcake " + currentTitle);
 					}
 
+					@Override
 					public void mediaParsedChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void mediaStateChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void mediaSubItemAdded(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							libvlc_media_t arg1) {
 
 					}
 
+					@Override
 					public void mediaSubItemTreeAdded(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							libvlc_media_t arg1) {
 
 					}
 
+					@Override
 					public void muted(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							boolean arg1) {
 
 					}
 
+					@Override
 					public void newMedia(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 
 					}
 
+					@Override
 					public void opening(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 						currentTitle = arg0.getMediaMeta().getTitle();
 						frame.setTitle("Cupcake " + currentTitle + " | Opening");
 					}
 
+					@Override
 					public void pausableChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void paused(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 						controlPanel.getPlayBtn().setIcon(
@@ -543,6 +569,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 					}
 
+					@Override
 					public void playing(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 						controlPanel.getPlayBtn().setIcon(
@@ -551,6 +578,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 								+ S.MEDIA_PLAYED);
 					}
 
+					@Override
 					public void positionChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							float arg1) {
@@ -559,38 +587,45 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 					}
 
+					@Override
 					public void scrambledChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void seekableChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void snapshotTaken(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							String arg1) {
 
 					}
 
+					@Override
 					public void stopped(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 						frame.setTitle("Cupcake " + currentTitle
 								+ S.MEDIA_STOPED);
 					}
 
+					@Override
 					public void subItemFinished(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void subItemPlayed(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public synchronized void timeChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							long arg1) {
@@ -610,16 +645,19 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 														.getTime()));
 					}
 
+					@Override
 					public void titleChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void videoOutput(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 					}
 
+					@Override
 					public void volumeChanged(
 							uk.co.caprica.vlcj.player.MediaPlayer arg0,
 							float arg1) {
@@ -694,6 +732,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * com.lordroid.cupcake.controlers.Watchable#remove(com.lordroid.cupcake
 	 * .controlers.Watcher)
 	 */
+	@Override
 	public void removeWatcher(Watcher w) {
 		this.watchers.remove(w);
 	}
@@ -871,6 +910,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * @see com.lordroid.cupcake.controlers.Watcher#updateHundler(com.lordroid.cupcake
 	 *      .controlers.Watchable, java.lang.String)
 	 */
+	@Override
 	public void updateHundler(Watchable wble, int message) {
 		if (message == S.PLAY_BTN_PRESSED) {
 			if (!mediaPlayerComponent.getMediaPlayer().isPlaying())
@@ -988,6 +1028,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * 
 	 * @see com.lordroid.cupcake.controlers.Watchable#updateWatchers()
 	 */
+	@Override
 	public void updateWatchers(int message) {
 		// TODO Auto-generated method stub
 
@@ -1006,7 +1047,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		int peers = arg0.getConnectedPeers().size();
 		long totalTime = System.currentTimeMillis() - this.torrentStartTime;
 		double speed = ((double) downSizeForSpeedCal / 1024)
-				/ (double) (totalTime / 1000);
+				/ (totalTime / 1000);
 		String[] values = { "" + peers, "" + speed,
 				"" + downloadedSize / 1024 / 1024 };
 		this.buffPan.updateValues(values);
