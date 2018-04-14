@@ -23,276 +23,281 @@ import java.util.HashMap;
  */
 public class SubtitleInfo {
 
-    String IDSubMovieFile;
-    String MovieHash,MovieByteSize,MovieTimeMS,MovieFrames,IDSubtitleFile,SubFileName,SubActualCD,SubSize,SubHash;
-    String IDSubtitle,UserID,SubLanguageID,SubFormat,SubSumCD,SubAddDate,SubDownloadsCnt,SubBad,SubRating;
-    String IDMovie,IDMovieImdb,MovieName,MovieNameEng,MovieYear,MovieImdbRating,UserNickName,ISO639,LanguageName,SubDownloadLink;
+	String IDSubMovieFile;
+	String MovieHash, MovieByteSize, MovieTimeMS, MovieFrames, IDSubtitleFile,
+			SubFileName, SubActualCD, SubSize, SubHash;
+	String IDSubtitle, UserID, SubLanguageID, SubFormat, SubSumCD, SubAddDate,
+			SubDownloadsCnt, SubBad, SubRating;
+	String IDMovie, IDMovieImdb, MovieName, MovieNameEng, MovieYear,
+			MovieImdbRating, UserNickName, ISO639, LanguageName,
+			SubDownloadLink;
 
-    SubtitleInfo (HashMap<?, ?> info){
-        IDSubMovieFile= (String) info.get("IDSubMovieFile");
-        MovieHash= (String) info.get("MovieHash");
-        MovieByteSize=(String) info.get("MovieByteSize");
-        MovieTimeMS= (String) info.get("MovieTimeMS");
-        MovieFrames=(String) info.get("MovieFrames");
-        IDSubtitleFile=(String) info.get("IDSubtitleFile");
-        SubFileName=(String) info.get("SubFileName");
-        SubActualCD=(String) info.get("SubActualCD");
-        SubSize=(String) info.get("SubSize");
-        SubHash=(String) info.get("SubHash");
-        IDSubtitle=(String)info.get("IDSubtitle");
-        UserID=(String)info.get("UserID");
-        SubLanguageID=(String)info.get("SubLanguageID");
-        SubFormat=(String)info.get("SubFormat");
-        SubSumCD=(String)info.get("SubSumCD");
-        SubAddDate=(String)info.get("SubAddDate");
-        SubDownloadsCnt=(String)info.get("SubDownloadsCnt");
-        SubBad=(String)info.get("SubBad");
-        SubRating=(String)info.get("SubRating");
-        IDMovie=(String)info.get("IDMovie");
-        IDMovieImdb=(String)info.get("IDMovieImdb");
-        MovieName=(String)info.get("MovieName");
-        MovieNameEng=(String)info.get("MovieNameEng");
-        MovieYear=(String)info.get("MovieYear");
-        MovieImdbRating="tt"+(String)info.get("MovieImdbRating");
-        UserNickName=(String)info.get("UserNickName");
-        ISO639=(String)info.get("ISO639");
-        LanguageName=(String)info.get("LanguageName");
-        SubDownloadLink=(String)info.get("SubDownloadLink");
+	SubtitleInfo(HashMap<?, ?> info) {
+		IDSubMovieFile = (String) info.get("IDSubMovieFile");
+		MovieHash = (String) info.get("MovieHash");
+		MovieByteSize = (String) info.get("MovieByteSize");
+		MovieTimeMS = (String) info.get("MovieTimeMS");
+		MovieFrames = (String) info.get("MovieFrames");
+		IDSubtitleFile = (String) info.get("IDSubtitleFile");
+		SubFileName = (String) info.get("SubFileName");
+		SubActualCD = (String) info.get("SubActualCD");
+		SubSize = (String) info.get("SubSize");
+		SubHash = (String) info.get("SubHash");
+		IDSubtitle = (String) info.get("IDSubtitle");
+		UserID = (String) info.get("UserID");
+		SubLanguageID = (String) info.get("SubLanguageID");
+		SubFormat = (String) info.get("SubFormat");
+		SubSumCD = (String) info.get("SubSumCD");
+		SubAddDate = (String) info.get("SubAddDate");
+		SubDownloadsCnt = (String) info.get("SubDownloadsCnt");
+		SubBad = (String) info.get("SubBad");
+		SubRating = (String) info.get("SubRating");
+		IDMovie = (String) info.get("IDMovie");
+		IDMovieImdb = (String) info.get("IDMovieImdb");
+		MovieName = (String) info.get("MovieName");
+		MovieNameEng = (String) info.get("MovieNameEng");
+		MovieYear = (String) info.get("MovieYear");
+		MovieImdbRating = "tt" + (String) info.get("MovieImdbRating");
+		UserNickName = (String) info.get("UserNickName");
+		ISO639 = (String) info.get("ISO639");
+		LanguageName = (String) info.get("LanguageName");
+		SubDownloadLink = (String) info.get("SubDownloadLink");
 
-    }
-    public String getIDSubMovieFile() {
-        return IDSubMovieFile;
-    }
+	}
 
-    public void setIDSubMovieFile(String IDSubMovieFile) {
-        this.IDSubMovieFile = IDSubMovieFile;
-    }
+	public String getIDSubMovieFile() {
+		return IDSubMovieFile;
+	}
 
-    public String getMovieHash() {
-        return MovieHash;
-    }
+	public void setIDSubMovieFile(String IDSubMovieFile) {
+		this.IDSubMovieFile = IDSubMovieFile;
+	}
 
-    public void setMovieHash(String movieHash) {
-        MovieHash = movieHash;
-    }
+	public String getMovieHash() {
+		return MovieHash;
+	}
 
-    public String getMovieByteSize() {
-        return MovieByteSize;
-    }
+	public void setMovieHash(String movieHash) {
+		MovieHash = movieHash;
+	}
 
-    public void setMovieByteSize(String movieByteSize) {
-        MovieByteSize = movieByteSize;
-    }
+	public String getMovieByteSize() {
+		return MovieByteSize;
+	}
 
-    public String getMovieTimeMS() {
-        return MovieTimeMS;
-    }
+	public void setMovieByteSize(String movieByteSize) {
+		MovieByteSize = movieByteSize;
+	}
 
-    public void setMovieTimeMS(String movieTimeMS) {
-        MovieTimeMS = movieTimeMS;
-    }
+	public String getMovieTimeMS() {
+		return MovieTimeMS;
+	}
 
-    public String getMovieFrames() {
-        return MovieFrames;
-    }
+	public void setMovieTimeMS(String movieTimeMS) {
+		MovieTimeMS = movieTimeMS;
+	}
 
-    public void setMovieFrames(String movieFrames) {
-        MovieFrames = movieFrames;
-    }
+	public String getMovieFrames() {
+		return MovieFrames;
+	}
 
-    public String getIDSubtitleFile() {
-        return IDSubtitleFile;
-    }
+	public void setMovieFrames(String movieFrames) {
+		MovieFrames = movieFrames;
+	}
 
-    public void setIDSubtitleFile(String IDSubtitleFile) {
-        this.IDSubtitleFile = IDSubtitleFile;
-    }
+	public String getIDSubtitleFile() {
+		return IDSubtitleFile;
+	}
 
-    public String getSubFileName() {
-        return SubFileName;
-    }
+	public void setIDSubtitleFile(String IDSubtitleFile) {
+		this.IDSubtitleFile = IDSubtitleFile;
+	}
 
-    public void setSubFileName(String subFileName) {
-        SubFileName = subFileName;
-    }
+	public String getSubFileName() {
+		return SubFileName;
+	}
 
-    public String getSubActualCD() {
-        return SubActualCD;
-    }
+	public void setSubFileName(String subFileName) {
+		SubFileName = subFileName;
+	}
 
-    public void setSubActualCD(String subActualCD) {
-        SubActualCD = subActualCD;
-    }
+	public String getSubActualCD() {
+		return SubActualCD;
+	}
 
-    public String getSubSize() {
-        return SubSize;
-    }
+	public void setSubActualCD(String subActualCD) {
+		SubActualCD = subActualCD;
+	}
 
-    public void setSubSize(String subSize) {
-        SubSize = subSize;
-    }
+	public String getSubSize() {
+		return SubSize;
+	}
 
-    public String getSubHash() {
-        return SubHash;
-    }
+	public void setSubSize(String subSize) {
+		SubSize = subSize;
+	}
 
-    public void setSubHash(String subHash) {
-        SubHash = subHash;
-    }
+	public String getSubHash() {
+		return SubHash;
+	}
 
-    public String getIDSubtitle() {
-        return IDSubtitle;
-    }
+	public void setSubHash(String subHash) {
+		SubHash = subHash;
+	}
 
-    public void setIDSubtitle(String IDSubtitle) {
-        this.IDSubtitle = IDSubtitle;
-    }
+	public String getIDSubtitle() {
+		return IDSubtitle;
+	}
 
-    public String getUserID() {
-        return UserID;
-    }
+	public void setIDSubtitle(String IDSubtitle) {
+		this.IDSubtitle = IDSubtitle;
+	}
 
-    public void setUserID(String userID) {
-        UserID = userID;
-    }
+	public String getUserID() {
+		return UserID;
+	}
 
-    public String getSubLanguageID() {
-        return SubLanguageID;
-    }
+	public void setUserID(String userID) {
+		UserID = userID;
+	}
 
-    public void setSubLanguageID(String subLanguageID) {
-        SubLanguageID = subLanguageID;
-    }
+	public String getSubLanguageID() {
+		return SubLanguageID;
+	}
 
-    public String getSubFormat() {
-        return SubFormat;
-    }
+	public void setSubLanguageID(String subLanguageID) {
+		SubLanguageID = subLanguageID;
+	}
 
-    public void setSubFormat(String subFormat) {
-        SubFormat = subFormat;
-    }
+	public String getSubFormat() {
+		return SubFormat;
+	}
 
-    public String getSubSumCD() {
-        return SubSumCD;
-    }
+	public void setSubFormat(String subFormat) {
+		SubFormat = subFormat;
+	}
 
-    public void setSubSumCD(String subSumCD) {
-        SubSumCD = subSumCD;
-    }
+	public String getSubSumCD() {
+		return SubSumCD;
+	}
 
-    public String getSubAddDate() {
-        return SubAddDate;
-    }
+	public void setSubSumCD(String subSumCD) {
+		SubSumCD = subSumCD;
+	}
 
-    public void setSubAddDate(String subAddDate) {
-        SubAddDate = subAddDate;
-    }
+	public String getSubAddDate() {
+		return SubAddDate;
+	}
 
-    public String getSubDownloadsCnt() {
-        return SubDownloadsCnt;
-    }
+	public void setSubAddDate(String subAddDate) {
+		SubAddDate = subAddDate;
+	}
 
-    public void setSubDownloadsCnt(String subDownloadsCnt) {
-        SubDownloadsCnt = subDownloadsCnt;
-    }
+	public String getSubDownloadsCnt() {
+		return SubDownloadsCnt;
+	}
 
-    public String getSubBad() {
-        return SubBad;
-    }
+	public void setSubDownloadsCnt(String subDownloadsCnt) {
+		SubDownloadsCnt = subDownloadsCnt;
+	}
 
-    public void setSubBad(String subBad) {
-        SubBad = subBad;
-    }
+	public String getSubBad() {
+		return SubBad;
+	}
 
-    public String getSubRating() {
-        return SubRating;
-    }
+	public void setSubBad(String subBad) {
+		SubBad = subBad;
+	}
 
-    public void setSubRating(String subRating) {
-        SubRating = subRating;
-    }
+	public String getSubRating() {
+		return SubRating;
+	}
 
-    public String getIDMovie() {
-        return IDMovie;
-    }
+	public void setSubRating(String subRating) {
+		SubRating = subRating;
+	}
 
-    public void setIDMovie(String IDMovie) {
-        this.IDMovie = IDMovie;
-    }
+	public String getIDMovie() {
+		return IDMovie;
+	}
 
-    public String getIDMovieImdb() {
-        return IDMovieImdb;
-    }
+	public void setIDMovie(String IDMovie) {
+		this.IDMovie = IDMovie;
+	}
 
-    public void setIDMovieImdb(String IDMovieImdb) {
-        this.IDMovieImdb = IDMovieImdb;
-    }
+	public String getIDMovieImdb() {
+		return IDMovieImdb;
+	}
 
-    public String getMovieName() {
-        return MovieName;
-    }
+	public void setIDMovieImdb(String IDMovieImdb) {
+		this.IDMovieImdb = IDMovieImdb;
+	}
 
-    public void setMovieName(String movieName) {
-        MovieName = movieName;
-    }
+	public String getMovieName() {
+		return MovieName;
+	}
 
-    public String getMovieNameEng() {
-        return MovieNameEng;
-    }
+	public void setMovieName(String movieName) {
+		MovieName = movieName;
+	}
 
-    public void setMovieNameEng(String movieNameEng) {
-        MovieNameEng = movieNameEng;
-    }
+	public String getMovieNameEng() {
+		return MovieNameEng;
+	}
 
-    public String getMovieYear() {
-        return MovieYear;
-    }
+	public void setMovieNameEng(String movieNameEng) {
+		MovieNameEng = movieNameEng;
+	}
 
-    public void setMovieYear(String movieYear) {
-        MovieYear = movieYear;
-    }
+	public String getMovieYear() {
+		return MovieYear;
+	}
 
-    public String getMovieImdbRating() {
-        return MovieImdbRating;
-    }
+	public void setMovieYear(String movieYear) {
+		MovieYear = movieYear;
+	}
 
-    public void setMovieImdbRating(String movieImdbRating) {
-        MovieImdbRating = movieImdbRating;
-    }
+	public String getMovieImdbRating() {
+		return MovieImdbRating;
+	}
 
-    public String getUserNickName() {
-        return UserNickName;
-    }
+	public void setMovieImdbRating(String movieImdbRating) {
+		MovieImdbRating = movieImdbRating;
+	}
 
-    public void setUserNickName(String userNickName) {
-        UserNickName = userNickName;
-    }
+	public String getUserNickName() {
+		return UserNickName;
+	}
 
-    public String getISO639() {
-        return ISO639;
-    }
+	public void setUserNickName(String userNickName) {
+		UserNickName = userNickName;
+	}
 
-    public void setISO639(String ISO639) {
-        this.ISO639 = ISO639;
-    }
+	public String getISO639() {
+		return ISO639;
+	}
 
-    public String getLanguageName() {
-        return LanguageName;
-    }
+	public void setISO639(String ISO639) {
+		this.ISO639 = ISO639;
+	}
 
-    public void setLanguageName(String languageName) {
-        LanguageName = languageName;
-    }
+	public String getLanguageName() {
+		return LanguageName;
+	}
 
-    public String getSubDownloadLink() {
-        return SubDownloadLink;
-    }
+	public void setLanguageName(String languageName) {
+		LanguageName = languageName;
+	}
 
-    public void setSubDownloadLink(String subDownloadLink) {
-        SubDownloadLink = subDownloadLink;
-    }
-    
-    public String getListInfo() {
-    	return (this.IDSubtitleFile);
-    }
+	public String getSubDownloadLink() {
+		return SubDownloadLink;
+	}
+
+	public void setSubDownloadLink(String subDownloadLink) {
+		SubDownloadLink = subDownloadLink;
+	}
+
+	public String getListInfo() {
+		return (this.IDSubtitleFile);
+	}
 }

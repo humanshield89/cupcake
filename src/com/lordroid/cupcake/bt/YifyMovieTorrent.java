@@ -129,7 +129,7 @@ public class YifyMovieTorrent implements Runnable {
 		};
 
 		PeerExchangeModule customModule = new PeerExchangeModule(configEx);
-		
+
 		Storage storage = new FileSystemStorage(downloadFolder.toPath());
 		try {
 			client = Bt.client().config(config).storage(storage)
@@ -146,9 +146,9 @@ public class YifyMovieTorrent implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void stopTorrent() {
 		client.stop();
-		
+
 	}
 }

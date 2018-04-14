@@ -38,9 +38,12 @@ import com.lordroid.cupcake.yify.YifyMovie;
  * 
  */
 public class SubtitleFetcher {
-	public static final String[] SUBTITLE_LANGUAGES_NAMES = {"English","Deutsch","Arabic","French","Espanol","Italiano","Português","rusian"};
-	public static final String[] SUBTITLE_LANGUAGES_CODES = {"eng","ger","ara","fre","spa","ita","por","rus"};
-	
+	public static final String[] SUBTITLE_LANGUAGES_NAMES = { "English",
+			"Deutsch", "Arabic", "French", "Espanol", "Italiano", "Português",
+			"rusian" };
+	public static final String[] SUBTITLE_LANGUAGES_CODES = { "eng", "ger",
+			"ara", "fre", "spa", "ita", "por", "rus" };
+
 	public static File unGzip(File infile, boolean deleteGzipfileOnSuccess)
 			throws IOException {
 		GZIPInputStream gin = new GZIPInputStream(new FileInputStream(infile));
@@ -70,39 +73,47 @@ public class SubtitleFetcher {
 		}
 	}
 
-	
-	public static List<SubtitleInfo> getSubtitleList(YifyMovie movie , String lang) throws XmlRpcException{
-		 OpenSubtitle openSubtitle=new OpenSubtitle();
-		 openSubtitle.login();
-		 List <SubtitleInfo> subs = openSubtitle.getMovieSubsByName(movie.getTitle(),"20",lang);
-		 openSubtitle.logOut();
+	public static List<SubtitleInfo> getSubtitleList(YifyMovie movie,
+			String lang) throws XmlRpcException {
+		OpenSubtitle openSubtitle = new OpenSubtitle();
+		openSubtitle.login();
+		List<SubtitleInfo> subs = openSubtitle.getMovieSubsByName(
+				movie.getTitle(), "20", lang);
+		openSubtitle.logOut();
 		return subs;
 	}
-	
-	public static List<SubtitleInfo> getSubtitleList(File video ,String lang) throws XmlRpcException{
-		 OpenSubtitle openSubtitle=new OpenSubtitle();
-		 openSubtitle.login();
-		 List <SubtitleInfo> subs = openSubtitle.Search(video.getAbsolutePath(),lang);
-		 openSubtitle.logOut();
+
+	public static List<SubtitleInfo> getSubtitleList(File video, String lang)
+			throws XmlRpcException {
+		OpenSubtitle openSubtitle = new OpenSubtitle();
+		openSubtitle.login();
+		List<SubtitleInfo> subs = openSubtitle.Search(video.getAbsolutePath(),
+				lang);
+		openSubtitle.logOut();
 		return subs;
 	}
-	
-	public static File getSubtitle(SubtitleInfo sub , YifyMovie movie) throws IOException{
+
+	public static File getSubtitle(SubtitleInfo sub, YifyMovie movie)
+			throws IOException {
 		String url = sub.getSubDownloadLink();
-		
-		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie.getDownlodFolder().getAbsolutePath()), true);
+
+		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie
+				.getDownlodFolder().getAbsolutePath()), true);
 	}
-	
-	public static File getSubtitle(SubtitleInfo sub , File movie) throws IOException{
+
+	public static File getSubtitle(SubtitleInfo sub, File movie)
+			throws IOException {
 		String url = sub.getSubDownloadLink();
-		
-		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie.getAbsolutePath()), true);
+
+		return unGzip(
+				HttpsDownloadUtility.HTTPdownloadFile(url,
+						movie.getAbsolutePath()), true);
 	}
-	
+
 	public static void main(String args[]) {
 		File f = new File("G:/Insidious.2010.720p.BrRip.x264.YIFY.mp4");
 		try {
-			for(SubtitleInfo sub : getSubtitleList(f,"ar")){
+			for (SubtitleInfo sub : getSubtitleList(f, "ar")) {
 				System.out.println(sub.getISO639());
 			}
 		} catch (XmlRpcException e) {
@@ -110,35 +121,47 @@ public class SubtitleFetcher {
 			e.printStackTrace();
 		}
 	}
-	public static File main(YifyMovie movie) throws JSONException,
-			IOException, Exception {
-		 OpenSubtitle openSubtitle=new OpenSubtitle();
-		 openSubtitle.login();
+
+	public static File main(YifyMovie movie) throws JSONException, IOException,
+			Exception {
+		OpenSubtitle openSubtitle = new OpenSubtitle();
+		openSubtitle.login();
 
 		String str = null;
 
 		try {
-		 str =	openSubtitle.getMovieSubsByName(movie.getTitle(),"20","ara").get(0).getSubDownloadLink();
-		 System.out.println("search by title arabic count = "+openSubtitle.getMovieSubsByName(movie.getTitle(),"20","ara").size());
-		 System.out.println("search by title english count = "+openSubtitle.getMovieSubsByName(movie.getTitle(),"20","eng").size());
-		 List<SubtitleInfo> list = openSubtitle.getMovieSubsByName(movie.getTitle(),"20","ara");
-		 for (SubtitleInfo sub : list){
-			 str = sub.getSubDownloadLink();
-			 System.out.println("==== sub");
-			 System.out.println("language name  "+sub.getLanguageName());
-			 System.out.println("iso639  "+sub.getISO639());
-			 System.out.println("language id "+sub.getSubLanguageID());
-			 System.out.println("rating  "+	 sub.getSubRating());
-			 System.out.println("==== end  sub");
-			 File gz = HttpsDownloadUtility.HTTPdownloadFile(str, movie.getDownlodFolder().getAbsolutePath());
-			 unGzip(gz, true);
-		 }
+			str = openSubtitle
+					.getMovieSubsByName(movie.getTitle(), "20", "ara").get(0)
+					.getSubDownloadLink();
+			System.out.println("search by title arabic count = "
+					+ openSubtitle.getMovieSubsByName(movie.getTitle(), "20",
+							"ara").size());
+			System.out.println("search by title english count = "
+					+ openSubtitle.getMovieSubsByName(movie.getTitle(), "20",
+							"eng").size());
+			List<SubtitleInfo> list = openSubtitle.getMovieSubsByName(
+					movie.getTitle(), "20", "ara");
+			for (SubtitleInfo sub : list) {
+				str = sub.getSubDownloadLink();
+				System.out.println("==== sub");
+				System.out.println("language name  " + sub.getLanguageName());
+				System.out.println("iso639  " + sub.getISO639());
+				System.out.println("language id " + sub.getSubLanguageID());
+				System.out.println("rating  " + sub.getSubRating());
+				System.out.println("==== end  sub");
+				File gz = HttpsDownloadUtility.HTTPdownloadFile(str, movie
+						.getDownlodFolder().getAbsolutePath());
+				unGzip(gz, true);
+			}
 
-		 } catch (Exception e) {
-			 str =	 openSubtitle.getMovieSubsByName(movie.getTitle(),"20","eng").get(0).getSubDownloadLink();
-		 }
+		} catch (Exception e) {
+			str = openSubtitle
+					.getMovieSubsByName(movie.getTitle(), "20", "eng").get(0)
+					.getSubDownloadLink();
+		}
 
-		File gz = HttpsDownloadUtility.HTTPdownloadFile(str, movie.getDownlodFolder().getAbsolutePath());
+		File gz = HttpsDownloadUtility.HTTPdownloadFile(str, movie
+				.getDownlodFolder().getAbsolutePath());
 
 		System.out.println(str);
 		openSubtitle.logOut();

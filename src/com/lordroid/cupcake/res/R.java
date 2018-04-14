@@ -81,7 +81,7 @@ public class R {
 	public static final BufferedImage PLAY_NOW_BTN = getIcon("watch_now.png");
 	public static final BufferedImage PLAY_NOW_BTN_HOVERED = getIcon("watch_now_hovered.png");
 	public static final BufferedImage PLAY_NOW_BTN_PRESSED = getIcon("watch_now_pressed.png");
-	
+
 	public static final BufferedImage PLAY_LATER_BTN = getIcon("watch_later.png");
 	public static final BufferedImage PLAY_LATER_BTN_HOVERED = getIcon("watch_later_hovered.png");
 	public static final BufferedImage PLAY_LATER_BTN_PRESSED = getIcon("watch_later_pressed.png");
@@ -90,10 +90,11 @@ public class R {
 	public static final BufferedImage DETAILS_BTN_HOVERED = getIcon("watch_Details_hovered.png");
 	public static final BufferedImage DETAILS_BTN_PRESSED = getIcon("watch_Details_pressed.png");
 
-	public static final BufferedImage[][] MOVIE_ITEM_BUTTON_IMAGES = {{PLAY_NOW_BTN,PLAY_NOW_BTN_HOVERED,PLAY_NOW_BTN_PRESSED}
-											,{PLAY_LATER_BTN,PLAY_LATER_BTN_HOVERED,PLAY_LATER_BTN_PRESSED},
-											{DETAILS_BTN,DETAILS_BTN_HOVERED,DETAILS_BTN_PRESSED}};
-	
+	public static final BufferedImage[][] MOVIE_ITEM_BUTTON_IMAGES = {
+			{ PLAY_NOW_BTN, PLAY_NOW_BTN_HOVERED, PLAY_NOW_BTN_PRESSED },
+			{ PLAY_LATER_BTN, PLAY_LATER_BTN_HOVERED, PLAY_LATER_BTN_PRESSED },
+			{ DETAILS_BTN, DETAILS_BTN_HOVERED, DETAILS_BTN_PRESSED } };
+
 	private static BufferedImage getIcon(String file) {
 		BufferedImage image = null;
 		try {

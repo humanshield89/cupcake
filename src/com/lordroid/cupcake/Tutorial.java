@@ -13,15 +13,15 @@ import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
 
 public class Tutorial {
 
-	public static void main( String[] args) {
-//		new NativeDiscovery().discover();
-//		SwingUtilities.invokeLater(new Runnable() {
-//			public void run() {
-//				new Tutorial(args);
-//			}
-//		});
+	public static void main(String[] args) {
+		// new NativeDiscovery().discover();
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
+		// new Tutorial(args);
+		// }
+		// });
 		printInfo();
-		
+
 	}
 
 	/**
@@ -31,8 +31,7 @@ public class Tutorial {
 		// TODO Auto-generated method stub
 		// while (mediaPlayerComponent.getMediaPlayer().is)
 		System.out.println(System.getProperty("os.arch"));
-		
-		
+
 	}
 
 	private final JFrame frame;

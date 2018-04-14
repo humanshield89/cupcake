@@ -102,15 +102,16 @@ public abstract class MouseMovementDetector {
 	private class ActivityListener extends MouseMotionAdapter {
 		int lastX = 0;
 		int lastY = 0;
+
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getXOnScreen();
 			int y = e.getYOnScreen();
 			int dX;
 			int dY;
-			dX = (x > lastX) ? ( x- lastX) : ( lastX - x);
-			dY = (y > lastY) ? ( y- lastY) : ( lastY - x);
-			if(dX > 5 || dY > 5){
+			dX = (x > lastX) ? (x - lastX) : (lastX - x);
+			dY = (y > lastY) ? (y - lastY) : (lastY - x);
+			if (dX > 5 || dY > 5) {
 				movement();
 			}
 			lastX = x;

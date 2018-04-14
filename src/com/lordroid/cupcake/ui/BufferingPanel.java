@@ -9,8 +9,8 @@ import javax.swing.JPanel;
 import com.alee.laf.progressbar.WebProgressBar;
 
 @SuppressWarnings("serial")
-public class BufferingPanel extends JPanel{
-	
+public class BufferingPanel extends JPanel {
+
 	/**
 	 * @return the peersLab
 	 */
@@ -38,36 +38,37 @@ public class BufferingPanel extends JPanel{
 	public WebProgressBar getProgress() {
 		return progress;
 	}
-	
-	private JLabel peersLab = new JLabel("0"){
-	
+
+	private JLabel peersLab = new JLabel("0") {
+
 		@Override
-		public void setText(String text){
-			super.setText("Number of peers : "+text);
+		public void setText(String text) {
+			super.setText("Number of peers : " + text);
 		}
 	};
 
-	private JLabel currentDownSpeed = new JLabel("0"){
+	private JLabel currentDownSpeed = new JLabel("0") {
 		@Override
-		public void setText(String text){
+		public void setText(String text) {
 			String str = text;
 			try {
 				str = text.substring(0, text.lastIndexOf("."));
-			} catch (Exception e){
-				
+			} catch (Exception e) {
+
 			}
-			super.setText("Average Speed : "+str+" KB/S");
+			super.setText("Average Speed : " + str + " KB/S");
 		}
 	};
-	private JLabel buffred = new JLabel("0"){
+	private JLabel buffred = new JLabel("0") {
 		@Override
-		public void setText(String text){
-			super.setText("Buffred : "+text+" MB");
+		public void setText(String text) {
+			super.setText("Buffred : " + text + " MB");
 		}
 	};
 	private WebProgressBar progress = new WebProgressBar();
 	private JPanel labelContainer = new JPanel();
-	public BufferingPanel()  {
+
+	public BufferingPanel() {
 		super();
 		progress.setIndeterminate(true);
 		progress.setStringPainted(true);
@@ -76,21 +77,20 @@ public class BufferingPanel extends JPanel{
 		labelContainer.add(peersLab);
 		labelContainer.add(currentDownSpeed);
 		labelContainer.add(buffred);
-		
-		
+
 		this.setLayout(new BorderLayout());
 		this.add(progress, BorderLayout.CENTER);
 		this.add(labelContainer, BorderLayout.SOUTH);
 	}
-	
+
 	public void resetValues() {
 		peersLab.setText("0");
 		currentDownSpeed.setText("0");
 		buffred.setText("0");
-		
+
 	}
-	
-	public void updateValues(String[] state){
+
+	public void updateValues(String[] state) {
 		peersLab.setText(state[0]);
 		currentDownSpeed.setText(state[1]);
 		buffred.setText(state[2]);

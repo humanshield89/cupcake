@@ -38,9 +38,7 @@ public class SubtitleMenuItem extends JMenuItem implements ActionListener {
 			try {
 				sub = SubtitleFetcher.getSubtitle(subInfo, new File(
 						TMP_SUBS_FOLDER));
-				this.mediaPlayer
-						.getMediaPlayerComponent()
-						.getMediaPlayer()
+				this.mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
 						.setSubTitleFile(sub);
 				cached = true;
 			} catch (IOException e) {
@@ -49,10 +47,8 @@ public class SubtitleMenuItem extends JMenuItem implements ActionListener {
 				cached = false;
 			}
 		} else {
-			this.mediaPlayer
-			.getMediaPlayerComponent()
-			.getMediaPlayer()
-			.setSubTitleFile(sub);
+			this.mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
+					.setSubTitleFile(sub);
 		}
 	}
 

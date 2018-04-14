@@ -7,11 +7,12 @@ import java.io.File;
 import javax.swing.JMenuItem;
 
 @SuppressWarnings("serial")
-public class LocalSubtitleFileMenuItem extends JMenuItem implements ActionListener {
-	final File subtitle ;
+public class LocalSubtitleFileMenuItem extends JMenuItem implements
+		ActionListener {
+	final File subtitle;
 	final MediaPlayer mediaPlayer;
-	
-	public LocalSubtitleFileMenuItem(File sub,MediaPlayer arg1){
+
+	public LocalSubtitleFileMenuItem(File sub, MediaPlayer arg1) {
 		this.setText(sub.getName());
 		subtitle = sub;
 		mediaPlayer = arg1;
@@ -20,6 +21,7 @@ public class LocalSubtitleFileMenuItem extends JMenuItem implements ActionListen
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		mediaPlayer.getMediaPlayerComponent().getMediaPlayer().setSubTitleFile(subtitle);
+		mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
+				.setSubTitleFile(subtitle);
 	}
 }

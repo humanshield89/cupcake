@@ -20,5 +20,4 @@ public class MovieShadowPan extends JPanel {
 		g.drawImage(R.MOVIE_SHADOW_BG, 0, 0, this);
 	}
 
-
 }

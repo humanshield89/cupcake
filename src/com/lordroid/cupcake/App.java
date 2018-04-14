@@ -50,19 +50,20 @@ public class App {
 		System.setProperty(
 				"http.agent",
 				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-		//WebLookAndFeel.install();
-		//WebLookAndFeel.initializeManagers();
+		// WebLookAndFeel.install();
+		// WebLookAndFeel.initializeManagers();
 		Submin.install(true);
-		
+
 	}
 
 	private static boolean initVlcJ() {
 		String ourLocation = PathUtils.getExcutionPath();
-		System.setProperty(
-				"VLC_PLUGIN_PATH",
-				new File(ourLocation +  File.separator + S.NATIVE_LIB_FOLDER + File.separator + "plugins").getAbsolutePath());
+		System.setProperty("VLC_PLUGIN_PATH", new File(ourLocation
+				+ File.separator + S.NATIVE_LIB_FOLDER + File.separator
+				+ "plugins").getAbsolutePath());
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),
-				new File(ourLocation +  File.separator + S.NATIVE_LIB_FOLDER).getAbsolutePath());
+				new File(ourLocation + File.separator + S.NATIVE_LIB_FOLDER)
+						.getAbsolutePath());
 		LOGGER.info("added " + ourLocation + File.separator
 				+ S.NATIVE_LIB_FOLDER + " to search path");
 
@@ -78,27 +79,26 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-		
 
 		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
 		// TODO
-		//initVlcJ();
-		 SwingUtilities.invokeLater(new Runnable() {
-		
-		 public void run() {
-		 // TODO Auto-generated method stub
-			 	JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-				MainFram frame = new MainFram();
-				
-				//frame.getContentPane().revalidate();
+		// initVlcJ();
+		SwingUtilities.invokeLater(new Runnable() {
 
-				//frame.movieListPan.revalidate();
-				//frame.movieListPan.search();
-				}
-		
-		 });
-		 
+			public void run() {
+				// TODO Auto-generated method stub
+				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+				MainFram frame = new MainFram();
+
+				// frame.getContentPane().revalidate();
+
+				// frame.movieListPan.revalidate();
+				// frame.movieListPan.search();
+			}
+
+		});
+
 	}
 
 }

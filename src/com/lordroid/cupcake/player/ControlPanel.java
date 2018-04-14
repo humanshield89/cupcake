@@ -52,7 +52,6 @@ import com.lordroid.cupcake.utils.TimeUtils;
  */
 public class ControlPanel extends JPanel implements Watcher, Watchable {
 
-
 	public class BtnActionListner implements ActionListener {
 
 		/*
@@ -179,13 +178,13 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	private JPanel controlsContainer = new JPanel();
 
 	public ControlPanel() {
-		
+
 		this.currentVolume.setFont(R.NORMAL_FONT);
-		// TODO 
-		//progress.setDrawProgress(true);
-		//progress.setTrackBgTop(new Color(135, 124, 176));
-		//progress.setDrawProgress(true);
-		///progress.setTrackBgBottom(new Color(100, 124, 125));
+		// TODO
+		// progress.setDrawProgress(true);
+		// progress.setTrackBgTop(new Color(135, 124, 176));
+		// progress.setDrawProgress(true);
+		// /progress.setTrackBgBottom(new Color(100, 124, 125));
 		progress.setFocusable(false);
 		progress.setValue(0);
 
@@ -247,13 +246,13 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		});
 		this.volumeBtn.addActionListener(new BtnActionListner());
 
-		//volumeControl.setMinimumWidth(50);
+		// volumeControl.setMinimumWidth(50);
 		volumeControl.setMaximumSize(new Dimension(50, 20));
-		//volumeControl.setMargin(0, 0, 0, 5);
-		//volumeControl.setPreferredWidth(125);
+		// volumeControl.setMargin(0, 0, 0, 5);
+		// volumeControl.setPreferredWidth(125);
 		// TODO
-		//volumeControl.setTrackBgBottom(new Color(100, 124, 125));
-		//volumeControl.setTrackBgTop(new Color(135, 124, 176));
+		// volumeControl.setTrackBgBottom(new Color(100, 124, 125));
+		// volumeControl.setTrackBgTop(new Color(135, 124, 176));
 
 		controlsContainer.setLayout(new BorderLayout());
 

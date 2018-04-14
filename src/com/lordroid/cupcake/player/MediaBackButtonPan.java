@@ -13,18 +13,18 @@ import com.lordroid.cupcake.ui.MainFram;
 public class MediaBackButtonPan extends JPanel {
 
 	private JButton backBtn = new JButton("<< Back to Movie List");
-	
+
 	public MediaBackButtonPan(final MainFram frame) {
 		this.setLayout(new BorderLayout());
 		this.add(backBtn, BorderLayout.WEST);
-		backBtn.addActionListener(new ActionListener(){
+		backBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				frame.initMovieListPan();
 			}
-			
+
 		});
 	}
 }

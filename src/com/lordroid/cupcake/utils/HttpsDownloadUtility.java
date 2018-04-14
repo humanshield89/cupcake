@@ -33,7 +33,7 @@ public class HttpsDownloadUtility {
 			throws IOException {
 		String saveFilePath = null;
 		URL url = new URL(fileURL);
-		HttpURLConnection httpConn =  (HttpURLConnection) url.openConnection();
+		HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		int responseCode = httpConn.getResponseCode();
 
 		// always check HTTP response code first
@@ -87,8 +87,7 @@ public class HttpsDownloadUtility {
 
 		return new File(saveFilePath);
 	}
-	
-	
+
 	/**
 	 * Downloads a file from a URL
 	 * 

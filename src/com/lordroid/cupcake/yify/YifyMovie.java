@@ -12,8 +12,7 @@ import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 public class YifyMovie {
 	long end;
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
-	private static final String MOVIE_DETAILS_API =
-	 "https://yts.am/api/v2/movie_details.json?movie_id=";
+	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
 	private String url;
 	private String imdbCode;
@@ -102,7 +101,7 @@ public class YifyMovie {
 		this.coverSmallURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_S_KEY);
 		this.coverMediumURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_M_KEY);
 		this.coverLargeURL = movie.getString(YifyS.RESPONSE_COVER_IMAGE_L_KEY);
-		//this.state = movieArg.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
+		// this.state = movieArg.getString(YifyS.RESPONSE_MOVIE_STATE_KEY);
 		try {
 			JSONArray torrentsJSON = movie
 					.getJSONArray(YifyS.RESPONSE_TORRENTS_KEY);
@@ -113,7 +112,8 @@ public class YifyMovie {
 
 		}
 
-		ImgtmpFolder = new File(S.SYSTEM_TMP_FOLDER+"cachedresources" +File.separator+ this.id + File.separator);
+		ImgtmpFolder = new File(S.SYSTEM_TMP_FOLDER + "cachedresources"
+				+ File.separator + this.id + File.separator);
 		ImgtmpFolder.mkdirs();
 		System.out.println("ratting = " + this.MPARating);
 		cacheBgImage();
@@ -162,26 +162,27 @@ public class YifyMovie {
 		} while (swaped);
 	}
 
-	
-	public void loadExtras(){
+	public void loadExtras() {
 		// TODO find a faster way to do this
-		// 300 to 500 miliseconds to get the downlowd count is expensive 
-		 try {
-		 JSONObject movie =
-		 JSONComunicator.readJsonFromUrl(MOVIE_DETAILS_API+id).getJSONObject("data").getJSONObject("movie");
-		 this.downloadCount = movie.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
-		 this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
-		 } catch (JSONException e) {
-		 // TODO Auto-generated catch block
-		 
-		 e.printStackTrace();
-		 } catch (Exception e) {
-		 // TODO Auto-generated catch block
-		
-		 e.printStackTrace();
-		 }
+		// 300 to 500 miliseconds to get the downlowd count is expensive
+		try {
+			JSONObject movie = JSONComunicator
+					.readJsonFromUrl(MOVIE_DETAILS_API + id)
+					.getJSONObject("data").getJSONObject("movie");
+			this.downloadCount = movie
+					.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+			this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void cacheBgImage() {
 		if (!isBGBEingCached) {
 			new Thread(new Runnable() {
@@ -189,8 +190,8 @@ public class YifyMovie {
 				public void run() {
 					// TODO Auto-generated method stub
 					isBGBEingCached = true;
-					if (!new File(ImgtmpFolder.getAbsolutePath() + File.separator
-							+ "background.jpg").exists()) {
+					if (!new File(ImgtmpFolder.getAbsolutePath()
+							+ File.separator + "background.jpg").exists()) {
 						try {
 							bgImageFile = HttpsDownloadUtility.downloadFile(
 									bgImageURL, ImgtmpFolder.getAbsolutePath());
@@ -226,8 +227,10 @@ public class YifyMovie {
 				public void run() {
 					isCoverMediumBeingCached = true;
 					// TODO Auto-generated method stub medium-cover.jpg
-					isCoverMediumCached = new File(ImgtmpFolder.getAbsolutePath()
-							+ File.separator + "medium-cover.jpg").exists();
+					isCoverMediumCached = new File(ImgtmpFolder
+							.getAbsolutePath()
+							+ File.separator
+							+ "medium-cover.jpg").exists();
 					if (!isCoverMediumCached) {
 						try {
 							CoverImageFileMedium = HttpsDownloadUtility
@@ -247,8 +250,10 @@ public class YifyMovie {
 								+ File.separator
 								+ "medium-cover.jpg");
 					}
-					isCoverMediumCached = new File(ImgtmpFolder.getAbsolutePath()
-							+ File.separator + "medium-cover.jpg").exists();
+					isCoverMediumCached = new File(ImgtmpFolder
+							.getAbsolutePath()
+							+ File.separator
+							+ "medium-cover.jpg").exists();
 					isCoverMediumBeingCached = false;
 				}
 
@@ -447,10 +452,10 @@ public class YifyMovie {
 		return ImgtmpFolder;
 	}
 
-	public File getDownlodFolder(){
-		return new File(S.MOVIE_DOWNLOAD_FOLDER+File.separator+id);
+	public File getDownlodFolder() {
+		return new File(S.MOVIE_DOWNLOAD_FOLDER + File.separator + id);
 	}
-	
+
 	/**
 	 * @return the bgImageFile
 	 */
@@ -520,15 +525,17 @@ public class YifyMovie {
 	}
 
 	public YifyTorrent getTorrent(int quality) {
-		if (quality == -1){
-			for (YifyTorrent t : torrents){
-				if (t.getQuality().equals(Settings.getCurrentDefaultPlayQuality())){
+		if (quality == -1) {
+			for (YifyTorrent t : torrents) {
+				if (t.getQuality().equals(
+						Settings.getCurrentDefaultPlayQuality())) {
 					return t;
 				}
 			}
 		} else {
-			for (YifyTorrent t : torrents ){
-				if (t.getQuality().equals(Settings.DEFAULT_PLAY_QUALITY[quality])){
+			for (YifyTorrent t : torrents) {
+				if (t.getQuality().equals(
+						Settings.DEFAULT_PLAY_QUALITY[quality])) {
 					return t;
 				}
 			}

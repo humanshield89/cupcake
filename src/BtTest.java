@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,16 +25,15 @@ import com.google.inject.Module;
 public class BtTest {
 	public static Logger LOGGER = LoggerFactory.getLogger(BtTest.class);
 
-
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 
 		System.setProperty("java.net.preferIPv4Stack", "true");
-		 try {
-		 testBT();
-		 } catch (MalformedURLException e) {
-		 // TODO Auto-generated catch block
-		 e.printStackTrace();
-		 }
+		try {
+			testBT();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -62,9 +60,13 @@ public class BtTest {
 		Storage storage = new FileSystemStorage(targetDirectory);
 
 		// create client with a private runtime
-		BtClient client = Bt.client().config(config)
+		BtClient client = Bt
+				.client()
+				.config(config)
 				.storage(storage)
-				.torrent(new URL("https://yts.am/torrent/download/FC5B92079B94D6D3801C763F1BEF021179BBB8C9"))
+				.torrent(
+						new URL(
+								"https://yts.am/torrent/download/FC5B92079B94D6D3801C763F1BEF021179BBB8C9"))
 				.autoLoadModules().module(dhtModule).stopWhenDownloaded()
 				.sequentialSelector().build();
 
@@ -72,18 +74,19 @@ public class BtTest {
 
 			public void accept(TorrentSessionState arg0) {
 				// TODO Auto-generated method stub
-				//arg0.
+				// arg0.
 				System.out.println("downloaded = "
 						+ ((double) arg0.getPiecesComplete() / (double) arg0
 								.getPiecesTotal()) * 100 + " %");
 				System.out.println("uploaded = " + arg0.getUploaded());
 				System.out.println("downloaded  = " + arg0.getDownloaded());
-				System.out.println("peers  = " + arg0.getConnectedPeers().size());
+				System.out.println("peers  = "
+						+ arg0.getConnectedPeers().size());
 
 			}
 
 		}, 1000L).join();
-		
+
 	}
 
 }

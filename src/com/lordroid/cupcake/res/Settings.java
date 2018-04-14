@@ -27,9 +27,11 @@ import com.lordroid.cupcake.yify.YifyS;
  */
 public class Settings {
 
-	public static final String[] SUB_ENCODING = {"UTF8","KOI8-R","Windows-1256"};
-	public static final String[] SUB_ENCODING_COMBO = {"Universal (UTF8)","Russian (KOI8-R)","Arabic (Windows-1256)"};
-	
+	public static final String[] SUB_ENCODING = { "UTF8", "KOI8-R",
+			"Windows-1256" };
+	public static final String[] SUB_ENCODING_COMBO = { "Universal (UTF8)",
+			"Russian (KOI8-R)", "Arabic (Windows-1256)" };
+
 	public static final String[] SORT_BY_KEY_ARRAY = { YifyS.SORT_DATE_ADDED,
 			YifyS.SORT_YEAR, YifyS.SORT_TITLE, YifyS.SORT_RATING,
 			YifyS.SORT_DOWNLOAD_COUNT, YifyS.SORT_LIKE_COUNT };
@@ -52,59 +54,65 @@ public class Settings {
 
 	public static final String[] ORDER_KEYS = { "desc", "asc" };
 	public static final String[] ORDER_COMBO = { "Descending", "Ascending" };
-	public static final String[] DEFAULT_PLAY_QUALITY = {"720p","1080p","3d"};
-	
+	public static final String[] DEFAULT_PLAY_QUALITY = { "720p", "1080p", "3d" };
+
 	/**
 	 * 
 	 * @return
 	 */
 	public static int getSubtitlesLang1() {
-		Integer i = new Integer(PropReader.getProp("SubtitleLang1", S.CONFIG_FILE));
-		return i ;
+		Integer i = new Integer(PropReader.getProp("SubtitleLang1",
+				S.CONFIG_FILE));
+		return i;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public static int getSubtitlesLang2() {
-		Integer i = new Integer(PropReader.getProp("SubtitleLang2", S.CONFIG_FILE));
-		return i ;
+		Integer i = new Integer(PropReader.getProp("SubtitleLang2",
+				S.CONFIG_FILE));
+		return i;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public static int getSubtitlesLang3() {
-		Integer i = new Integer(PropReader.getProp("SubtitleLang3", S.CONFIG_FILE));
-		return i ;
+		Integer i = new Integer(PropReader.getProp("SubtitleLang3",
+				S.CONFIG_FILE));
+		return i;
 	}
-	
+
 	/**
 	 * 
 	 * @param size
 	 */
-	public static void getCurrentMaxCacheSize(long size){
-		PropReader.writeProp("CurrentDefaultPlayQuality", size+"", S.CONFIG_FILE);
+	public static void getCurrentMaxCacheSize(long size) {
+		PropReader.writeProp("CurrentDefaultPlayQuality", size + "",
+				S.CONFIG_FILE);
 
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
-	public static long getCurrentMaxCacheSize(){
-		long l = new Long(PropReader.getProp("CurrentMaxCacheSize", S.CONFIG_FILE));
+	public static long getCurrentMaxCacheSize() {
+		long l = new Long(PropReader.getProp("CurrentMaxCacheSize",
+				S.CONFIG_FILE));
 		return l;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public static int getCurrentQuality() {
-		Integer i = new Integer(PropReader.getProp("CurrentFilterQuality", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("CurrentFilterQuality",
+				S.CONFIG_FILE));
 		return i;
 	}
 
@@ -113,7 +121,8 @@ public class Settings {
 	 * @return
 	 */
 	public static int getCurrentMinimumRating() {
-		Integer i = new Integer(PropReader.getProp("currentMiniRating", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("currentMiniRating",
+				S.CONFIG_FILE));
 		return i;
 	}
 
@@ -122,7 +131,8 @@ public class Settings {
 	 * @return
 	 */
 	public static int getCurrentSortBy() {
-		Integer i = new Integer(PropReader.getProp("currentSortBy", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("currentSortBy",
+				S.CONFIG_FILE));
 		return i;
 	}
 
@@ -131,7 +141,8 @@ public class Settings {
 	 * @return
 	 */
 	public static int getCurrentGenre() {
-		Integer i = new Integer(PropReader.getProp("CurrentGenre", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("CurrentGenre",
+				S.CONFIG_FILE));
 		return i;
 
 	}
@@ -140,8 +151,9 @@ public class Settings {
 	 * 
 	 * @return
 	 */
-	public static String getCurrentDefaultPlayQuality(){
-		Integer i = new Integer(PropReader.getProp("CurrentDefaultPlayQuality", S.CONFIG_FILE));
+	public static String getCurrentDefaultPlayQuality() {
+		Integer i = new Integer(PropReader.getProp("CurrentDefaultPlayQuality",
+				S.CONFIG_FILE));
 		return DEFAULT_PLAY_QUALITY[i];
 	}
 
@@ -150,7 +162,6 @@ public class Settings {
 	 * @return
 	 */
 	public static String getDefaultSubtittleEncoding() {
-		
 
 		return PropReader.getProp("DefaultSubtittleEncoding", S.CONFIG_FILE);
 	}
@@ -161,16 +172,18 @@ public class Settings {
 	 */
 	public static int getCurrentVolume() {
 		// TODO extenrnalize those
-		Integer i = new Integer(PropReader.getProp("CurrentVolume", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("CurrentVolume",
+				S.CONFIG_FILE));
 		return i;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public static int getMaxSearchItemsPerPage() {
-		Integer i = new Integer(PropReader.getProp("MaxSearchItemsPerPage", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("MaxSearchItemsPerPage",
+				S.CONFIG_FILE));
 		return i;
 	}
 
@@ -179,10 +192,11 @@ public class Settings {
 	 * @return indexOfCurrentOrder
 	 */
 	public static int getCurrentOrder() {
-		Integer i = new Integer(PropReader.getProp("CurrentOrder", S.CONFIG_FILE));
+		Integer i = new Integer(PropReader.getProp("CurrentOrder",
+				S.CONFIG_FILE));
 		return i;
 	}
-	
+
 	/**
 	 * 
 	 * @param str
@@ -196,17 +210,17 @@ public class Settings {
 	 * 
 	 * @param i
 	 */
-	public static void setCurrentVolume(int i ) {
-		PropReader.writeProp("CurrentVolume", i+"", S.CONFIG_FILE);
+	public static void setCurrentVolume(int i) {
+		PropReader.writeProp("CurrentVolume", i + "", S.CONFIG_FILE);
 	}
-
 
 	/**
 	 * 
 	 * @param quality
 	 */
 	public static void setCurrentQuality(int quality) {
-		PropReader.writeProp("CurrentFilterQuality", quality+"", S.CONFIG_FILE);
+		PropReader.writeProp("CurrentFilterQuality", quality + "",
+				S.CONFIG_FILE);
 	}
 
 	/**
@@ -214,7 +228,7 @@ public class Settings {
 	 * @param sortBy
 	 */
 	public static void setCurrentSortBy(int sortBy) {
-		PropReader.writeProp("currentSortBy", sortBy+"", S.CONFIG_FILE);
+		PropReader.writeProp("currentSortBy", sortBy + "", S.CONFIG_FILE);
 	}
 
 	/**
@@ -222,7 +236,7 @@ public class Settings {
 	 * @param genre
 	 */
 	public static void setCurrentGenre(int genre) {
-		PropReader.writeProp("CurrentGenre", genre+"", S.CONFIG_FILE);
+		PropReader.writeProp("CurrentGenre", genre + "", S.CONFIG_FILE);
 	}
 
 	/**
@@ -230,7 +244,8 @@ public class Settings {
 	 * @param minRating
 	 */
 	public static void setCurrentminRating(int minRating) {
-		PropReader.writeProp("currentMiniRating", minRating+"", S.CONFIG_FILE);
+		PropReader
+				.writeProp("currentMiniRating", minRating + "", S.CONFIG_FILE);
 	}
 
 	/**
@@ -238,51 +253,53 @@ public class Settings {
 	 * @param order
 	 */
 	public static void setCurrentOrder(int order) {
-		PropReader.writeProp("CurrentOrder", order+"", S.CONFIG_FILE);
+		PropReader.writeProp("CurrentOrder", order + "", S.CONFIG_FILE);
 	}
-	
+
 	/**
 	 * 
 	 * @param index
 	 */
-	public static void setDefaultPlayQuality(int index ){
-		PropReader.writeProp("CurrentDefaultPlayQuality", index+"", S.CONFIG_FILE);
+	public static void setDefaultPlayQuality(int index) {
+		PropReader.writeProp("CurrentDefaultPlayQuality", index + "",
+				S.CONFIG_FILE);
 	}
-	
+
 	/**
 	 * 
 	 * @param langIndex
 	 */
-	public static void setSubtitlesLang1(int langIndex){
-		PropReader.writeProp("SubtitleLang1", langIndex+"", S.CONFIG_FILE);
+	public static void setSubtitlesLang1(int langIndex) {
+		PropReader.writeProp("SubtitleLang1", langIndex + "", S.CONFIG_FILE);
 
 	}
-	
+
 	/**
 	 * 
 	 * @param langIndex
 	 */
-	public static void setSubtitlesLang2(int langIndex){
-		PropReader.writeProp("SubtitleLang2", langIndex+"", S.CONFIG_FILE);
+	public static void setSubtitlesLang2(int langIndex) {
+		PropReader.writeProp("SubtitleLang2", langIndex + "", S.CONFIG_FILE);
 
 	}
-	
+
 	/**
 	 * 
 	 * @param langIndex
 	 */
-	public static void setSubtitlesLang3(int langIndex){
-		PropReader.writeProp("SubtitleLang3", langIndex+"", S.CONFIG_FILE);
+	public static void setSubtitlesLang3(int langIndex) {
+		PropReader.writeProp("SubtitleLang3", langIndex + "", S.CONFIG_FILE);
 
 	}
-	
+
 	/**
 	 * 
 	 * @param index
 	 */
 	public static void setDefaultSubtittleEncoding(int index) {
-		
-		PropReader.writeProp("DefaultSubtittleEncoding", SUB_ENCODING[index], S.CONFIG_FILE);
+
+		PropReader.writeProp("DefaultSubtittleEncoding", SUB_ENCODING[index],
+				S.CONFIG_FILE);
 
 	}
 }
