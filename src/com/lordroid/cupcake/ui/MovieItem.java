@@ -26,25 +26,26 @@ import com.lordroid.cupcake.utils.TimeUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
 @SuppressWarnings("serial")
-public class MovieItem extends JPanel implements MouseListener ,WatchableListPan,ActionListener{
+public class MovieItem extends JPanel implements MouseListener,
+		WatchableListPan, ActionListener {
 	public static final int PLAY_ACTION = 0;
 	public static final int DETAILS_ACTION = 2;
 	public static final int LATER_ACTION = 1;
-	
-	
-	ArrayList<ListPanWatcher> watchersList  = new ArrayList<ListPanWatcher>();
+
+	ArrayList<ListPanWatcher> watchersList = new ArrayList<ListPanWatcher>();
 	MovieItem thisPan;
 	private final YifyMovie movie;
 	private BufferedImage coverImage;
 	private boolean isImageCached = false;
 	private BufferedImage blurryImage;
 	private boolean isBluredCached = false;
+	private boolean selected = false;
 	private JPanel infoPan = new JPanel() {
 		public void paintComponent(Graphics g) {
 			BufferedImage img = null;
 			BufferedImage img2 = null;
 			try {
-				if (entered) {
+				if (selected) {
 					img = blurryImage.getSubimage(0, 145, 230, 200);
 					img2 = R.BORDER_IMAGE.getSubimage(0, 145, 230, 200);
 				} else
@@ -56,26 +57,20 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
-			g2d.setColor(new Color(0, 0, 0, 100));
+			g2d.setColor(new Color(0, 0, 0, 150));
 
-			if (entered) {
+			if (selected) {
 				g2d.drawImage(img, 0, 0, this);
 
 			}
 			g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-			if (entered)
+			if (selected)
 				g2d.drawImage(img2, 0, 0, this);
 
 		}
 	};
-	// private final int infoPanX;
-	private final int infoPanY;
-	// private final int infoPanWitdh;
-	// private final int infoPanHeight;
-	// private final int infoPanWitdhHovered;
-	// private final int infoPanHeighthHovered;
-	private boolean entered = false;
 
+	private final int infoPanY;
 	private JLabel titleLab = new JLabel();
 	private JLabel imdbIcon = new JLabel(new ImageIcon(R.IMDB_ICON));
 	private JLabel viewsIcon = new JLabel(new ImageIcon(R.VIEWS_ICON));
@@ -90,21 +85,20 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 	private JLabel lab3d = new JLabel(new ImageIcon(R.QUALITY_3D));
 
 	// private PlayNowBtn playNowbtn = new PlayNowBtn();
-	private MovieItemButton[] itemButtons = {new MovieItemButton(0),new MovieItemButton(1),new MovieItemButton(2)}; 
+	private MovieItemButton[] itemButtons = { new MovieItemButton(0),
+			new MovieItemButton(1), new MovieItemButton(2) };
 	// private JLabel ratingIcon ;
 
 	// private final int infoPanHoveredX;
 	private final int infoPanHoveredY;
 
 	public MovieItem(YifyMovie moviearg) {
-		//JList list = new JList(JList.);
 		thisPan = this;
 		this.movie = moviearg;
 		try {
 			coverImage = ImageIO.read(movie.getCoverImageFileMedium());
 			this.isImageCached = true;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			this.isImageCached = false;
 			try {
 				coverImage = ImageIO.read(Thread.currentThread()
@@ -128,14 +122,14 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 		this.infoPan.setBounds(0, this.getHeight() - 71, 230, 200);
 		infoPan.setLayout(null);
 
-		titleLab.setText("<html><h3 style='text-align: center;'><u>" + movie.getTitleLong()
-				+ "</u></h3></html>");
+		titleLab.setText("<html><h3 style='text-align: center;'><u>"
+				+ movie.getTitleLong() + "</u></h3></html>");
 		titleLab.setForeground(Color.WHITE);
 		titleLab.setFont(R.MOVIE_TITLE_FONT);
 		titleLab.setBounds(2, 2, 228, 45);
 		titleLab.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLab.setVerticalAlignment(SwingConstants.CENTER);
-		
+
 		imdbIcon.setBounds(12, 49, 60, 20);
 		imdbRatingLab.setText("<html><b>" + movie.getRating() + "</b></html>");
 		imdbRatingLab.setForeground(Color.WHITE);
@@ -170,8 +164,6 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 
 		this.lab3d.setBounds(156, 166, 60, 20);
 
-		// System.out.println(descriText.getText());
-
 		infoPan.add(titleLab);
 		infoPan.add(imdbIcon);
 		infoPan.add(imdbRatingLab);
@@ -190,55 +182,52 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 		infoPanY = this.getHeight() - 71;
 		infoPanHoveredY = 145;
 
-		// buttons 
+		// buttons
 		itemButtons[0].setBounds(15, 10, 200, 35);
 		itemButtons[1].setBounds(15, 55, 200, 35);
 		itemButtons[2].setBounds(15, 100, 200, 35);
-		
-		
-		// infoPanHeight = 629;
-		// infoPanHeighthHovered = this.getHeight();
-		// infoPan.setBackground(new Color(0,0,0,122));
+
 		this.setLayout(null);
 		this.add(infoPan);
-		for (MovieItemButton btn : itemButtons){
+		for (MovieItemButton btn : itemButtons) {
 			this.add(btn);
 			btn.setVisible(false);
 			btn.addMouseListener(this);
 		}
-		// this.setBackground(Color.BLACK);
 
 		this.addMouseListener(this);
 		initToolTip();
 		initActions();
+
 	}
 
 	private void initActions() {
-		// TODO Auto-generated method stub
-		for (MovieItemButton b : itemButtons){
+		for (MovieItemButton b : itemButtons) {
 			b.addActionListener(this);
 		}
+
 	}
 
 	private void initToolTip() {
-		
-		// TODO find some why to work around the flikering cause by mouse hovered over this components
-		// being reported to the panel as exited 
-//		this.descriText.setToolTipText("Movie short description");
-//		descriText.addMouseListener(this);
-//		this.genreText.setToolTipText("Movie genre ");
-//		genreText.addMouseListener(this);
-//		this.imdbIcon.setToolTipText("IMDB rating ");
-//		imdbIcon.addMouseListener(this);
-//		this.viewsIcon.setToolTipText("Number of views based on torrent download count");
-//		viewsIcon.addMouseListener(this);
-//		this.lab1080p.setToolTipText("This movie is available in 1080p quality");
-//		lab1080p.addMouseListener(this);
-//		this.lab720p.setToolTipText("This movie is available in 720p quality");
-//		lab720p.addMouseListener(this);
-//		this.lab3d.setToolTipText("This movie is available in 3D");
-//		lab3d.addMouseListener(this);
-		
+
+		// TODO find some why to work around the flikering cause by mouse
+		// hovered over this components
+		// being reported to the panel as exited
+		// this.descriText.setToolTipText("Movie short description");
+		// descriText.addMouseListener(this);
+		// this.genreText.setToolTipText("Movie genre ");
+		// genreText.addMouseListener(this);
+		// this.imdbIcon.setToolTipText("IMDB rating ");
+		// imdbIcon.addMouseListener(this);
+		// this.viewsIcon.setToolTipText("Number of views based on torrent download count");
+		// viewsIcon.addMouseListener(this);
+		// this.lab1080p.setToolTipText("This movie is available in 1080p quality");
+		// lab1080p.addMouseListener(this);
+		// this.lab720p.setToolTipText("This movie is available in 720p quality");
+		// lab720p.addMouseListener(this);
+		// this.lab3d.setToolTipText("This movie is available in 3D");
+		// lab3d.addMouseListener(this);
+
 	}
 
 	public void paintComponent(Graphics g) {
@@ -249,7 +238,6 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 				coverImage = ImageIO.read(movie.getCoverImageFileMedium());
 				isImageCached = true;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				isImageCached = false;
 
 				e.printStackTrace();
@@ -266,14 +254,12 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 			}
 		}
 
-		if (!entered) {
-			// g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		if (!selected) {
 			g2d.drawImage(coverImage, 0, 0, this);
 		} else {
 			g2d.drawImage(blurryImage, 0, 0, this);
 			g2d.drawImage(R.BORDER_IMAGE, 0, 0, this);
 		}
-
 
 	}
 
@@ -283,39 +269,51 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		entered = true;
-		
-		if (entered) {
-			infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
-			for (MovieItemButton btn : itemButtons) 
-				btn.setVisible(true);
-			infoPan.repaint();
-			repaint();
-			// revalidate();
-		}
-
+		this.updateSelectionStatus(this);
 	}
 
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		if (arg0.getSource().equals(itemButtons[0]) || arg0.getSource().equals(itemButtons[1]) || arg0.getSource().equals(itemButtons[1])
-				/* || arg0.getSource().equals(descriText) || arg0.getSource().equals(this.lab1080p) || arg0.getSource().equals(this.lab720p) || arg0.getSource().equals(this.lab3d)
-			|| arg0.getSource().equals(genreText) || arg0.getSource().equals(this.imdbIcon) || arg0.getSource().equals(viewsIcon) */) {
-			
+		if (arg0.getSource().equals(itemButtons[0])
+				|| arg0.getSource().equals(itemButtons[1])
+				|| arg0.getSource().equals(itemButtons[1])
+		/*
+		 * || arg0.getSource().equals(descriText) ||
+		 * arg0.getSource().equals(this.lab1080p) ||
+		 * arg0.getSource().equals(this.lab720p) ||
+		 * arg0.getSource().equals(this.lab3d) ||
+		 * arg0.getSource().equals(genreText) ||
+		 * arg0.getSource().equals(this.imdbIcon) ||
+		 * arg0.getSource().equals(viewsIcon)
+		 */) {
+
 			return;
 		}
-		entered = false;
-		
-		if (!entered) {
-			infoPan.setBounds(0, infoPanY, 230, 200);
-			for (MovieItemButton btn : itemButtons) 
-				btn.setVisible(false);
-		}
+
+		setSelected(false);
 
 		infoPan.repaint();
 		repaint();
-		// revalidate();
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+		if (selected) {
+			infoPan.setBounds(infoPan.getBounds().x, infoPanHoveredY, 230, 200);
+			for (MovieItemButton btn : itemButtons)
+				btn.setVisible(true);
+			infoPan.repaint();
+			repaint();
+		} else {
+			infoPan.setBounds(0, infoPanY, 230, 200);
+			for (MovieItemButton btn : itemButtons)
+				btn.setVisible(false);
+			infoPan.repaint();
+			repaint();
+		}
+	}
+
+	public boolean isSelected() {
+		return selected;
 	}
 
 	public void mousePressed(MouseEvent arg0) {
@@ -346,12 +344,20 @@ public class MovieItem extends JPanel implements MouseListener ,WatchableListPan
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		MovieItemButton source = (MovieItemButton) arg0.getSource();
-		if (source.equals(itemButtons[0])){
+		if (source.equals(itemButtons[0])) {
 			this.updateListWatchers(PLAY_ACTION);
 		} else if (source.equals(itemButtons[1])) {
 			this.updateListWatchers(LATER_ACTION);
 		} else if (source.equals(itemButtons[2])) {
 			this.updateListWatchers(DETAILS_ACTION);
+		}
+	}
+
+	@Override
+	public void updateSelectionStatus(MovieItem movie) {
+		// TODO Auto-generated method stub
+		for (ListPanWatcher w : watchersList) {
+			w.ItemSelected(movie);
 		}
 	}
 }

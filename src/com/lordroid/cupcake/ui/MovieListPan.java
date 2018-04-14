@@ -8,9 +8,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -34,25 +36,26 @@ import com.lordroid.cupcake.yify.YifyMovie;
 import com.lordroid.cupcake.yify.YifyS;
 
 @SuppressWarnings("serial")
-public class MovieListPan extends JPanel implements ActionListener {
+public class MovieListPan extends JPanel implements ActionListener,
+		KeyListener, ListPanWatcher {
 	public static final String SEARHC_DEFAULT_TEXT = "Search Title/imdbCode ...";
 	private final ListPanWatcher listWatcher;
-	//private ArrayList<YifyMovie> moviesList = new ArrayList<YifyMovie>();
-
+	private ArrayList<MovieItem> moviesList = new ArrayList<MovieItem>();
+	private int currentlySelected = -999;
 	// JPanel mainContainer = new JPa
 	private WebPanel seachPanContainer = new WebPanel() {
-//		public void paintComponent(Graphics g) {
-//			int i = 0;
-//			int n = 0;
-//			while (n < this.getHeight()) {
-//				i = 0;
-//				while (i < this.getWidth()) {
-//					g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
-//					i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
-//				}
-//				n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
-//			}
-//		}
+		// public void paintComponent(Graphics g) {
+		// int i = 0;
+		// int n = 0;
+		// while (n < this.getHeight()) {
+		// i = 0;
+		// while (i < this.getWidth()) {
+		// g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
+		// i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
+		// }
+		// n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
+		// }
+		// }
 	};
 	// sort by components
 	private JLabel sortByLabel = new JLabel("Sort by : ");
@@ -121,7 +124,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 	private int order;
 
-	public MovieListPan( ListPanWatcher watcher ) {
+	public MovieListPan(ListPanWatcher watcher) {
+
 		this.listWatcher = watcher;
 		seachPanContainer.setLayout(new FlowLayout());
 
@@ -136,7 +140,16 @@ public class MovieListPan extends JPanel implements ActionListener {
 		genreCombo.setSelectedIndex(Settings.getCurrentGenre());
 		qualityCombo.setSelectedIndex(Settings.getCurrentQuality());
 		orderCombo.setSelectedIndex(Settings.getCurrentOrder());
-		
+
+		sortByCombo.setFocusable(false);
+		minRatingCombo.setFocusable(false);
+		genreCombo.setFocusable(false);
+		qualityCombo.setFocusable(false);
+		orderCombo.setFocusable(false);
+		sortByCombo.setFocusable(false);
+		searchField.setFocusable(false);
+		searchBtn.setFocusable(false);
+
 		searchField.setText(SEARHC_DEFAULT_TEXT);
 		searchField.setPreferredSize(new Dimension(148, 23));
 
@@ -166,6 +179,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		this.add(this.seachPanContainer, BorderLayout.NORTH);
 		this.add(scrollPan, BorderLayout.CENTER);
 
+		// scrollPan.setF
 		// actionListeners
 		this.searchBtn.addActionListener(this);
 		this.loadMoreBtn.addActionListener(this);
@@ -201,18 +215,27 @@ public class MovieListPan extends JPanel implements ActionListener {
 			}
 
 		});
-		// TODO : change this load a blank pannel with the frame size 
-		//        add a status panel on the south and display loading ... or something 
+		// TODO : change this load a blank pannel with the frame size
+		// add a status panel on the south and display loading ... or something
 		// like contacting
 		movieListContainer.add(new JPanel());
-		
-		this.actionPerformed(new ActionEvent(searchBtn, ActionEvent.ACTION_PERFORMED, "search"));
+		loadMoreBtn.addKeyListener(this);
+		this.actionPerformed(new ActionEvent(searchBtn,
+				ActionEvent.ACTION_PERFORMED, "search"));
+		this.addKeyListener(this);
+		this.requestFocus();
+		this.requestFocusInWindow();
+	}
+
+	public boolean isFocusTraversable() {
+		return true;
 	}
 
 	private void getNextPage() {
 		this.searchBtn.setEnabled(false);
 		// TODO Auto-generated method stub
 		movieListContainer.remove(loadMoreBtn);
+		currentlySelected--;
 		page++;
 		String url = JSONComunicator.getJsonQueryUrl(page, quality, minRating,
 				term, genre, sortBy, order);
@@ -263,8 +286,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 			for (int i = 0; i < movies.length(); i++) {
 				this.addMovieItem((JSONObject) movies.get(i));
 				movieListContainer.revalidate();
-				JScrollBar vertical = scrollPan.getVerticalScrollBar();
-				vertical.setValue(vertical.getMaximum());
+				// JScrollBar vertical = scrollPan.getVerticalScrollBar();
+				// vertical.setValue(vertical.getMaximum());
 
 			}
 
@@ -279,15 +302,18 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 		}
 		this.searchBtn.setEnabled(true);
+		this.requestFocus();
 
 	}
 
-	private void addMovieItem(JSONObject obj){
-		MovieItem mv = new MovieItem(
-				new YifyMovie(obj));
+	private void addMovieItem(JSONObject obj) {
+		MovieItem mv = new MovieItem(new YifyMovie(obj));
 		mv.addListPanWatcher(listWatcher);
+		mv.addListPanWatcher(this);
 		movieListContainer.add(new MovieShadowPan(mv));
+		moviesList.add(mv);
 	}
+
 	private void noResults() {
 		// TODO Auto-generated method stub
 		movieListContainer.add(this.noResult);
@@ -312,6 +338,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		this.searchBtn.setEnabled(false);
 		movieListContainer.removeAll();
+		this.moviesList = new ArrayList<MovieItem>();
 		page = 1;
 		quality = this.qualityCombo.getSelectedIndex();
 		sortBy = this.sortByCombo.getSelectedIndex();
@@ -339,8 +366,8 @@ public class MovieListPan extends JPanel implements ActionListener {
 			e.printStackTrace();
 			movieListContainer.add(this.noResponse);
 			this.searchBtn.setEnabled(true);
-			return ;
-		} 
+			return;
+		}
 		if (obj != null) {
 			data = obj.getJSONObject(YifyS.RESPONSE_DATA_KEY);
 			// maxPage = obj.getJSONObject("");
@@ -348,7 +375,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 			// TODO : something went wrong handle it
 			movieListContainer.add(this.noResponse);
 			this.searchBtn.setEnabled(true);
-			return ;
+			return;
 		}
 
 		if (data != null) {
@@ -359,7 +386,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 			} catch (JSONException e) {
 				movieListContainer.add(this.noResult);
 				this.searchBtn.setEnabled(true);
-				return ;
+				return;
 			}
 		} else {
 			// TODO : something went wrong handle it
@@ -382,6 +409,7 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 		}
 		this.searchBtn.setEnabled(true);
+		this.currentlySelected = -999;
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -405,6 +433,99 @@ public class MovieListPan extends JPanel implements ActionListener {
 
 			}).start();
 		}
+	}
+
+	private int getNumberOfItemInRow() {
+		int width = movieListContainer.getWidth();
+		// int height = movieListContainer.getHeight();
+
+		return width / 260;
+
+	}
+
+	private void NavigateTo(int increment) {
+		// TODO : maybe there is better ways to do this my man
+		int inc = increment;
+		if (this.currentlySelected == -999) {
+			currentlySelected = 0;
+			inc = 0;
+		}
+		if (currentlySelected + inc >= moviesList.size()
+				|| currentlySelected + inc < 0) {
+			if (currentlySelected + inc >= moviesList.size()) {
+				if (currentlySelected < moviesList.size())
+					moviesList.get(currentlySelected).setSelected(false);
+				loadMoreBtn.setSelected(true);
+				loadMoreBtn.requestFocus();
+				currentlySelected = moviesList.size();
+			}
+		} else {
+			if (currentlySelected < moviesList.size())
+				moviesList.get(currentlySelected).setSelected(false);
+			else
+				loadMoreBtn.setSelected(false);
+
+			currentlySelected = currentlySelected + inc;
+			moviesList.get(currentlySelected).setSelected(true);
+			this.requestFocus();
+		}
+		double rowsPerView = ((double) scrollPan.getViewport().getHeight() / 385.0) - 1;
+		JScrollBar vertical = scrollPan.getVerticalScrollBar();
+		int newValue = (int) ((((double) (currentlySelected / getNumberOfItemInRow())) * 385) - (385 * rowsPerView) / 2);
+		vertical.setValue(newValue);
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		App.LOGGER.info("Key Event   : " + arg0.getKeyCode());
+		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
+			App.LOGGER.info("Arrow key up presssed ");
+			NavigateTo(-getNumberOfItemInRow());
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+			App.LOGGER.info("Arrow key down presssed ");
+			NavigateTo(getNumberOfItemInRow());
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			App.LOGGER.info("Arrow key right presssed ");
+			NavigateTo(1);
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			App.LOGGER.info("Arrow key left presssed ");
+			NavigateTo(-1);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void ListActionPerformed(YifyMovie movie, int action) {
+		// TODO Auto-generated method stub
+		// DO nothing here
+	}
+
+	@Override
+	public void ItemSelected(MovieItem movieItem) {
+		// TODO Auto-generated method stub
+		try {
+			moviesList.get(currentlySelected).setSelected(false);
+		} catch (Exception e) {
+
+		}
+		currentlySelected = moviesList.indexOf(movieItem);
+		movieItem.setSelected(true);
 	}
 
 }

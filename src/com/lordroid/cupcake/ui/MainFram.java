@@ -51,7 +51,7 @@ public class MainFram extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPan = new JPanel();
-	public MovieListPan movieListPan ;
+	public MovieListPan movieListPan;
 	private MediaPlayer player = new MediaPlayer(this);
 	public JMenuBar mainMenu = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
@@ -59,34 +59,34 @@ public class MainFram extends JFrame {
 	JMenu editMenu = new JMenu("Edit");
 	JMenu aboutMenu = new JMenu("About");
 	JMenu viewMenuItem = new JMenu("View");
-	
+
 	JMenuItem settingsMenuItem = new JMenuItem("Settings");
 	JMenuItem openVideoMenuItem = new JMenuItem("Video File");
 	JMenuItem openTorrentMenuItem = new JMenuItem("Torrent File");
 	JMenuItem exitMenuItem = new JMenuItem("Exit");
-	
+
 	JMenuItem aboutCupcakeMenuItem = new JMenuItem("About Cupcake");
 	JMenuItem licenseMenuItem = new JMenuItem("License");
 	JMenuItem librariesMenuItem = new JMenuItem("Used Libraries");
-	
+
 	JMenuItem playerViewMenuItem = new JMenuItem("Player View");
 	JMenuItem MovieListViewMenuItem = new JMenuItem("Movie List View");
 
 	public MainFram() {
 		this.setBackground(Color.BLACK);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowListener(){
+		this.addWindowListener(new WindowListener() {
 
 			@Override
 			public void windowActivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void windowClosed(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -95,84 +95,88 @@ public class MainFram extends JFrame {
 				systemExit();
 			}
 
-
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void windowIconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
-		
+
 		this.setIconImage(R.ICON);
-		// TODO : change this 
-		
-		// initializing components 
-		movieListPan = new MovieListPan(new ListPanWatcher(){
+		// TODO : change this
+
+		// initializing components
+		movieListPan = new MovieListPan(new ListPanWatcher() {
 
 			public void ListActionPerformed(YifyMovie movie, int action) {
 				// TODO Auto-generated method stub
 
-					// TODO Auto-generated method stub
-					System.out.println("Action performed on "+movie.getTitle()+" Action value is : "+action);
-					if (action == MovieItem.PLAY_ACTION){
-						initPlayerView();
-						player.setTorrent(new YifyMovieTorrent(movie ,YifyMovieTorrent.USE_DEFAULT_SETTINGS));
-					} else if (action == MovieItem.LATER_ACTION) {
-						//initPlayerView();
-						//player.setYoutube(movie.getYoutubeTrailerURL());
-						try {
-							DesktopUtils.openWebpage(new URL(movie.getYoutubeTrailerURL()));
-						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						
-						}
+				// TODO Auto-generated method stub
+				System.out.println("Action performed on " + movie.getTitle()
+						+ " Action value is : " + action);
+				if (action == MovieItem.PLAY_ACTION) {
+					initPlayerView();
+					player.setTorrent(new YifyMovieTorrent(movie,
+							YifyMovieTorrent.USE_DEFAULT_SETTINGS));
+				} else if (action == MovieItem.LATER_ACTION) {
+					// initPlayerView();
+					// player.setYoutube(movie.getYoutubeTrailerURL());
+					try {
+						DesktopUtils.openWebpage(new URL(movie
+								.getYoutubeTrailerURL()));
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+
 					}
 				}
-			
-			
+			}
+
+			@Override
+			public void ItemSelected(MovieItem movieItem) {
+				// TODO Auto-generated method stub
+				// do nothing
+			}
+
 		});
-		
-		// window properties 
+
+		// window properties
 		int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 		this.setSize(1000, 600);
 		this.setMinimumSize(new Dimension(1000, 600));
 		this.setLocation(new Point((screenWidth - this.getWidth()) / 2,
 				(screenHeight - this.getHeight()) / 2));
-		//this.setVisible(true);
+		// this.setVisible(true);
 		this.setTitle(Strings.getTitle() + Strings.getVersion());
-		
-		
-		// layouts 
+
+		// layouts
 		contentPan.setLayout(new BorderLayout());
-		
-		
+
 		this.setContentPane(contentPan);
 
-		// menu bar 
+		// menu bar
 		mainMenu.add(fileMenu);
-		//fileMenu.add(openMenu);
+		// fileMenu.add(openMenu);
 		fileMenu.add(openVideoMenuItem);
 		fileMenu.add(openTorrentMenuItem);
 		fileMenu.add(exitMenuItem);
@@ -186,7 +190,7 @@ public class MainFram extends JFrame {
 		aboutMenu.add(librariesMenuItem);
 		aboutMenu.add(licenseMenuItem);
 		this.setJMenuBar(mainMenu);
-		// actions 
+		// actions
 		playerViewMenuItem.addActionListener(new MenuActionListener());
 		MovieListViewMenuItem.addActionListener(new MenuActionListener());
 		exitMenuItem.addActionListener(new MenuActionListener());
@@ -194,41 +198,41 @@ public class MainFram extends JFrame {
 		this.setVisible(true);
 
 	}
-	
+
 	protected void systemExit() {
 		// TODO Auto-generated method stub
 		MediaPlayer.getMediaplayerfactory().release();
 		System.exit(0);
-		
+
 	}
 
-	
-	
 	public void initMovieListPan() {
-	
+
 		try {
 			player.getMediaPlayerComponent().getMediaPlayer().pause();
 			player.getMediaPlayerComponent().getMediaPlayer().stop();
-			player.getMediaPlayerComponent().getMediaPlayer().setFullScreen(false);
-			if(player.torrent != null)
-			player.torrent.stopTorrent();
+			player.getMediaPlayerComponent().getMediaPlayer()
+					.setFullScreen(false);
+			if (player.torrent != null)
+				player.torrent.stopTorrent();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
-		contentPan.add(movieListPan,BorderLayout.CENTER);
-		this.setTitle("Cupcake "+ "Movie list ");
+		contentPan.add(movieListPan, BorderLayout.CENTER);
+		movieListPan.requestFocus();
+		this.setTitle("Cupcake " + "Movie list ");
 		contentPan.revalidate();
 		playerViewMenuItem.setEnabled(true);
 		MovieListViewMenuItem.setEnabled(false);
 	}
-	
-	public void initPlayerView(){
+
+	public void initPlayerView() {
 		this.getContentPane().removeAll();
 		this.setContentPane(contentPan);
-		//player = new MediaPlayer(this);
+		// player = new MediaPlayer(this);
 		contentPan.add(player, BorderLayout.CENTER);
 		this.setTitle("Cupcake ");
 		player.revalidate();
@@ -236,22 +240,20 @@ public class MainFram extends JFrame {
 		playerViewMenuItem.setEnabled(false);
 		MovieListViewMenuItem.setEnabled(true);
 	}
-	
-	
 
 	class MenuActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Object source = arg0.getSource();
-			if(source.equals(playerViewMenuItem)){
+			if (source.equals(playerViewMenuItem)) {
 				initPlayerView();
-			} else if (source.equals(MovieListViewMenuItem)){
+			} else if (source.equals(MovieListViewMenuItem)) {
 				initMovieListPan();
-			} else if (source.equals(exitMenuItem)){
+			} else if (source.equals(exitMenuItem)) {
 				systemExit();
 			}
 		}
-		
+
 	}
 }

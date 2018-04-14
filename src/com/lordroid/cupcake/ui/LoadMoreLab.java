@@ -22,6 +22,15 @@ public class LoadMoreLab extends JButton implements MouseListener {
 		this.setBackground(new Color(0, 0, 0, 0));
 	}
 
+	public void setSelected(boolean bool) {
+		super.setSelected(bool);
+		if (bool)
+			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK_HOVERED));
+		else
+			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK));
+
+	}
+
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
