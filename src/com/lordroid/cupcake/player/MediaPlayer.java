@@ -149,8 +149,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		subtitlesMenu.add(localSubsMenu);
 		subtitlesMenu.add(localSubPicker);
 
-		
-		
 		backPanel = new MediaBackButtonPan(frame);
 		this.setLayout(new BorderLayout());
 		mediaPlayer.setVideoSurface(videoSurface);
@@ -749,9 +747,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 		subtitleWorker = new Thread(new Runnable() {
 			boolean subtitleSet = false;
+
 			@Override
 			public void run() {
-
 
 				// TODO Auto-generated method stub
 				List<SubtitleInfo> subInfoList1 = null;
@@ -768,14 +766,16 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList1 != null)
-					for (int i = 0 ; i < subInfoList1.size() ; i++) {
+					for (int i = 0; i < subInfoList1.size(); i++) {
 						SubtitleInfo subInfo = subInfoList1.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
 						lang1Menu.add(subItem);
-						if(i == 0 && !subtitleSet){
-							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+						if (i == 0 && !subtitleSet) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
 							subtitleSet = true;
-							// TODO continue here 
+							// TODO continue here
 						}
 					}
 				// lang 2
@@ -788,12 +788,14 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList2 != null)
-					for (int i = 0 ; i < subInfoList2.size() ; i++) {
+					for (int i = 0; i < subInfoList2.size(); i++) {
 						SubtitleInfo subInfo = subInfoList2.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
 						lang2Menu.add(subItem);
-						if(i == 0 && !subtitleSet){
-							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+						if (i == 0 && !subtitleSet) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
 							subtitleSet = true;
 						}
 					}
@@ -807,12 +809,14 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					e.printStackTrace();
 				}
 				if (subInfoList3 != null)
-					for (int i = 0 ; i < subInfoList3.size() ; i++) {
+					for (int i = 0; i < subInfoList3.size(); i++) {
 						SubtitleInfo subInfo = subInfoList3.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(subInfo,mediaPlayer2);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
 						lang3Menu.add(subItem);
-						if(i == 0 && !subtitleSet){
-							subItem.actionPerformed(new ActionEvent(subItem, 0, "dummy"));
+						if (i == 0 && !subtitleSet) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
 							subtitleSet = true;
 						}
 					}
@@ -838,19 +842,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * @param file
 	 */
 	private void setSubtitle(File file) {
-		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
-		mediaPlayerComponent.getMediaPlayer().setMarqueeText(file.getName());
-		// TODO Auto-generated method stub
+		// TODO
 		mediaPlayerComponent.getMediaPlayer().setSubTitleFile(file);
-		// mediaPlayerComponent.getMediaPlayer().setS
-		for (MediaMeta m : mediaPlayerComponent.getMediaPlayer()
-				.getSubItemMediaMeta()) {
-			App.LOGGER.debug(m.getLanguage());
-		}
-		for (TrackDescription o : mediaPlayerComponent.getMediaPlayer()
-				.getSpuDescriptions()) {
-			App.LOGGER.debug(o.description());
-		}
+
 	}
 
 	/**
@@ -1057,38 +1051,41 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					.getMovie(),
 					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
 							.getSubtitlesLang3()]);
-			
-			if(list1 != null)
-			for (int i =0 ; i < list1.size() ; i++) {
-				SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),this);
-				this.lang1Menu.add(item);
-				if(i == 0 && !defaultSubSelected){
-					// TODO make it better 
-					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
-					defaultSubSelected = true;
+
+			if (list1 != null)
+				for (int i = 0; i < list1.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),
+							this);
+					this.lang1Menu.add(item);
+					if (i == 0 && !defaultSubSelected) {
+						// TODO make it better
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
 				}
-			}
-			if(list2 != null)
-			for (int i =0 ; i < list2.size() ; i++) {
-				SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),this);
-				this.lang2Menu.add(item);
-				if(i == 0 && !defaultSubSelected){
-					// TODO make it better 
-					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
-					defaultSubSelected = true;
+			if (list2 != null)
+				for (int i = 0; i < list2.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),
+							this);
+					this.lang2Menu.add(item);
+					if (i == 0 && !defaultSubSelected) {
+						// TODO make it better
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
 				}
-			}
-			if(list3 != null)
-			for (int i =0 ; i < list3.size() ; i++) {
-				SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),this);
-				this.lang3Menu.add(item);
-				if(i == 0 && !defaultSubSelected){
-					// TODO make it better 
-					item.actionPerformed(new ActionEvent(item, 0,"dummy"));
-					defaultSubSelected = true;
+			if (list3 != null)
+				for (int i = 0; i < list3.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),
+							this);
+					this.lang3Menu.add(item);
+					if (i == 0 && !defaultSubSelected) {
+						// TODO make it better
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
 				}
-			}
-			
+
 		} catch (XmlRpcException e) {
 			e.printStackTrace();
 		}
