@@ -31,7 +31,6 @@ public class MovieItem extends JPanel implements MouseListener,
 	public static final int PLAY_ACTION = 0;
 	public static final int DETAILS_ACTION = 2;
 	public static final int LATER_ACTION = 1;
-
 	ArrayList<ListPanWatcher> watchersList = new ArrayList<ListPanWatcher>();
 	MovieItem thisPan;
 	private final YifyMovie movie;
@@ -199,7 +198,8 @@ public class MovieItem extends JPanel implements MouseListener,
 		this.addMouseListener(this);
 		initToolTip();
 		initActions();
-
+		// TODO : conditional if enabled in settings 
+		loadExtra ();
 	}
 
 	private void initActions() {
@@ -209,6 +209,19 @@ public class MovieItem extends JPanel implements MouseListener,
 
 	}
 
+	private void loadExtra (){
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				movie.loadExtras();
+				viewCountLab.setText(TimeUtils.getFormatedViewCount(movie
+						.getDownloadCount()));
+			}
+			
+		}).start();
+	}
 	private void initToolTip() {
 
 		// TODO find some why to work around the flikering cause by mouse
