@@ -38,16 +38,19 @@ import com.lordroid.cupcake.yify.YifyMovie;
  * 
  */
 public class SubtitleFetcher {
-//	public static final String[] SUBTITLE_LANGUAGES_NAMES = { "English",
-//			"Deutsch", "Arabic", "French", "Espanol", "Italiano", "Português",
-//			"rusian" };
-//	public static final String[] SUBTITLE_LANGUAGES_CODES = { "eng", "ger",
-//			"ara", "fre", "spa", "ita", "por", "rus" };
+	// public static final String[] SUBTITLE_LANGUAGES_NAMES = { "English",
+	// "Deutsch", "Arabic", "French", "Espanol", "Italiano", "Português",
+	// "rusian" };
+	// public static final String[] SUBTITLE_LANGUAGES_CODES = { "eng", "ger",
+	// "ara", "fre", "spa", "ita", "por", "rus" };
 	public static final String[] SUBTITLE_LANGUAGES_NAMES = { "English",
-		"Deutsch", "Arabic", "French", "Espanol", "Italiano", "Português","Português (BR)",
-		"rusian" ,"Aragonés","Türkçe" , "ÝÇÑÓí","Chinese (zh)","Chinese (zt)"};
-public static final String[] SUBTITLE_LANGUAGES_CODES = { "eng", "ger",
-		"ara", "fre", "spa", "ita", "por", "pob" , "rus" ,"arg","tur","per","chi","zht"};
+			"Deutsch", "Arabic", "French", "Espanol", "Italiano", "Português",
+			"Português (BR)", "rusian", "Aragonés", "Türkçe", "ÝÇÑÓí",
+			"Chinese (zh)", "Chinese (zt)" };
+	public static final String[] SUBTITLE_LANGUAGES_CODES = { "eng", "ger",
+			"ara", "fre", "spa", "ita", "por", "pob", "rus", "arg", "tur",
+			"per", "chi", "zht" };
+
 	public static File unGzip(File infile, boolean deleteGzipfileOnSuccess)
 			throws IOException {
 		GZIPInputStream gin = new GZIPInputStream(new FileInputStream(infile));

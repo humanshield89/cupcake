@@ -59,7 +59,8 @@ public class JSONComunicator {
 	public static String getJsonQueryUrl(int page, int quality,
 			int minimumRating, String queryTerm, int genre, int sortBy,
 			int order) {
-		int limit = Settings.MAX_RESULT_PER_SEARCH[Settings.getMaxSearchItemsPerPage()];
+		int limit = Settings.MAX_RESULT_PER_SEARCH[Settings
+				.getMaxSearchItemsPerPage()];
 		String query = API_URL + YifyS.REQUEST_LIMIT_KEY + limit + "&"
 				+ YifyS.REQUEST_PAGE_KEY + page + "&"
 				+ YifyS.REQUEST_MINIM_RATING_KEY + minimumRating + "&"

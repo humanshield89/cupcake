@@ -59,7 +59,6 @@ public class YifyMovie {
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
 
-
 		this.url = movie.getString(YifyS.RESPONSE_URL_KEY);
 		this.imdbCode = movie.getString(YifyS.RESPONSE_IMDB_CODE_KEY);
 		this.title = movie.getString(YifyS.RESPONSE_TITLE_KEY);
@@ -110,7 +109,8 @@ public class YifyMovie {
 
 		}
 
-		ImgtmpFolder = new File( S.IMAGE_CACHE_TMP_FOLDER + this.id + File.separator);
+		ImgtmpFolder = new File(S.IMAGE_CACHE_TMP_FOLDER + this.id
+				+ File.separator);
 		ImgtmpFolder.mkdirs();
 		cacheBgImage();
 		cacheCoverImageMedium();
@@ -154,8 +154,9 @@ public class YifyMovie {
 			}
 
 		} while (swaped);
-		for (YifyTorrent t : torrents){
-		App.LOGGER.info(t.getQuality()+"size = "+t.getSizeInBytes()+"  "+t.getSize());
+		for (YifyTorrent t : torrents) {
+			App.LOGGER.info(t.getQuality() + "size = " + t.getSizeInBytes()
+					+ "  " + t.getSize());
 		}
 	}
 

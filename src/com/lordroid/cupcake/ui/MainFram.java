@@ -47,7 +47,7 @@ import com.lordroid.cupcake.settingsUi.GlobalSettings;
 import com.lordroid.cupcake.utils.DesktopUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
-public class MainFram extends JFrame implements ActionListener{
+public class MainFram extends JFrame implements ActionListener {
 
 	/**
 	 * 
@@ -135,8 +135,9 @@ public class MainFram extends JFrame implements ActionListener{
 				// TODO Auto-generated method stub
 
 				// TODO Auto-generated method stub
-				App.LOGGER.info("Action performed on " + movie.getTitle()+" language =  "+movie.getLanguage()+"  id ="+movie.getId()
-						+ " Action value is : " + action);
+				App.LOGGER.info("Action performed on " + movie.getTitle()
+						+ " language =  " + movie.getLanguage() + "  id ="
+						+ movie.getId() + " Action value is : " + action);
 				if (action == MovieItem.PLAY_ACTION) {
 					initPlayerView();
 					player.setTorrent(new YifyMovieTorrent(movie,
@@ -199,9 +200,7 @@ public class MainFram extends JFrame implements ActionListener{
 		MovieListViewMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
 		settingsMenuItem.addActionListener(this);
-		
-		
-		
+
 		initMovieListPan();
 		this.setVisible(true);
 
@@ -259,7 +258,7 @@ public class MainFram extends JFrame implements ActionListener{
 			initMovieListPan();
 		} else if (source.equals(exitMenuItem)) {
 			systemExit();
-		} else if (source.equals(settingsMenuItem)){
+		} else if (source.equals(settingsMenuItem)) {
 			GlobalSettings.showSettings();
 		}
 	}

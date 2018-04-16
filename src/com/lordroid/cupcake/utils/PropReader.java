@@ -49,7 +49,7 @@ public class PropReader {
 	 */
 	public static void ArrayToProp(ArrayList<String> lines, File propFile) {
 		BufferedWriter bw = null;
-		
+
 		propFile.delete();
 		propFile.getParentFile().mkdirs();
 		try {
@@ -221,24 +221,24 @@ public class PropReader {
 		ArrayToProp(lines, propFile);
 	}
 
-	public static void appendLine(String line,File file){
+	public static void appendLine(String line, File file) {
 
 		BufferedWriter bw = null;
 
 		ArrayList<String> strs = propToArray(file);
-		
+
 		try {
 			DataOutputStream dos = new DataOutputStream(new FileOutputStream(
 					file));
 			bw = new BufferedWriter(new OutputStreamWriter(
 					new BufferedOutputStream(dos), "UTF-8"));
 
-			for(String str : strs) {
+			for (String str : strs) {
 				bw.write(str);
 				bw.newLine();
 			}
-				bw.write(line);
-				bw.newLine();
+			bw.write(line);
+			bw.newLine();
 
 			bw.flush();
 			bw.close();

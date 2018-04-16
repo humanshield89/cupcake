@@ -31,7 +31,6 @@ import de.sciss.submin.Submin;
 public class GeneralSettingsPan extends SettingsPaneImpl implements
 		ActionListener {
 
-
 	private JLabel uiLangLab = new JLabel("GUI Language   :  ");
 	private JComboBox<String> uiLangCombo = new JComboBox<String>(
 			Settings.AVAILABLE_GUI_LANGUAGE_COMBO);
@@ -52,24 +51,24 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 			currentCacheSizeValueLab, cacheValueLab, clearCacheBtn,
 			imageCacheLab, imageCacheValueLab, clearImageCacheBtn };
 
-//	public static void main(String args[]) {
-//		Submin.install(true);
-////		JFrame frame = new JFrame();
-////		frame.setSize(600, 400);
-////		frame.setContentPane(new GeneralSettingsPan());
-////		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-////		frame.setVisible(true);
-//		GlobalSettings settings = new GlobalSettings();
-//		int action = JOptionPane
-//				.showConfirmDialog(
-//						null,
-//						settings,
-//						"Settings ",
-//						JOptionPane.OK_CANCEL_OPTION);
-//		if(action == JOptionPane.OK_OPTION)
-//			settings.ApplySettings();
-//		System.out.println(action);
-//	}
+	// public static void main(String args[]) {
+	// Submin.install(true);
+	// // JFrame frame = new JFrame();
+	// // frame.setSize(600, 400);
+	// // frame.setContentPane(new GeneralSettingsPan());
+	// // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// // frame.setVisible(true);
+	// GlobalSettings settings = new GlobalSettings();
+	// int action = JOptionPane
+	// .showConfirmDialog(
+	// null,
+	// settings,
+	// "Settings ",
+	// JOptionPane.OK_CANCEL_OPTION);
+	// if(action == JOptionPane.OK_OPTION)
+	// settings.ApplySettings();
+	// System.out.println(action);
+	// }
 
 	public GeneralSettingsPan() {
 		super();
@@ -173,8 +172,8 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 	public void ApplySettings() {
 		// TODO Auto-generated method stub
 		Settings.setGuiLanugage(uiLangCombo.getSelectedIndex());
-		Settings.setCurrentMaxCacheSize((long)cacheSlider.getValue()*1024*1024);
-		
+		Settings.setCurrentMaxCacheSize((long) cacheSlider.getValue() * 1024 * 1024);
+
 	}
 
 	@Override
@@ -189,10 +188,10 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 							"Please confirm your action ",
 							JOptionPane.YES_NO_OPTION);
 			if (action == JOptionPane.YES_OPTION) {
-			FileUtils.deleteRecursively(new File(S.IMAGE_CACHE_TMP_FOLDER));
-			new File(S.IMAGE_CACHE_TMP_FOLDER).mkdirs();
-			imageCacheValueLab.setText(CacheTracker.getImageCacheSize() / 1024
-					/ 1024 + "MB");
+				FileUtils.deleteRecursively(new File(S.IMAGE_CACHE_TMP_FOLDER));
+				new File(S.IMAGE_CACHE_TMP_FOLDER).mkdirs();
+				imageCacheValueLab.setText(CacheTracker.getImageCacheSize()
+						/ 1024 / 1024 + "MB");
 			}
 		} else if (source.equals(clearCacheBtn)) {
 			// JDialogBox.
