@@ -133,11 +133,9 @@ public class MainFram extends JFrame implements ActionListener {
 			@Override
 			public void ListActionPerformed(YifyMovie movie, int action) {
 				// TODO Auto-generated method stub
-
-				// TODO Auto-generated method stub
-				App.LOGGER.info("Action performed on " + movie.getTitle()
-						+ " language =  " + movie.getLanguage() + "  id ="
-						+ movie.getId() + " Action value is : " + action);
+//				App.LOGGER.info("Action performed on " + movie.getTitle()
+//						+ " language =  " + movie.getLanguage() + "  id ="
+//						+ movie.getId() + " Action value is : " + action);
 				if (action == MovieItem.PLAY_ACTION) {
 					initPlayerView();
 					player.setTorrent(new YifyMovieTorrent(movie,

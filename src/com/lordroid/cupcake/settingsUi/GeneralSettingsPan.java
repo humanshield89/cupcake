@@ -1,3 +1,21 @@
+/*
+ *  Cupcake Player
+ * 
+ *  Copyright 2018 Rachid Boudjelida <rachidboudjelida@gmail.com>
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.lordroid.cupcake.settingsUi;
 
 import java.awt.Color;
@@ -25,8 +43,6 @@ import com.lordroid.cupcake.res.Settings;
 import com.lordroid.cupcake.utils.CacheTracker;
 import com.lordroid.cupcake.utils.FileUtils;
 
-import de.sciss.submin.Submin;
-
 @SuppressWarnings("serial")
 public class GeneralSettingsPan extends SettingsPaneImpl implements
 		ActionListener {
@@ -51,24 +67,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 			currentCacheSizeValueLab, cacheValueLab, clearCacheBtn,
 			imageCacheLab, imageCacheValueLab, clearImageCacheBtn };
 
-	// public static void main(String args[]) {
-	// Submin.install(true);
-	// // JFrame frame = new JFrame();
-	// // frame.setSize(600, 400);
-	// // frame.setContentPane(new GeneralSettingsPan());
-	// // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	// // frame.setVisible(true);
-	// GlobalSettings settings = new GlobalSettings();
-	// int action = JOptionPane
-	// .showConfirmDialog(
-	// null,
-	// settings,
-	// "Settings ",
-	// JOptionPane.OK_CANCEL_OPTION);
-	// if(action == JOptionPane.OK_OPTION)
-	// settings.ApplySettings();
-	// System.out.println(action);
-	// }
 
 	public GeneralSettingsPan() {
 		super();
@@ -106,7 +104,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				cacheValueLab.setText(cacheSlider.getValue() + " MB");
 			}
 
@@ -115,8 +112,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				// TODO Auto-generated method stub
-				// arg0.getScrollType(MouseWheelEvent.)
 				int i = arg0.getWheelRotation();
 				cacheSlider.setValue(cacheSlider.getValue() + (i * 50));
 			}
@@ -156,7 +151,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 
 	@Override
 	public void loadCurrentSettings() {
-		// TODO Auto-generated method stub
 		uiLangCombo.setSelectedIndex(Settings.getGuiLanguage());
 		cacheSlider
 				.setValue((int) (Settings.getCurrentMaxCacheSize() / 1024L / 1024L));
@@ -170,7 +164,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 
 	@Override
 	public void ApplySettings() {
-		// TODO Auto-generated method stub
 		Settings.setGuiLanugage(uiLangCombo.getSelectedIndex());
 		Settings.setCurrentMaxCacheSize((long) cacheSlider.getValue() * 1024 * 1024);
 
@@ -178,7 +171,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		Object source = arg0.getSource();
 		if (source.equals(clearImageCacheBtn)) {
 			int action = JOptionPane
