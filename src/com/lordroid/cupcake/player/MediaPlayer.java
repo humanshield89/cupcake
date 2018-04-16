@@ -1036,6 +1036,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	@Override
 	public void accept(TorrentSessionState arg0) {
+		
 		// TODO Auto-generated method stub
 		// arg0.get
 		long totalSize = this.torrent.getYiFyTorrent().getSizeInBytes();

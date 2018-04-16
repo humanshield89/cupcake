@@ -78,7 +78,6 @@ public class App {
 			InterruptedException {
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
-
 		new NativeDiscovery().discover();
 		// LOGGER.info("initializing libvlc...");
 		// TODO

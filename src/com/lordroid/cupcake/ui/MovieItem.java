@@ -34,6 +34,20 @@ public class MovieItem extends JPanel implements MouseListener,
 	ArrayList<ListPanWatcher> watchersList = new ArrayList<ListPanWatcher>();
 	MovieItem thisPan;
 	private final YifyMovie movie;
+	/**
+	 * @return the movie
+	 */
+	public YifyMovie getMovie() {
+		return movie;
+	}
+
+	/**
+	 * @return the itemButtons
+	 */
+	public MovieItemButton[] getItemButtons() {
+		return itemButtons;
+	}
+
 	private BufferedImage coverImage;
 	private boolean isImageCached = false;
 	private BufferedImage blurryImage;

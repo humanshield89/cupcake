@@ -32,6 +32,8 @@ public class S {
 
 	public static final String SYSTEM_TMP_FOLDER = System
 			.getProperty("java.io.tmpdir") + "cupcake" + File.separator;
+	public static final String IMAGE_CACHE_TMP_FOLDER = S.SYSTEM_TMP_FOLDER + "cachedresources"
+			+ File.separator;
 	public static final String MOVIE_DOWNLOAD_FOLDER = SYSTEM_TMP_FOLDER
 			+ File.separator + "DownloadedMovies";
 	public static final File DEFAULT_BG = new File(PathUtils.getExcutionPath()
@@ -59,5 +61,7 @@ public class S {
 	public static final File DEFAULT_COVER = new File(
 			PathUtils.getExcutionPath() + File.separator + "resources"
 					+ File.separator + "default_cover_medium.jpg");
+
+
 
 }

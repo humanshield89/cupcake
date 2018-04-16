@@ -38,6 +38,11 @@ public class R {
 
 	public static final BufferedImage ICON = getIcon("icon.png");
 
+	public static final BufferedImage GENERALE_SETINGS_ICON = getIcon("general.png");
+	public static final BufferedImage LIST_SETINGS_ICON = getIcon("list.png");
+	public static final BufferedImage PLAYER_SETINGS_ICON = getIcon("media_settings.png");
+
+	
 	public static final BufferedImage PLAY_BTN_ICON = getIcon("play.png");
 	public static final BufferedImage PAUSE_BTN_ICON = getIcon("pause.png");
 	public static final BufferedImage SKIP_BTN_ICON = getIcon("skip.png");

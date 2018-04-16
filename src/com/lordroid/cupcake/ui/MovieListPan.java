@@ -136,7 +136,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		sortByLabel.setForeground(Color.WHITE);
 		orderLab.setForeground(Color.WHITE);
 		// initialize default or previously selected values
-		sortByCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
+		sortByCombo.setSelectedIndex(Settings.getCurrentSortBy());
 		minRatingCombo.setSelectedIndex(Settings.getCurrentMinimumRating());
 		genreCombo.setSelectedIndex(Settings.getCurrentGenre());
 		qualityCombo.setSelectedIndex(Settings.getCurrentQuality());
@@ -353,11 +353,16 @@ public class MovieListPan extends JPanel implements ActionListener,
 		term = this.searchField.getText();
 		minRating = this.minRatingCombo.getSelectedIndex();
 		order = this.orderCombo.getSelectedIndex();
+		
+//		// Only if settings are set 
+		if(Settings.getRememberFiltersOnStartup() == 0){
 		Settings.setCurrentQuality(quality);
 		Settings.setCurrentSortBy(sortBy);
 		Settings.setCurrentGenre(genre);
 		Settings.setCurrentminRating(minRating);
 		Settings.setCurrentOrder(order);
+		}
+		
 		String url = JSONComunicator.getJsonQueryUrl(page, quality, minRating,
 				term, genre, sortBy, order);
 		App.LOGGER.info(url);
@@ -388,7 +393,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		if (data != null) {
 			try {
 				maxPage = data.getInt("movie_count")
-						/ Settings.getMaxSearchItemsPerPage();
+						/ Settings.MAX_RESULT_PER_SEARCH[Settings.getMaxSearchItemsPerPage()];
 				movies = data.getJSONArray("movies");
 			} catch (JSONException e) {
 				movieListContainer.add(this.noResult);
@@ -433,12 +438,15 @@ public class MovieListPan extends JPanel implements ActionListener,
 
 			}).start();
 		} else if (event.getSource().equals(loadMoreBtn)) {
+			
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
+					loadMoreBtn.setVisible(false);
 					getNextPage();
+					loadMoreBtn.setVisible(true);
 				}
 
 			}).start();
@@ -483,6 +491,8 @@ public class MovieListPan extends JPanel implements ActionListener,
 		JScrollBar vertical = scrollPan.getVerticalScrollBar();
 		int newValue = (int) ((((double) (currentlySelected / getNumberOfItemInRow())) * 385) - (385 * rowsPerView) / 2);
 		vertical.setValue(newValue);
+		// TODO
+		App.LOGGER.info("currently sellected is "+currentlySelected +"  Max index is "+moviesList.size());
 
 	}
 
@@ -505,6 +515,13 @@ public class MovieListPan extends JPanel implements ActionListener,
 		} else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
 			App.LOGGER.info("Arrow key left presssed ");
 			NavigateTo(-1);
+		} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			if(currentlySelected < moviesList.size())
+			listWatcher.ListActionPerformed(moviesList.get(currentlySelected).getMovie() , Settings.getDefaultEnterOperation());
+			if(currentlySelected ==  moviesList.size()) {
+				this.actionPerformed(new ActionEvent(loadMoreBtn,
+						ActionEvent.ACTION_PERFORMED, "update"));
+			}
 		}
 	}
 
@@ -536,6 +553,8 @@ public class MovieListPan extends JPanel implements ActionListener,
 		}
 		currentlySelected = moviesList.indexOf(movieItem);
 		movieItem.setSelected(true);
+		// TODO : switch to debug on release
+		App.LOGGER.info("currently sellected is "+currentlySelected +"  Max index is "+moviesList.size());
 	}
 
 }

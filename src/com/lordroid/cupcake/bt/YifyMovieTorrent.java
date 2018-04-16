@@ -138,6 +138,7 @@ public class YifyMovieTorrent implements Runnable {
 					.module(dhtModule).module(customModule)
 					.stopWhenDownloaded().sequentialSelector().build();
 			client.startAsync(watcher, 1000L);
+			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			// mostly because the url isn't good
@@ -146,10 +147,11 @@ public class YifyMovieTorrent implements Runnable {
 					.error("Error while trying URL = " + yiFyTorrent.getUrl());
 			e.printStackTrace();
 		}
+
 	}
 
 	public void stopTorrent() {
 		client.stop();
-
+		
 	}
 }

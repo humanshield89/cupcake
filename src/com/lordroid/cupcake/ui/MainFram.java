@@ -37,15 +37,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.player.MediaPlayer;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Strings;
+import com.lordroid.cupcake.settingsUi.GlobalSettings;
 import com.lordroid.cupcake.utils.DesktopUtils;
 import com.lordroid.cupcake.yify.YifyMovie;
 
-public class MainFram extends JFrame {
+public class MainFram extends JFrame implements ActionListener{
 
 	/**
 	 * 
@@ -133,7 +135,7 @@ public class MainFram extends JFrame {
 				// TODO Auto-generated method stub
 
 				// TODO Auto-generated method stub
-				System.out.println("Action performed on " + movie.getTitle()
+				App.LOGGER.info("Action performed on " + movie.getTitle()+" language =  "+movie.getLanguage()+"  id ="+movie.getId()
 						+ " Action value is : " + action);
 				if (action == MovieItem.PLAY_ACTION) {
 					initPlayerView();
@@ -193,9 +195,13 @@ public class MainFram extends JFrame {
 		aboutMenu.add(licenseMenuItem);
 		this.setJMenuBar(mainMenu);
 		// actions
-		playerViewMenuItem.addActionListener(new MenuActionListener());
-		MovieListViewMenuItem.addActionListener(new MenuActionListener());
-		exitMenuItem.addActionListener(new MenuActionListener());
+		playerViewMenuItem.addActionListener(this);
+		MovieListViewMenuItem.addActionListener(this);
+		exitMenuItem.addActionListener(this);
+		settingsMenuItem.addActionListener(this);
+		
+		
+		
 		initMovieListPan();
 		this.setVisible(true);
 
@@ -243,19 +249,18 @@ public class MainFram extends JFrame {
 		MovieListViewMenuItem.setEnabled(true);
 	}
 
-	class MenuActionListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			Object source = arg0.getSource();
-			if (source.equals(playerViewMenuItem)) {
-				initPlayerView();
-			} else if (source.equals(MovieListViewMenuItem)) {
-				initMovieListPan();
-			} else if (source.equals(exitMenuItem)) {
-				systemExit();
-			}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Object source = arg0.getSource();
+		if (source.equals(playerViewMenuItem)) {
+			initPlayerView();
+		} else if (source.equals(MovieListViewMenuItem)) {
+			initMovieListPan();
+		} else if (source.equals(exitMenuItem)) {
+			systemExit();
+		} else if (source.equals(settingsMenuItem)){
+			GlobalSettings.showSettings();
 		}
-
 	}
 }

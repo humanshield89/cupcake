@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.res.Settings;
 import com.lordroid.cupcake.utils.HttpsDownloadUtility;
+import com.lordroid.cupcake.utils.PropReader;
 
 public class YifyMovie {
-	long end;
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
 	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
 	private int id;
@@ -55,13 +56,10 @@ public class YifyMovie {
 	private boolean has3d = false;
 
 	public YifyMovie(JSONObject movieArg) {
-		long start = System.currentTimeMillis();
 		this.id = movieArg.getInt(YifyS.RESPONSE_ID_KEY);
 		JSONObject movie = movieArg;
 
-		end = System.currentTimeMillis();
-		System.out.println("[YIFY Movie] total time to grab JSON file  = "
-				+ (end - start));
+
 		this.url = movie.getString(YifyS.RESPONSE_URL_KEY);
 		this.imdbCode = movie.getString(YifyS.RESPONSE_IMDB_CODE_KEY);
 		this.title = movie.getString(YifyS.RESPONSE_TITLE_KEY);
@@ -112,17 +110,13 @@ public class YifyMovie {
 
 		}
 
-		ImgtmpFolder = new File(S.SYSTEM_TMP_FOLDER + "cachedresources"
-				+ File.separator + this.id + File.separator);
+		ImgtmpFolder = new File( S.IMAGE_CACHE_TMP_FOLDER + this.id + File.separator);
 		ImgtmpFolder.mkdirs();
-		System.out.println("ratting = " + this.MPARating);
 		cacheBgImage();
 		cacheCoverImageMedium();
 		sortTorrentsBySize();
 		setAvailableQualities();
-		end = System.currentTimeMillis();
-		System.out.println("[YIFY Movie] total time to create movie = "
-				+ (end - start));
+
 	}
 
 	private void setAvailableQualities() {
@@ -160,6 +154,9 @@ public class YifyMovie {
 			}
 
 		} while (swaped);
+		for (YifyTorrent t : torrents){
+		App.LOGGER.info(t.getQuality()+"size = "+t.getSizeInBytes()+"  "+t.getSize());
+		}
 	}
 
 	public void loadExtras() {
@@ -173,11 +170,9 @@ public class YifyMovie {
 					.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
 			this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 
 			e.printStackTrace();
 		}
