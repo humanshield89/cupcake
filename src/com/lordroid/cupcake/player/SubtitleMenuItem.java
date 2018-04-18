@@ -31,7 +31,8 @@ import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.utils.SubtitleFetcher;
 
 @SuppressWarnings("serial")
-public class SubtitleMenuItem extends JRadioButtonMenuItem implements ActionListener {
+public class SubtitleMenuItem extends JRadioButtonMenuItem implements
+		ActionListener {
 	public static final String TMP_SUBS_FOLDER = S.SYSTEM_TMP_FOLDER
 			+ File.separator + "subtitles";
 	MediaPlayer mediaPlayer;
@@ -45,7 +46,6 @@ public class SubtitleMenuItem extends JRadioButtonMenuItem implements ActionList
 		this.subInfo = subInfo;
 		this.setText(subInfo.getLanguageName() + " | "
 				+ subInfo.getIDSubtitle());
-		// this.addA
 		this.addActionListener(this);
 	}
 
@@ -53,18 +53,28 @@ public class SubtitleMenuItem extends JRadioButtonMenuItem implements ActionList
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		if (!cached) {
-			try {
-				sub = SubtitleFetcher.getSubtitle(subInfo, new File(
-						TMP_SUBS_FOLDER));
-				this.mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
-						.setSubTitleFile(sub);
-				this.mediaPlayer.setSubtitle(sub);
-				cached = true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				cached = false;
-			}
+
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						sub = SubtitleFetcher.getSubtitle(subInfo, new File(
+								TMP_SUBS_FOLDER));
+						mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
+								.setSubTitleFile(sub);
+						mediaPlayer.setSubtitle(sub);
+						cached = true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						cached = false;
+					}
+				}
+
+			});
+
 		} else {
 			this.mediaPlayer.setSubtitle(sub);
 		}

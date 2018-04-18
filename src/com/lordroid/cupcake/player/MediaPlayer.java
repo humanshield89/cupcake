@@ -1004,6 +1004,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	
 	private void loadRemoteSubtitles(){
 		if (!Settings.LoadOsSubtitles()) {
+			
 			return;
 		}
 		
