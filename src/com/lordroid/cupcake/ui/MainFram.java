@@ -26,8 +26,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
@@ -40,10 +38,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.lordroid.cupcake.App;
 import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.player.MediaPlayer;
+import com.lordroid.cupcake.player.MediaPlayerFrame;
 import com.lordroid.cupcake.res.R;
 import com.lordroid.cupcake.res.Strings;
 import com.lordroid.cupcake.settingsUi.GlobalSettings;
@@ -233,8 +231,7 @@ public class MainFram extends JFrame implements ActionListener {
 		MovieListViewMenuItem.setEnabled(false);
 		CardLayout cl = (CardLayout) (CardContentPan.getLayout());
 		cl.show(CardContentPan, LIST_CARD_NAME);
-		mediaPlayerFrame.myMediaPlayer.getMediaPlayerComponent()
-				.getMediaPlayer().pause();
+		mediaPlayerFrame.myMediaPlayer.pause();
 	}
 
 	public void OpenMediaPlayer() {

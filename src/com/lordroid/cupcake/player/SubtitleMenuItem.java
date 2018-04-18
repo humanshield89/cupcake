@@ -23,7 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 import Opensubs.SubtitleInfo;
 
@@ -31,7 +31,7 @@ import com.lordroid.cupcake.res.S;
 import com.lordroid.cupcake.utils.SubtitleFetcher;
 
 @SuppressWarnings("serial")
-public class SubtitleMenuItem extends JMenuItem implements ActionListener {
+public class SubtitleMenuItem extends JRadioButtonMenuItem implements ActionListener {
 	public static final String TMP_SUBS_FOLDER = S.SYSTEM_TMP_FOLDER
 			+ File.separator + "subtitles";
 	MediaPlayer mediaPlayer;

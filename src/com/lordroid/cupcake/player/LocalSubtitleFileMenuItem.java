@@ -22,10 +22,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 @SuppressWarnings("serial")
-public class LocalSubtitleFileMenuItem extends JMenuItem implements
+public class LocalSubtitleFileMenuItem extends JRadioButtonMenuItem implements
 		ActionListener {
 	final File subtitle;
 	final MediaPlayer mediaPlayer;

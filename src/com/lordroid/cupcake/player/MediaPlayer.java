@@ -22,8 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -34,12 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 
 import org.apache.xmlrpc.XmlRpcException;
 
@@ -85,6 +87,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	// LoggerFactory.getLogger(MediaPlayer.class);
 	private final BufferingPanel buffPan = new BufferingPanel();
 	private JFrame frame;
+	private boolean fullScreenStrategySet = false;
 	static String[] argument_libvlc = { "--subsdec-encoding="
 			+ Settings.getDefaultSubtittleEncoding() };
 
@@ -137,7 +140,22 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			SubtitleFetcher.SUBTITLE_LANGUAGES_NAMES[Settings
 					.getSubtitlesLang3()]);
 	JMenuItem localSubPicker = new JMenuItem("Choose local Subtitle file");
+	@SuppressWarnings("serial")
+	JRadioButtonMenuItem disableSubsMenuItem= new  JRadioButtonMenuItem("Disable Subtitles"){
+		{
+			this.addActionListener(new ActionListener(){
 
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					setSubtitle(null);
+				}
+				
+			});
+		}
+	};
+	ButtonGroup subtitlesGroup = new ButtonGroup();
+	
 	Thread subtitleWorker;
 
 	public MediaPlayer(JFrame frame) {
@@ -150,12 +168,18 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		onlineSubMenu.add(lang3Menu);
 		subtitlesMenu.add(localSubsMenu);
 		subtitlesMenu.add(localSubPicker);
+		subtitlesMenu.add(disableSubsMenuItem);
 
+		disableSubsMenuItem.setSelected(true);
+		rebuildSubGroupButtons();
+		
+		
 		this.setLayout(new BorderLayout());
 		mediaPlayer.setVideoSurface(videoSurface);
 		mediaPlayerComponent.setVideoSurface(videoSurface);
 
-		setFullScreenStrategy(frame);
+		// TODO
+		//setFullScreenStrategy(frame);
 
 		initActionListners();
 		this.addWatcher(controlPanel);
@@ -207,7 +231,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 */
 	public void setFullScreenStrategy(JFrame frame2) {
 		// TODO Auto-generated method stub
-		frame = frame2;
+		
+		if(!fullScreenStrategySet){
+			frame = frame2;
 		mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
 				new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
 					@Override
@@ -225,6 +251,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					}
 
 				});
+		fullScreenStrategySet = true;
+		}
 
 	}
 
@@ -425,7 +453,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(this);
 	}
 
-	private void pause() {
+	public void pause() {
+		if(mediaPlayerComponent.getMediaPlayer().isPlaying())
 		this.mediaPlayerComponent.getMediaPlayer().pause();
 	}
 
@@ -508,93 +537,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.lastRewindTime = System.currentTimeMillis();
 	}
 
-	private void getRemoteSubs(MediaPlayer arg0) {
-		// TODO Auto-generated method stub
-		final MediaPlayer mediaPlayer2 = arg0;
-		try {
-			subtitleWorker.interrupt();
-		} catch (Exception e) {
 
-		}
-
-		subtitleWorker = new Thread(new Runnable() {
-			boolean subtitleSet = false;
-
-			@Override
-			public void run() {
-
-				List<SubtitleInfo> subInfoList1 = null;
-				List<SubtitleInfo> subInfoList2 = null;
-				List<SubtitleInfo> subInfoList3 = null;
-
-				// lang 1
-				try {
-					subInfoList1 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang1()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList1 != null)
-					for (int i = 0; i < subInfoList1.size(); i++) {
-						SubtitleInfo subInfo = subInfoList1.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang1Menu.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-				// lang 2
-				try {
-					subInfoList2 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang2()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList2 != null)
-					for (int i = 0; i < subInfoList2.size(); i++) {
-						SubtitleInfo subInfo = subInfoList2.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang2Menu.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-				// lang3
-				try {
-					subInfoList3 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang3()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList3 != null)
-					for (int i = 0; i < subInfoList3.size(); i++) {
-						SubtitleInfo subInfo = subInfoList3.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang3Menu.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-			}
-
-		});
-		subtitleWorker.start();
-	}
 
 	/**
 	 * @param str
@@ -613,13 +556,17 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 */
 	public void setSubtitle(File file) {
 		// TODO
-		mediaPlayerComponent.getMediaPlayer().setSubTitleFile(file);
+		if (file != null)
+			mediaPlayerComponent.getMediaPlayer().setSubTitleFile(file);
+		else 
+			mediaPlayerComponent.getMediaPlayer().setSpu(-1);
+
 		mediaPlayerComponent.getMediaPlayer().setMarqueeSize(20);
 		mediaPlayerComponent.getMediaPlayer().setMarqueePosition(
 				libvlc_marquee_position_e.top_right);
 		mediaPlayerComponent.getMediaPlayer().setMarqueeTimeout(3000);
 		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
-				"Subtitle Loaded : " + file.getName());
+				( file != null ? "Subtitle Loaded : "+file.getName() : "Subtitle Disabled"));
 		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
 		// mediaPlayerComponent.getMediaPlayer().setM
 	}
@@ -796,7 +743,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				this.setPlayerView();
 				this.play();
 				TorrentStartedPlaying = true;
-				getSubtitle(torrent);
+				loadRemoteSubtitles();
 			}
 		} else {
 			// remining = total - downloaded
@@ -821,71 +768,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	}
 
-	private void getSubtitle(YifyMovieTorrent arg) {
-		try {
-			// remove any previous entries
-			lang1Menu.removeAll();
-			lang2Menu.removeAll();
-			lang3Menu.removeAll();
-			this.localSubsMenu.removeAll();
-			boolean defaultSubSelected = false;
-			List<SubtitleInfo> list1 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang1()]);
 
-			List<SubtitleInfo> list2 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang2()]);
-
-			List<SubtitleInfo> list3 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang3()]);
-
-			if (list1 != null)
-				for (int i = 0; i < list1.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),
-							this);
-					this.lang1Menu.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						// TODO make it better
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-			if (list2 != null)
-				for (int i = 0; i < list2.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),
-							this);
-					this.lang2Menu.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						// TODO make it better
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-			if (list3 != null)
-				for (int i = 0; i < list3.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),
-							this);
-					this.lang3Menu.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						// TODO make it better
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-
-		} catch (XmlRpcException e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	// TODO
 
@@ -1118,6 +1001,172 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		controlPanel.getCurrentVolume().setText("" + arg0.getVolume());
 	}
 
+	
+	private void loadRemoteSubtitles(){
+		if (!Settings.LoadOsSubtitles()) {
+			return;
+		}
+		
+		if(this.currentlyPlayingSource == SOURCE_YIFY_TORRENT){
+			getSubtitle(torrent);
+		} else if (this.currentlyPlayingSource == SOURCE_VIDEO){
+			getRemoteSubs(this);
+		}
+		
+	}
+	private void getSubtitle(YifyMovieTorrent arg) {
+		// TODO
+		try {
+			// remove any previous entries
+			boolean defaultSubSelected = false;
+			List<SubtitleInfo> list1 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang1()]);
+
+			List<SubtitleInfo> list2 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang2()]);
+
+			List<SubtitleInfo> list3 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang3()]);
+
+			if (list1 != null)
+				for (int i = 0; i < list1.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),
+							this);
+					this.lang1Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+			if (list2 != null)
+				for (int i = 0; i < list2.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),
+							this);
+					this.lang2Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+			if (list3 != null)
+				for (int i = 0; i < list3.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),
+							this);
+					this.lang3Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void getRemoteSubs(MediaPlayer arg0) {
+		// TODO Auto-generated method stub
+		final MediaPlayer mediaPlayer2 = arg0;
+		try {
+			subtitleWorker.interrupt();
+		} catch (Exception e) {
+
+		}
+
+		subtitleWorker = new Thread(new Runnable() {
+			boolean subtitleSet = false;
+
+			@Override
+			public void run() {
+
+				List<SubtitleInfo> subInfoList1 = null;
+				List<SubtitleInfo> subInfoList2 = null;
+				List<SubtitleInfo> subInfoList3 = null;
+
+				// lang 1
+				try {
+					subInfoList1 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang1()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList1 != null)
+					for (int i = 0; i < subInfoList1.size(); i++) {
+						SubtitleInfo subInfo = subInfoList1.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang1Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+				// lang 2
+				try {
+					subInfoList2 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang2()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList2 != null)
+					for (int i = 0; i < subInfoList2.size(); i++) {
+						SubtitleInfo subInfo = subInfoList2.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang2Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+				// lang3
+				try {
+					subInfoList3 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang3()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList3 != null)
+					for (int i = 0; i < subInfoList3.size(); i++) {
+						SubtitleInfo subInfo = subInfoList3.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang3Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+			}
+
+		});
+		subtitleWorker.start();
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1127,12 +1176,13 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 */
 	@Override
 	public void setMediaFromYifyTorrent(YifyMovieTorrent yifyTorrent) {
-		// TODO Auto-generated method stub
 		this.currentlyPlayingSource = SOURCE_YIFY_TORRENT;
 		TorrentStartedPlaying = false;
 		this.torrent = yifyTorrent;
 		torrent.start(this);
 		this.setBufferingView();
+		removeAllSubtitleItems();
+		rebuildSubGroupButtons();
 		torrentStartTime = System.currentTimeMillis();
 	}
 
@@ -1145,21 +1195,20 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 */
 	@Override
 	public void setMediaFromLocalVideo(File videoArgs) {
-		// TODO Auto-generated method stub
 		setCurrentVideo(videoArgs.getAbsolutePath());
 		this.currentlyPlayingSource = SOURCE_VIDEO;
+		rebuildSubGroupButtons();
+		removeAllSubtitleItems();
 		// local subs
 		ArrayList<File> localSubs = FileUtils.searchrecursively(
 				video.getParentFile(), "srt");
-		this.localSubsMenu.removeAll();
-		lang1Menu.removeAll();
-		lang2Menu.removeAll();
-		lang3Menu.removeAll();
 		for (File f : localSubs) {
-			localSubsMenu.add(new LocalSubtitleFileMenuItem(f, this));
+			LocalSubtitleFileMenuItem item = new LocalSubtitleFileMenuItem(f, this);
+			localSubsMenu.add(item);
 		}
 		// remote subs
-		getRemoteSubs(this);
+
+		loadRemoteSubtitles();
 
 	}
 
@@ -1174,7 +1223,18 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	public void setMediaFromLocalTorrent(Object torrent) {
 		// TODO Auto-generated method stub
 		this.currentlyPlayingSource = SOURCE_LOCAL_TORRENT;
-
+		removeAllSubtitleItems();
 	}
-
+	
+	private void rebuildSubGroupButtons() {
+		subtitlesGroup = new ButtonGroup();
+		subtitlesGroup.add(disableSubsMenuItem);
+	}
+	
+	private void removeAllSubtitleItems(){
+		localSubsMenu.removeAll();
+		lang1Menu.removeAll();
+		lang2Menu.removeAll();
+		lang3Menu.removeAll();
+	}
 }

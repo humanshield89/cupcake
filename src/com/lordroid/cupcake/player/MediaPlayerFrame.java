@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.lordroid.cupcake.ui;
+package com.lordroid.cupcake.player;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -25,8 +25,6 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import com.lordroid.cupcake.bt.YifyMovieTorrent;
-import com.lordroid.cupcake.player.MediaPlayer;
-import com.lordroid.cupcake.player.MediaPlayerImp;
 
 /**
  * @author HumanShield85
@@ -34,7 +32,7 @@ import com.lordroid.cupcake.player.MediaPlayerImp;
  */
 @SuppressWarnings("serial")
 public class MediaPlayerFrame extends JFrame implements MediaPlayerImp {
-	final MediaPlayer myMediaPlayer;
+	public final MediaPlayer myMediaPlayer;
 
 	public MediaPlayerFrame() {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
