@@ -98,6 +98,7 @@ public class R {
 			{ PLAY_NOW_BTN, PLAY_NOW_BTN_HOVERED, PLAY_NOW_BTN_PRESSED },
 			{ PLAY_LATER_BTN, PLAY_LATER_BTN_HOVERED, PLAY_LATER_BTN_PRESSED },
 			{ DETAILS_BTN, DETAILS_BTN_HOVERED, DETAILS_BTN_PRESSED } };
+	public static final BufferedImage STOP_BTN_ICON = getIcon("stop.png");
 
 	private static BufferedImage getIcon(String file) {
 		BufferedImage image = null;

@@ -28,6 +28,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -141,21 +143,22 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 					.getSubtitlesLang3()]);
 	JMenuItem localSubPicker = new JMenuItem("Choose local Subtitle file");
 	@SuppressWarnings("serial")
-	JRadioButtonMenuItem disableSubsMenuItem= new  JRadioButtonMenuItem("Disable Subtitles"){
+	JRadioButtonMenuItem disableSubsMenuItem = new JRadioButtonMenuItem(
+			"Disable Subtitles") {
 		{
-			this.addActionListener(new ActionListener(){
+			this.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					setSubtitle(null);
 				}
-				
+
 			});
 		}
 	};
 	ButtonGroup subtitlesGroup = new ButtonGroup();
-	
+
 	Thread subtitleWorker;
 
 	public MediaPlayer(JFrame frame) {
@@ -172,14 +175,13 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 		disableSubsMenuItem.setSelected(true);
 		rebuildSubGroupButtons();
-		
-		
+
 		this.setLayout(new BorderLayout());
 		mediaPlayer.setVideoSurface(videoSurface);
 		mediaPlayerComponent.setVideoSurface(videoSurface);
 
 		// TODO
-		//setFullScreenStrategy(frame);
+		// setFullScreenStrategy(frame);
 
 		initActionListners();
 		this.addWatcher(controlPanel);
@@ -231,27 +233,27 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 */
 	public void setFullScreenStrategy(JFrame frame2) {
 		// TODO Auto-generated method stub
-		
-		if(!fullScreenStrategySet){
+
+		if (!fullScreenStrategySet) {
 			frame = frame2;
-		mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
-				new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
-					@Override
-					protected void beforeEnterFullScreen() {
-						// controlPanel.setVisible(false);
-						// statusBar.setVisible(false);
-						// Window overlayWin = new Window();
-						// overlay.
-					}
+			mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
+					new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
+						@Override
+						protected void beforeEnterFullScreen() {
+							// controlPanel.setVisible(false);
+							// statusBar.setVisible(false);
+							// Window overlayWin = new Window();
+							// overlay.
+						}
 
-					@Override
-					protected void afterExitFullScreen() {
-						// controlPanel.setVisible(true);
-						// statusBar.setVisible(true);
-					}
+						@Override
+						protected void afterExitFullScreen() {
+							// controlPanel.setVisible(true);
+							// statusBar.setVisible(true);
+						}
 
-				});
-		fullScreenStrategySet = true;
+					});
+			fullScreenStrategySet = true;
 		}
 
 	}
@@ -366,28 +368,68 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		});
 
 		mediaPlayerComponent.addKeyListener(new KeyListener() {
+			long firstEnter = 0L;
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-
+				if (arg0.getKeyCode() == KeyEvent.VK_UP) {
+					changeVolume(controlPanel.getVolumeControl().getValue() + 1);
+				} else if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+					changeVolume(controlPanel.getVolumeControl().getValue() - 1);
+				} else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+					mediaPlayer.skip(-1000);
+					showSkipMarquee(false);
+				} else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+					mediaPlayer.skip(1000);
+					showSkipMarquee(true);
+				}
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
 				// TODO Auto-generated method stub
 				if (arg0.getKeyChar() == ' ') {
 					if (mediaPlayer.isPlaying())
 						pause();
 					else
 						play();
+				} else if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					App.LOGGER.info("escape key pressed " + "  char = "
+							+ arg0.getKeyChar() + " code = "
+							+ arg0.getKeyCode());
+					if (mediaPlayer.isFullScreen()) {
+						fullScreen();
+					}
+				} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+					App.LOGGER.info("enter key pressed " + "  char = "
+							+ arg0.getKeyChar() + " code = "
+							+ arg0.getKeyCode());
+					if ((arg0.getWhen() - firstEnter) < 500) {
+						fullScreen();
+						firstEnter = 0;
+					} else {
+						firstEnter = arg0.getWhen();
+					}
 				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		mediaPlayerComponent.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent arg0) {
+				// TODO Auto-generated method stub
+				int i = arg0.getWheelRotation();
+				changeVolume(controlPanel.getVolumeControl().getValue() - i * 5);
+
 			}
 
 		});
@@ -453,16 +495,49 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(this);
 	}
 
+	protected void setDefaultMarqueeProperties() {
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(false);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeSize(20);
+		mediaPlayerComponent.getMediaPlayer().setMarqueePosition(
+				libvlc_marquee_position_e.top_right);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeTimeout(1000);
+
+	}
+
+	/**
+	 * 
+	 */
+	protected void showSkipMarquee(boolean skiping) {
+		// TODO Auto-generated method stub
+		String str = (skiping ? "FastForward >> " : "<< Rewind ");
+		setDefaultMarqueeProperties();
+		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
+				str + TimeUtils.getLabelFormatedTime(mediaPlayer.getTime()));
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
+	}
+
+	/**
+	 * @param i
+	 */
+	protected void changeVolume(int value) {
+		setDefaultMarqueeProperties();
+		controlPanel.getVolumeControl().setValue(value);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
+				"Volume : " + controlPanel.getVolumeControl().getValue());
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
+		setVolumeIcon();
+	}
+
 	public void pause() {
-		if(mediaPlayerComponent.getMediaPlayer().isPlaying())
-		this.mediaPlayerComponent.getMediaPlayer().pause();
+		if (mediaPlayerComponent.getMediaPlayer().isPlaying())
+			this.mediaPlayerComponent.getMediaPlayer().pause();
 	}
 
 	private void stop() {
 		this.mediaPlayerComponent.getMediaPlayer().stop();
 		controlPanel.getProgress().setValue(0);
 		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PLAY_BTN_ICON));
-		controlPanel.getCurrentTimeLab().setText("  00:00  ");
+		controlPanel.getCurrentTimeLab().setText("  00:00:00  ");
 	}
 
 	private void play() {
@@ -537,8 +612,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.lastRewindTime = System.currentTimeMillis();
 	}
 
-
-
 	/**
 	 * @param str
 	 *            the video to set
@@ -558,7 +631,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		// TODO
 		if (file != null)
 			mediaPlayerComponent.getMediaPlayer().setSubTitleFile(file);
-		else 
+		else
 			mediaPlayerComponent.getMediaPlayer().setSpu(-1);
 
 		mediaPlayerComponent.getMediaPlayer().setMarqueeSize(20);
@@ -566,7 +639,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 				libvlc_marquee_position_e.top_right);
 		mediaPlayerComponent.getMediaPlayer().setMarqueeTimeout(3000);
 		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
-				( file != null ? "Subtitle Loaded : "+file.getName() : "Subtitle Disabled"));
+				(file != null ? "Subtitle Loaded : " + file.getName()
+						: "Subtitle Disabled"));
 		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
 		// mediaPlayerComponent.getMediaPlayer().setM
 	}
@@ -643,6 +717,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			setVolumeIcon();
 		} else if (message == S.FULL_SCREEN_BTN_PRESSED) {
 			fullScreen();
+		} else if (message == S.STOP_BTN_PRESSED) {
+			stop();
 		}
 	}
 
@@ -650,7 +726,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * 
 	 */
 	private void setVolumeIcon() {
-		// mediaPlayerComponent.getMediaPlayer().setVolume(200);
 		// TODO Auto-generated method stub
 		int volume = mediaPlayerComponent.getMediaPlayer().getVolume();
 		App.LOGGER.debug("current volume =  " + volume);
@@ -755,20 +830,19 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			long neededTime = (long) (remining / (speed * 1024));
 			long timeleftonTheMovie = movieLenght
 					- mediaPlayerComponent.getMediaPlayer().getTime() / 1000;
-			if (neededTime > timeleftonTheMovie)
+			if (neededTime > timeleftonTheMovie) {
 				App.LOGGER.info("we should pause" + "    remining time = "
 						+ remining + "   remining on movie = "
 						+ timeleftonTheMovie);
-			else
+			} else {
 				App.LOGGER.info("no need to pause" + "    remining time = "
 						+ remining + "   remining on movie = "
 						+ timeleftonTheMovie);
+			}
 
 		}
 
 	}
-
-
 
 	// TODO
 
@@ -1001,20 +1075,20 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		controlPanel.getCurrentVolume().setText("" + arg0.getVolume());
 	}
 
-	
-	private void loadRemoteSubtitles(){
+	private void loadRemoteSubtitles() {
 		if (!Settings.LoadOsSubtitles()) {
-			
+
 			return;
 		}
-		
-		if(this.currentlyPlayingSource == SOURCE_YIFY_TORRENT){
+
+		if (this.currentlyPlayingSource == SOURCE_YIFY_TORRENT) {
 			getSubtitle(torrent);
-		} else if (this.currentlyPlayingSource == SOURCE_VIDEO){
+		} else if (this.currentlyPlayingSource == SOURCE_VIDEO) {
 			getRemoteSubs(this);
 		}
-		
+
 	}
+
 	private void getSubtitle(YifyMovieTorrent arg) {
 		// TODO
 		try {
@@ -1077,7 +1151,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		}
 
 	}
-	
+
 	private void getRemoteSubs(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
 		final MediaPlayer mediaPlayer2 = arg0;
@@ -1168,6 +1242,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		});
 		subtitleWorker.start();
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1204,7 +1279,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		ArrayList<File> localSubs = FileUtils.searchrecursively(
 				video.getParentFile(), "srt");
 		for (File f : localSubs) {
-			LocalSubtitleFileMenuItem item = new LocalSubtitleFileMenuItem(f, this);
+			LocalSubtitleFileMenuItem item = new LocalSubtitleFileMenuItem(f,
+					this);
 			localSubsMenu.add(item);
 		}
 		// remote subs
@@ -1226,13 +1302,13 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.currentlyPlayingSource = SOURCE_LOCAL_TORRENT;
 		removeAllSubtitleItems();
 	}
-	
+
 	private void rebuildSubGroupButtons() {
 		subtitlesGroup = new ButtonGroup();
 		subtitlesGroup.add(disableSubsMenuItem);
 	}
-	
-	private void removeAllSubtitleItems(){
+
+	private void removeAllSubtitleItems() {
 		localSubsMenu.removeAll();
 		lang1Menu.removeAll();
 		lang2Menu.removeAll();

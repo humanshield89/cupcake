@@ -81,6 +81,8 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 				updateWatchers(S.FULL_SCREEN_BTN_PRESSED);
 			} else if (arg0.getSource().equals(fullScreen)) {
 				updateWatchers(S.FULL_SCREEN_BTN_PRESSED);
+			} else if (arg0.getSource().equals(stopBtn)){
+				updateWatchers(S.STOP_BTN_PRESSED);
 			}
 		}
 
@@ -100,6 +102,8 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 			Settings.getCurrentVolume());
 
 	private JButton playBtn = new JButton(new ImageIcon(R.PLAY_BTN_ICON));
+	private JButton stopBtn = new JButton(new ImageIcon(R.STOP_BTN_ICON));
+
 
 	private JButton rewindBtn = new JButton(new ImageIcon(R.REWIND_BTN_ICON));
 
@@ -274,6 +278,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		this.add(progressContainer, BorderLayout.CENTER);
 		btnContainer.add(rewindBtn);
 		btnContainer.add(playBtn);
+		btnContainer.add(stopBtn);
 		btnContainer.add(skipBtn);
 
 		volumePanel.add(currentVolume);
@@ -288,6 +293,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		controlsContainer.add(volumePanel, BorderLayout.EAST);
 		this.add(controlsContainer, BorderLayout.SOUTH);
 		playBtn.addActionListener(new BtnActionListner());
+		stopBtn.addActionListener(new BtnActionListner());
 		skipBtn.addActionListener(new BtnActionListner());
 		rewindBtn.addActionListener(new BtnActionListner());
 
@@ -301,6 +307,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		// playBtn.setFocusable(false);
 		rewindBtn.setFocusable(false);
 		skipBtn.setFocusable(false);
+		stopBtn.setFocusable(false);
 		// currentTimeLab.setFocusable(false);
 		// volumeBtn.setFocusable(false);
 		// fullScreen.setFocusable(false);

@@ -50,6 +50,7 @@ public class S {
 	public static final int VOLUME_CONTROL_SLIDED = 8;
 	public static final int FULL_SCREEN_BTN_PRESSED = 9;
 	public static final int VOLUME_UP_DOWN_PRESSED = 10;
+	public static final int STOP_BTN_PRESSED = 11;
 
 	public static final String MEDIA_STOPED = " | Stopped";
 	public static final String MEDIA_PAUSED = " | Paused";
