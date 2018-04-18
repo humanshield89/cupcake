@@ -18,28 +18,37 @@
  */
 package com.lordroid.cupcake.player;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.JMenuItem;
+import com.lordroid.cupcake.bt.YifyMovieTorrent;
 
-@SuppressWarnings("serial")
-public class LocalSubtitleFileMenuItem extends JMenuItem implements
-		ActionListener {
-	final File subtitle;
-	final MediaPlayer mediaPlayer;
+/**
+ * @author HumanShield85
+ * 
+ */
+public interface MediaPlayerImp {
+	/**
+	 * this is called when trying to load a new media calling this will remove
+	 * any previous playing media on the player
+	 * 
+	 * @param yifyTorrent
+	 *            the Yify torrent that will be played on the player
+	 */
+	public void setMediaFromYifyTorrent(YifyMovieTorrent yifyTorrent);
 
-	public LocalSubtitleFileMenuItem(File sub, MediaPlayer arg1) {
-		this.setText(sub.getName());
-		this.addActionListener(this);
-		subtitle = sub;
-		mediaPlayer = arg1;
-	}
+	/**
+	 * 
+	 * @param video
+	 */
+	public void setMediaFromLocalVideo(File video);
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		mediaPlayer.setSubtitle(subtitle);
-	}
+	// TODO set this to a local torrent object once we make one
+	/**
+	 * TODO : this is not implemented yet ,finish this when we create a local
+	 * torrent Object
+	 * 
+	 * @param torrent
+	 */
+	public void setMediaFromLocalTorrent(Object torrent);
+
 }

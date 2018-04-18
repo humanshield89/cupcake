@@ -33,6 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
@@ -91,49 +94,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	ArrayList<Watcher> watchers = new ArrayList<Watcher>();
 
 	BasicSliderUI uix;
-	@SuppressWarnings("serial")
-	private JSlider progress = new JSlider() {
-		{
-			MouseListener[] listeners = getMouseListeners();
-			for (MouseListener l : listeners)
-				removeMouseListener(l); // remove UI-installed TrackListener
-			final BasicSliderUI ui = (BasicSliderUI) getUI();
-			uix = ui;
-			BasicSliderUI.TrackListener tl = ui.new TrackListener() {
-				// this is where we jump to absolute value of click
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					Point p = e.getPoint();
-					int value = ui.valueForXPosition(p.x);
-
-					setValue(value);
-					updateWatchers(S.TIMER_CLICKED);
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					Point p = e.getPoint();
-					progress.setToolTipText(TimeUtils.getLabelFormatedTime(ui
-							.valueForXPosition(p.x) * 1000));
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					progress.setToolTipText("");
-				}
-
-				// disable check that will invoke scrollDueToClickInTrack
-				@Override
-				public boolean shouldScroll(int dir) {
-					return false;
-				}
-			};
-			addMouseListener(tl);
-		}
-	};
+	private JSlider progress;
 
 	private JSlider volumeControl = new JSlider(0, 100,
 			Settings.getCurrentVolume());
@@ -177,14 +138,114 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 	private JPanel controlsContainer = new JPanel();
 
+	@SuppressWarnings("serial")
 	public ControlPanel() {
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		progress = new JSlider() {
+			{
+				MouseListener[] listeners = getMouseListeners();
+				for (MouseListener l : listeners)
+					removeMouseListener(l); // remove UI-installed TrackListener
+				/** BasicSliderUI **/
+				uix = (BasicSliderUI) getUI();
+				// uix = ui;
+				BasicSliderUI.TrackListener tl = uix.new TrackListener() {
 
+					// this is where we jump to absolute value of click
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						Point p = e.getPoint();
+						int value = uix.valueForXPosition(p.x);
+
+						setValue(value);
+						updateWatchers(S.TIMER_CLICKED);
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						Point p = e.getPoint();
+						progress.setToolTipText(TimeUtils
+								.getLabelFormatedTime(uix
+										.valueForXPosition(p.x) * 1000));
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						progress.setToolTipText("");
+					}
+
+					@Override
+					public void mouseDragged(MouseEvent e) {
+						// TODO Auto-generated method stub
+						Point p = e.getPoint();
+						int value = uix.valueForXPosition(p.x);
+
+						setValue(value);
+					}
+
+					@Override
+					public void mouseMoved(MouseEvent e) {
+
+						Point p = e.getPoint();
+						progress.setToolTipText(TimeUtils
+								.getLabelFormatedTime(uix
+										.valueForXPosition(p.x) * 1000));
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						updateWatchers(S.TIMER_CLICKED);
+
+					}
+
+					// disable check that will invoke scrollDueToClickInTrack
+					@Override
+					public boolean shouldScroll(int dir) {
+						return false;
+					}
+
+				};
+				addMouseListener(tl);
+				this.addMouseMotionListener(new MouseMotionListener() {
+
+					@Override
+					public void mouseDragged(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseMoved(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						Point p = arg0.getPoint();
+						progress.setToolTipText(TimeUtils
+								.getLabelFormatedTime(uix
+										.valueForXPosition(p.x) * 1000));
+					}
+
+				});
+			}
+
+		};
+		progress.setBackground(this.getBackground());
+		// progress.setSize(950,50);
+		try {
+			UIManager.setLookAndFeel(previousLF);
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		this.currentVolume.setFont(R.NORMAL_FONT);
-		// TODO
-		// progress.setDrawProgress(true);
-		// progress.setTrackBgTop(new Color(135, 124, 176));
-		// progress.setDrawProgress(true);
-		// /progress.setTrackBgBottom(new Color(100, 124, 125));
+
 		progress.setFocusable(false);
 		progress.setValue(0);
 
@@ -198,69 +259,9 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 			}
 
 		});
-		progress.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				// updateWatchers(S.TIMER_CLICKED);
-				// currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
-				// .getValue() * 1000));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				updateWatchers(S.TIMER_PRESSED);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				updateWatchers(S.TIMER_RELEASED);
-			}
-
-		});
-		progress.addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseDragged(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-				currentTimeLab.setText(TimeUtils.getLabelFormatedTime(progress
-						.getValue() * 1000));
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-
-				Point p = e.getPoint();
-				progress.setToolTipText(TimeUtils.getLabelFormatedTime(uix
-						.valueForXPosition(p.x) * 1000));
-			}
-
-		});
 		this.volumeBtn.addActionListener(new BtnActionListner());
 
-		// volumeControl.setMinimumWidth(50);
 		volumeControl.setMaximumSize(new Dimension(50, 20));
-		// volumeControl.setMargin(0, 0, 0, 5);
-		// volumeControl.setPreferredWidth(125);
-		// TODO
-		// volumeControl.setTrackBgBottom(new Color(100, 124, 125));
-		// volumeControl.setTrackBgTop(new Color(135, 124, 176));
 
 		controlsContainer.setLayout(new BorderLayout());
 
@@ -268,6 +269,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		progressContainer.add(currentTimeLab, BorderLayout.WEST);
 		progressContainer.add(progress, BorderLayout.CENTER);
 		progressContainer.add(totalTimeLab, BorderLayout.EAST);
+
 		this.setLayout(new BorderLayout());
 		this.add(progressContainer, BorderLayout.CENTER);
 		btnContainer.add(rewindBtn);
@@ -289,8 +291,25 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		skipBtn.addActionListener(new BtnActionListner());
 		rewindBtn.addActionListener(new BtnActionListner());
 
-		progress.setMaximum(100);
+		// progress.setMaximum(100);
 		this.setOpaque(true);
+		this.setSize(new Dimension(1000, 200));
+		// remove focus
+		// progressPan.setFocusable(false);
+		progress.setFocusable(false);
+		volumeControl.setFocusable(false);
+		// playBtn.setFocusable(false);
+		rewindBtn.setFocusable(false);
+		skipBtn.setFocusable(false);
+		// currentTimeLab.setFocusable(false);
+		// volumeBtn.setFocusable(false);
+		// fullScreen.setFocusable(false);
+		// currentVolume.setFocusable(false);
+		// volumePanel.setFocusable(false);
+		// totalTimeLab.setFocusable(false);
+		// progressContainer.setFocusable(false);
+		// btnContainer.setFocusable(false);
+		// controlsContainer.setFocusable(false);
 	}
 
 	/**

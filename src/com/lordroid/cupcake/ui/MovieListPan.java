@@ -166,7 +166,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		qualityCombo.setFocusable(false);
 		orderCombo.setFocusable(false);
 		sortByCombo.setFocusable(false);
-		searchField.setFocusable(false);
+		searchField.setFocusable(true);
 		searchBtn.setFocusable(false);
 
 		searchField.setText(SEARHC_DEFAULT_TEXT);
@@ -578,6 +578,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 		// TODO : switch to debug on release
 		App.LOGGER.info("currently sellected is " + currentlySelected
 				+ "  Max index is " + moviesList.size());
+		this.requestFocus();
 	}
 
 }

@@ -41,8 +41,12 @@ public class TimeUtils {
 		long mm = (time / 1000 / 60) % 60;
 		long hh = (time / 1000 / 60 / 60) % 24;
 		App.LOGGER.debug("true ?" + "   " + hh + ":" + mm + ":" + ss + "  ");
-
-		return "   " + hh + ":" + mm + ":" + ss + "  ";
+		String ssS = ss + "";
+		String mmS = mm + "";
+		String hhS = hh + "";
+		return "   " + (hhS.length() == 2 ? hhS : "0" + hhS) + ":"
+				+ (mmS.length() == 2 ? mmS : "0" + mmS) + ":"
+				+ (ssS.length() == 2 ? ssS : "0" + ssS) + "  ";
 	}
 
 	public static String getFormatedViewCount(long views) {

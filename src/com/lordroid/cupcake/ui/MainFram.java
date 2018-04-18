@@ -19,12 +19,15 @@
 package com.lordroid.cupcake.ui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
@@ -53,9 +56,14 @@ public class MainFram extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPan = new JPanel();
+	private static final String PLAYER_CARD_NAME = "Cupcake Player";
+	private static final String LIST_CARD_NAME = "Cupcake Movies";
+
+	private JPanel CardContentPan = new JPanel();
+	private JPanel PlayercontentPan = new JPanel();
+	private JPanel MoviecontentPan = new JPanel();
 	public MovieListPan movieListPan;
-	private MediaPlayer player = new MediaPlayer(this);
+	// private MediaPlayer player = new MediaPlayer(this);
 	public JMenuBar mainMenu = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
 	JMenu openMenu = new JMenu("Open");
@@ -74,6 +82,7 @@ public class MainFram extends JFrame implements ActionListener {
 
 	JMenuItem playerViewMenuItem = new JMenuItem("Player View");
 	JMenuItem MovieListViewMenuItem = new JMenuItem("Movie List View");
+	public static MediaPlayerFrame mediaPlayerFrame = new MediaPlayerFrame();
 
 	public MainFram() {
 		this.setBackground(Color.BLACK);
@@ -82,13 +91,11 @@ public class MainFram extends JFrame implements ActionListener {
 
 			@Override
 			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -100,25 +107,21 @@ public class MainFram extends JFrame implements ActionListener {
 
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -133,13 +136,15 @@ public class MainFram extends JFrame implements ActionListener {
 			@Override
 			public void ListActionPerformed(YifyMovie movie, int action) {
 				// TODO Auto-generated method stub
-//				App.LOGGER.info("Action performed on " + movie.getTitle()
-//						+ " language =  " + movie.getLanguage() + "  id ="
-//						+ movie.getId() + " Action value is : " + action);
+				// App.LOGGER.info("Action performed on " + movie.getTitle()
+				// + " language =  " + movie.getLanguage() + "  id ="
+				// + movie.getId() + " Action value is : " + action);
 				if (action == MovieItem.PLAY_ACTION) {
-					initPlayerView();
-					player.setTorrent(new YifyMovieTorrent(movie,
-							YifyMovieTorrent.USE_DEFAULT_SETTINGS));
+					// initPlayerView();
+					mediaPlayerFrame.myMediaPlayer
+							.setMediaFromYifyTorrent(new YifyMovieTorrent(
+									movie, -1));
+					OpenMediaPlayer();
 				} else if (action == MovieItem.LATER_ACTION) {
 					// initPlayerView();
 					// player.setYoutube(movie.getYoutubeTrailerURL());
@@ -173,9 +178,9 @@ public class MainFram extends JFrame implements ActionListener {
 		this.setTitle(Strings.getTitle() + Strings.getVersion());
 
 		// layouts
-		contentPan.setLayout(new BorderLayout());
+		CardContentPan.setLayout(new CardLayout());
 
-		this.setContentPane(contentPan);
+		this.setContentPane(CardContentPan);
 
 		// menu bar
 		mainMenu.add(fileMenu);
@@ -198,6 +203,14 @@ public class MainFram extends JFrame implements ActionListener {
 		MovieListViewMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
 		settingsMenuItem.addActionListener(this);
+		// creating the components
+		MoviecontentPan.setLayout(new BorderLayout());
+		PlayercontentPan.setLayout(new BorderLayout());
+		CardContentPan.add(this.MoviecontentPan, LIST_CARD_NAME);
+		MoviecontentPan.add(movieListPan, BorderLayout.CENTER);
+		CardContentPan.add(this.PlayercontentPan, PLAYER_CARD_NAME);
+		PlayercontentPan.add(mediaPlayerFrame.getContentPane(),
+				BorderLayout.CENTER);
 
 		initMovieListPan();
 		this.setVisible(true);
@@ -213,37 +226,23 @@ public class MainFram extends JFrame implements ActionListener {
 
 	public void initMovieListPan() {
 
-		try {
-			player.getMediaPlayerComponent().getMediaPlayer().pause();
-			player.getMediaPlayerComponent().getMediaPlayer().stop();
-			player.getMediaPlayerComponent().getMediaPlayer()
-					.setFullScreen(false);
-			if (player.torrent != null)
-				player.torrent.stopTorrent();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		this.getContentPane().removeAll();
-		this.setContentPane(contentPan);
-		contentPan.add(movieListPan, BorderLayout.CENTER);
 		movieListPan.requestFocus();
 		this.setTitle("Cupcake " + "Movie list ");
-		contentPan.revalidate();
+		// contentPan.revalidate();
 		playerViewMenuItem.setEnabled(true);
 		MovieListViewMenuItem.setEnabled(false);
+		CardLayout cl = (CardLayout) (CardContentPan.getLayout());
+		cl.show(CardContentPan, LIST_CARD_NAME);
+		mediaPlayerFrame.myMediaPlayer.getMediaPlayerComponent()
+				.getMediaPlayer().pause();
 	}
 
-	public void initPlayerView() {
-		this.getContentPane().removeAll();
-		this.setContentPane(contentPan);
-		// player = new MediaPlayer(this);
-		contentPan.add(player, BorderLayout.CENTER);
-		this.setTitle("Cupcake ");
-		player.revalidate();
-		contentPan.revalidate();
+	public void OpenMediaPlayer() {
 		playerViewMenuItem.setEnabled(false);
 		MovieListViewMenuItem.setEnabled(true);
+		CardLayout cl = (CardLayout) (CardContentPan.getLayout());
+		cl.show(CardContentPan, PLAYER_CARD_NAME);
+		mediaPlayerFrame.myMediaPlayer.setFullScreenStrategy(this);
 	}
 
 	@Override
@@ -251,7 +250,7 @@ public class MainFram extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		Object source = arg0.getSource();
 		if (source.equals(playerViewMenuItem)) {
-			initPlayerView();
+			OpenMediaPlayer();
 		} else if (source.equals(MovieListViewMenuItem)) {
 			initMovieListPan();
 		} else if (source.equals(exitMenuItem)) {
@@ -260,4 +259,5 @@ public class MainFram extends JFrame implements ActionListener {
 			GlobalSettings.showSettings();
 		}
 	}
+
 }

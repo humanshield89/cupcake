@@ -58,6 +58,7 @@ public class SubtitleMenuItem extends JMenuItem implements ActionListener {
 						TMP_SUBS_FOLDER));
 				this.mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
 						.setSubTitleFile(sub);
+				this.mediaPlayer.setSubtitle(sub);
 				cached = true;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -65,8 +66,7 @@ public class SubtitleMenuItem extends JMenuItem implements ActionListener {
 				cached = false;
 			}
 		} else {
-			this.mediaPlayer.getMediaPlayerComponent().getMediaPlayer()
-					.setSubTitleFile(sub);
+			this.mediaPlayer.setSubtitle(sub);
 		}
 	}
 

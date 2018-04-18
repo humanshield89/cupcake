@@ -67,7 +67,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 			currentCacheSizeValueLab, cacheValueLab, clearCacheBtn,
 			imageCacheLab, imageCacheValueLab, clearImageCacheBtn };
 
-
 	public GeneralSettingsPan() {
 		super();
 		for (JComponent c : components) {
