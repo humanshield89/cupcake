@@ -81,7 +81,7 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 				updateWatchers(S.FULL_SCREEN_BTN_PRESSED);
 			} else if (arg0.getSource().equals(fullScreen)) {
 				updateWatchers(S.FULL_SCREEN_BTN_PRESSED);
-			} else if (arg0.getSource().equals(stopBtn)){
+			} else if (arg0.getSource().equals(stopBtn)) {
 				updateWatchers(S.STOP_BTN_PRESSED);
 			}
 		}
@@ -103,7 +103,6 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 
 	private JButton playBtn = new JButton(new ImageIcon(R.PLAY_BTN_ICON));
 	private JButton stopBtn = new JButton(new ImageIcon(R.STOP_BTN_ICON));
-
 
 	private JButton rewindBtn = new JButton(new ImageIcon(R.REWIND_BTN_ICON));
 

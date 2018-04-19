@@ -76,6 +76,8 @@ public class App {
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
+		if (args != null && args.length > 0)
+			System.out.println(args[0]);
 		setSysPropreties();
 		System.out.println(PathUtils.getExcutionPath());
 		new NativeDiscovery().discover();

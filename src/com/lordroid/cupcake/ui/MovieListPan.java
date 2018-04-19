@@ -60,21 +60,7 @@ public class MovieListPan extends JPanel implements ActionListener,
 	private final ListPanWatcher listWatcher;
 	private ArrayList<MovieItem> moviesList = new ArrayList<MovieItem>();
 	private int currentlySelected = -999;
-	// JPanel mainContainer = new JPa
-	private WebPanel seachPanContainer = new WebPanel() {
-		// public void paintComponent(Graphics g) {
-		// int i = 0;
-		// int n = 0;
-		// while (n < this.getHeight()) {
-		// i = 0;
-		// while (i < this.getWidth()) {
-		// g.drawImage(R.SEARCH_BACKGROUND_IMG, i, n, this);
-		// i = i + R.SEARCH_BACKGROUND_IMG.getWidth(this);
-		// }
-		// n = n + R.SEARCH_BACKGROUND_IMG.getHeight(this);
-		// }
-		// }
-	};
+	private WebPanel seachPanContainer = new WebPanel();
 	// sort by components
 	private JLabel sortByLabel = new JLabel("Sort by : ");
 	private WebComboBox sortByCombo = new WebComboBox(
@@ -198,9 +184,8 @@ public class MovieListPan extends JPanel implements ActionListener,
 		this.add(this.seachPanContainer, BorderLayout.NORTH);
 		this.add(scrollPan, BorderLayout.CENTER);
 
-		// scrollPan.setF
-		// actionListeners
 		this.searchBtn.addActionListener(this);
+		searchField.addKeyListener(this);
 		this.loadMoreBtn.addActionListener(this);
 		searchField.addMouseListener(new MouseListener() {
 
@@ -216,25 +201,21 @@ public class MovieListPan extends JPanel implements ActionListener,
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -256,9 +237,8 @@ public class MovieListPan extends JPanel implements ActionListener,
 		return true;
 	}
 
-	private void getNextPage() {
+	private synchronized void getNextPage() {
 		this.searchBtn.setEnabled(false);
-		// TODO Auto-generated method stub
 		movieListContainer.remove(loadMoreBtn);
 		currentlySelected--;
 		page++;
@@ -273,13 +253,11 @@ public class MovieListPan extends JPanel implements ActionListener,
 		try {
 			obj = JSONComunicator.readJsonFromUrl(url);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			movieListContainer.add(this.noResponse);
 			this.searchBtn.setEnabled(true);
 			return;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			noResponse();
 			return;
@@ -519,7 +497,11 @@ public class MovieListPan extends JPanel implements ActionListener,
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		App.LOGGER.info("Key Event   : " + arg0.getKeyCode());
+		App.LOGGER.debug("Key Event   : " + arg0.getKeyCode());
+		// make sure we don't fuck up :p
+		if (arg0.getSource().equals(searchField)) {
+			return;
+		}
 		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
 			App.LOGGER.info("Arrow key up presssed ");
 			NavigateTo(-getNumberOfItemInRow());
@@ -550,7 +532,14 @@ public class MovieListPan extends JPanel implements ActionListener,
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		if (arg0.getSource().equals(searchField)) {
+			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+				this.actionPerformed(new ActionEvent(searchBtn,
+						ActionEvent.ACTION_PERFORMED, "search"));
+				App.LOGGER.info("Key Event   : " + arg0.getKeyCode());
 
+			}
+		}
 	}
 
 	@Override

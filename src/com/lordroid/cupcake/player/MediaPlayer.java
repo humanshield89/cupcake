@@ -19,6 +19,7 @@
 package com.lordroid.cupcake.player;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -70,6 +71,7 @@ import com.lordroid.cupcake.utils.FileUtils;
 import com.lordroid.cupcake.utils.StringUtils;
 import com.lordroid.cupcake.utils.SubtitleFetcher;
 import com.lordroid.cupcake.utils.TimeUtils;
+import com.lordroid.cupcake.yify.YifyMovie;
 
 public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		Consumer<TorrentSessionState>, MediaPlayerEventListener, MediaPlayerImp {
@@ -80,6 +82,8 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	public static final int SOURCE_YIFY_TORRENT = 1;
 	public static final int SOURCE_LOCAL_TORRENT = 2;
 	public static final int SOURCE_VIDEO = 3;
+	public static final String CARD_PLAYER = "Media Player";
+	public static final String CARD_BUFFER_TORRENT = "BUFERING TORRENT";
 
 	public YifyMovieTorrent torrent;
 	boolean TorrentStartedPlaying = false;
@@ -126,6 +130,9 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	private boolean wasPlaying;
 	private boolean mouseOncontrol = false;
+
+	// cardlayourt
+	JPanel cards = new JPanel();
 
 	// POPUP MENU
 	JPopupMenu menu = new JPopupMenu();
@@ -180,8 +187,18 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayer.setVideoSurface(videoSurface);
 		mediaPlayerComponent.setVideoSurface(videoSurface);
 
-		// TODO
-		// setFullScreenStrategy(frame);
+		JPanel mediaPlayerContainerPan = new JPanel();
+		mediaPlayerContainerPan.setLayout(new BorderLayout());
+		JPanel bufferingPanelCOntainer = new JPanel();
+		bufferingPanelCOntainer.setLayout(new BorderLayout());
+		bufferingPanelCOntainer.add(buffPan, BorderLayout.CENTER);
+		mediaPlayerContainerPan.add(mediaPlayerComponent, BorderLayout.CENTER);
+		mediaPlayerContainerPan.add(controlPanel, BorderLayout.SOUTH);
+		cards.setLayout(new CardLayout());
+
+		cards.add(mediaPlayerContainerPan, CARD_PLAYER);
+		cards.add(bufferingPanelCOntainer, CARD_BUFFER_TORRENT);
+		this.add(cards, BorderLayout.CENTER);
 
 		initActionListners();
 		this.addWatcher(controlPanel);
@@ -259,26 +276,15 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	}
 
 	public void setPlayerView() {
-		try {
-			this.removeAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.add(mediaPlayerComponent, BorderLayout.CENTER);
-		this.add(controlPanel, BorderLayout.SOUTH);
-		this.revalidate();
-		controlPanel.repaint();
+		CardLayout cl = (CardLayout) (cards.getLayout());
+		cl.show(cards, CARD_PLAYER);
+		repaint();
 	}
 
 	public void setBufferingView() {
-		try {
-			this.removeAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.add(buffPan, BorderLayout.CENTER);
-		this.revalidate();
-		buffPan.repaint();
+		CardLayout cl = (CardLayout) (cards.getLayout());
+		cl.show(cards, CARD_BUFFER_TORRENT);
+		repaint();
 	}
 
 	/*
@@ -752,7 +758,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	}
 
 	/**
-	 * 
+	 * this is called from Progress Bar
 	 */
 	private void setTime() {
 		// TODO Auto-generated method stub
@@ -1047,11 +1053,7 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	@Override
 	public synchronized void timeChanged(
 			uk.co.caprica.vlcj.player.MediaPlayer arg0, long arg1) {
-		// long mili = arg0.getTime();
-		// int minutes = (int) ((mili/60));.
 		int seconds = (int) (mediaPlayerComponent.getMediaPlayer().getTime() / 1000);
-		// App.LOGGER.info("total time is  "+mediaPlayerComponent.getMediaPlayer().getLength());
-		// App.LOGGER.info("current time is  "+mediaPlayerComponent.getMediaPlayer().getTime());
 		controlPanel.getProgress().setValue(seconds);
 		controlPanel.getCurrentTimeLab().setText(
 				TimeUtils.getLabelFormatedTime(mediaPlayerComponent
@@ -1092,7 +1094,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	private void getSubtitle(YifyMovieTorrent arg) {
 		// TODO
 		try {
-			// remove any previous entries
 			boolean defaultSubSelected = false;
 			List<SubtitleInfo> list1 = SubtitleFetcher.getSubtitleList(arg
 					.getMovie(),
@@ -1251,14 +1252,14 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	 * .lordroid.cupcake.yify.YifyTorrent)
 	 */
 	@Override
-	public void setMediaFromYifyTorrent(YifyMovieTorrent yifyTorrent) {
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
 		this.currentlyPlayingSource = SOURCE_YIFY_TORRENT;
-		TorrentStartedPlaying = false;
-		this.torrent = yifyTorrent;
-		torrent.start(this);
 		this.setBufferingView();
+		this.torrent = new YifyMovieTorrent(yifyMovie, -1);
+		TorrentStartedPlaying = false;
 		removeAllSubtitleItems();
 		rebuildSubGroupButtons();
+		torrent.start(this);
 		torrentStartTime = System.currentTimeMillis();
 	}
 

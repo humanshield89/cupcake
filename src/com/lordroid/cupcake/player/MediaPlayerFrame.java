@@ -24,7 +24,7 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import com.lordroid.cupcake.bt.YifyMovieTorrent;
+import com.lordroid.cupcake.yify.YifyMovie;
 
 /**
  * @author HumanShield85
@@ -94,7 +94,7 @@ public class MediaPlayerFrame extends JFrame implements MediaPlayerImp {
 	 * .lordroid.cupcake.yify.YifyTorrent)
 	 */
 	@Override
-	public void setMediaFromYifyTorrent(YifyMovieTorrent yifyTorrent) {
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
 		// TODO Auto-generated method stub
 
 	}

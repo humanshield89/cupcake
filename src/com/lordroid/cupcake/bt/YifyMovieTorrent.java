@@ -114,7 +114,7 @@ public class YifyMovieTorrent implements Runnable {
 
 	public void start(Consumer<TorrentSessionState> watcher) {
 		this.watcher = watcher;
-		run();
+		new Thread(this).start();
 	}
 
 	@Override
@@ -133,12 +133,19 @@ public class YifyMovieTorrent implements Runnable {
 
 		Storage storage = new FileSystemStorage(downloadFolder.toPath());
 		try {
+			// client = Bt.client().config(config).storage(storage)
+			// .torrent(new URL(yiFyTorrent.getUrl())).autoLoadModules()
+			// .module(dhtModule).module(customModule)
+			// .stopWhenDownloaded().sequentialSelector().build();
+			// client.startAsync(watcher, 1000L);
+			// TODO try this
 			client = Bt.client().config(config).storage(storage)
 					.torrent(new URL(yiFyTorrent.getUrl())).autoLoadModules()
 					.module(dhtModule).module(customModule)
-					.stopWhenDownloaded().sequentialSelector().build();
+					.stopWhenDownloaded()
+					.selector(MyPeiceSelector.sequential()).build();
 			client.startAsync(watcher, 1000L);
-
+			// Bt.client().selector(MyPeiceSelector.sequential());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			// mostly because the url isn't good

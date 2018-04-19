@@ -226,7 +226,6 @@ public class YifyMovie {
 						isBGCached = true;
 					}
 					isBGBEingCached = false;
-					System.out.println("End Time " + System.currentTimeMillis());
 				}
 			}).start();
 		}
@@ -241,7 +240,6 @@ public class YifyMovie {
 				@Override
 				public void run() {
 					isCoverMediumBeingCached = true;
-					// TODO Auto-generated method stub medium-cover.jpg
 					isCoverMediumCached = new File(ImgtmpFolder
 							.getAbsolutePath()
 							+ File.separator

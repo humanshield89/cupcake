@@ -20,7 +20,7 @@ package com.lordroid.cupcake.player;
 
 import java.io.File;
 
-import com.lordroid.cupcake.bt.YifyMovieTorrent;
+import com.lordroid.cupcake.yify.YifyMovie;
 
 /**
  * @author HumanShield85
@@ -34,7 +34,7 @@ public interface MediaPlayerImp {
 	 * @param yifyTorrent
 	 *            the Yify torrent that will be played on the player
 	 */
-	public void setMediaFromYifyTorrent(YifyMovieTorrent yifyTorrent);
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie);
 
 	/**
 	 * 

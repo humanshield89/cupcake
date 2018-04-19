@@ -139,10 +139,10 @@ public class MainFram extends JFrame implements ActionListener {
 				// + movie.getId() + " Action value is : " + action);
 				if (action == MovieItem.PLAY_ACTION) {
 					// initPlayerView();
-					mediaPlayerFrame.myMediaPlayer
-							.setMediaFromYifyTorrent(new YifyMovieTorrent(
-									movie, -1));
 					OpenMediaPlayer();
+					mediaPlayerFrame.myMediaPlayer
+							.setMediaFromYifyTorrent(movie);
+
 				} else if (action == MovieItem.LATER_ACTION) {
 					// initPlayerView();
 					// player.setYoutube(movie.getYoutubeTrailerURL());
@@ -235,11 +235,13 @@ public class MainFram extends JFrame implements ActionListener {
 	}
 
 	public void OpenMediaPlayer() {
+
 		playerViewMenuItem.setEnabled(false);
 		MovieListViewMenuItem.setEnabled(true);
 		CardLayout cl = (CardLayout) (CardContentPan.getLayout());
 		cl.show(CardContentPan, PLAYER_CARD_NAME);
 		mediaPlayerFrame.myMediaPlayer.setFullScreenStrategy(this);
+
 	}
 
 	@Override

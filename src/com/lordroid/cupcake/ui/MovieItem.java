@@ -117,12 +117,9 @@ public class MovieItem extends JPanel implements MouseListener,
 	private JLabel lab1080p = new JLabel(new ImageIcon(R.QUALITY_1080P));
 	private JLabel lab3d = new JLabel(new ImageIcon(R.QUALITY_3D));
 
-	// private PlayNowBtn playNowbtn = new PlayNowBtn();
 	private MovieItemButton[] itemButtons = { new MovieItemButton(0),
 			new MovieItemButton(1), new MovieItemButton(2) };
-	// private JLabel ratingIcon ;
 
-	// private final int infoPanHoveredX;
 	private final int infoPanHoveredY;
 
 	public MovieItem(YifyMovie moviearg) {
@@ -282,7 +279,6 @@ public class MovieItem extends JPanel implements MouseListener,
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		if (!this.isImageCached) {
-			System.out.println("updating image");
 			try {
 				coverImage = ImageIO.read(movie.getCoverImageFileMedium());
 				isImageCached = true;
@@ -294,12 +290,9 @@ public class MovieItem extends JPanel implements MouseListener,
 		}
 		if (isImageCached) {
 			if (!isBluredCached) {
-				long start = System.currentTimeMillis();
 				blurryImage = new GaussianFilter(10).filter(coverImage,
 						blurryImage);
 				isBluredCached = true;
-				long end = System.currentTimeMillis();
-				System.out.println("total bluring time = " + (end - start));
 			}
 		}
 
