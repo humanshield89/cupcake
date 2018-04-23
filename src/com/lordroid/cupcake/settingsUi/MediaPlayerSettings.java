@@ -128,8 +128,13 @@ public class MediaPlayerSettings extends SettingsPaneImpl {
 	}
 
 	@Override
-	public void loadDefaultSettings() {
-		// TODO Auto-generated method stub
+	public void ApplySettings() {
+		Settings.setDefaultSubtittleEncoding(subtileEncodingCombo
+				.getSelectedIndex());
+		Settings.setLoadOsSubtitles(enableOs.isSelected());
+		Settings.setSubtitlesLang1(lang1Combo.getSelectedIndex());
+		Settings.setSubtitlesLang2(lang2Combo.getSelectedIndex());
+		Settings.setSubtitlesLang3(lang3Combo.getSelectedIndex());
 
 	}
 
@@ -148,13 +153,8 @@ public class MediaPlayerSettings extends SettingsPaneImpl {
 	}
 
 	@Override
-	public void ApplySettings() {
-		Settings.setDefaultSubtittleEncoding(subtileEncodingCombo
-				.getSelectedIndex());
-		Settings.setLoadOsSubtitles(enableOs.isSelected());
-		Settings.setSubtitlesLang1(lang1Combo.getSelectedIndex());
-		Settings.setSubtitlesLang2(lang2Combo.getSelectedIndex());
-		Settings.setSubtitlesLang3(lang3Combo.getSelectedIndex());
+	public void loadDefaultSettings() {
+		// TODO Auto-generated method stub
 
 	}
 

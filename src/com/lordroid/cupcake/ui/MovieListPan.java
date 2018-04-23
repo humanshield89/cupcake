@@ -233,8 +233,40 @@ public class MovieListPan extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public boolean isFocusTraversable() {
-		return true;
+	public void actionPerformed(ActionEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getSource().equals(searchBtn)) {
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					search();
+				}
+
+			}).start();
+		} else if (event.getSource().equals(loadMoreBtn)) {
+
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					loadMoreBtn.setVisible(false);
+					getNextPage();
+					loadMoreBtn.setVisible(true);
+				}
+
+			}).start();
+		}
+	}
+
+	private void addMovieItem(JSONObject obj) {
+		MovieItem mv = new MovieItem(new YifyMovie(obj));
+		mv.addListPanWatcher(listWatcher);
+		mv.addListPanWatcher(this);
+		movieListContainer.add(new MovieShadowPan(mv));
+		moviesList.add(mv);
 	}
 
 	private synchronized void getNextPage() {
@@ -309,24 +341,129 @@ public class MovieListPan extends JPanel implements ActionListener,
 
 	}
 
-	private void addMovieItem(JSONObject obj) {
-		MovieItem mv = new MovieItem(new YifyMovie(obj));
-		mv.addListPanWatcher(listWatcher);
-		mv.addListPanWatcher(this);
-		movieListContainer.add(new MovieShadowPan(mv));
-		moviesList.add(mv);
+	private int getNumberOfItemInRow() {
+		int width = movieListContainer.getWidth();
+		// int height = movieListContainer.getHeight();
+
+		return width / 260;
+
 	}
 
-	private void noResults() {
-		// TODO Auto-generated method stub
-		movieListContainer.add(this.noResult);
-		this.searchBtn.setEnabled(true);
+	@Override
+	public boolean isFocusTraversable() {
+		return true;
 	}
 
-	private void noResponse() {
+	@Override
+	public void ItemSelected(MovieItem movieItem) {
 		// TODO Auto-generated method stub
-		movieListContainer.add(this.noResponse);
-		this.searchBtn.setEnabled(true);
+		try {
+			moviesList.get(currentlySelected).setSelected(false);
+		} catch (Exception e) {
+
+		}
+		currentlySelected = moviesList.indexOf(movieItem);
+		movieItem.setSelected(true);
+		// TODO : switch to debug on release
+		App.LOGGER.info("currently sellected is " + currentlySelected
+				+ "  Max index is " + moviesList.size());
+		this.requestFocus();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		App.LOGGER.debug("Key Event   : " + arg0.getKeyCode());
+		// make sure we don't fuck up :p
+		if (arg0.getSource().equals(searchField)) {
+			return;
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
+			App.LOGGER.info("Arrow key up presssed ");
+			NavigateTo(-getNumberOfItemInRow());
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+			App.LOGGER.info("Arrow key down presssed ");
+			NavigateTo(getNumberOfItemInRow());
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			App.LOGGER.info("Arrow key right presssed ");
+			NavigateTo(1);
+
+		} else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			App.LOGGER.info("Arrow key left presssed ");
+			NavigateTo(-1);
+		} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (currentlySelected < moviesList.size())
+				listWatcher.ListActionPerformed(
+						moviesList.get(currentlySelected).getMovie(),
+						Settings.getDefaultEnterOperation());
+			if (currentlySelected == moviesList.size()) {
+				this.actionPerformed(new ActionEvent(loadMoreBtn,
+						ActionEvent.ACTION_PERFORMED, "update"));
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		if (arg0.getSource().equals(searchField)) {
+			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+				this.actionPerformed(new ActionEvent(searchBtn,
+						ActionEvent.ACTION_PERFORMED, "search"));
+				App.LOGGER.info("Key Event   : " + arg0.getKeyCode());
+
+			}
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void ListActionPerformed(YifyMovie movie, int action) {
+		// TODO Auto-generated method stub
+		// DO nothing here
+	}
+
+	private void NavigateTo(int increment) {
+		// TODO : maybe there is better ways to do this my man
+		int inc = increment;
+		if (this.currentlySelected == -999) {
+			currentlySelected = 0;
+			inc = 0;
+		}
+		if (currentlySelected + inc >= moviesList.size()
+				|| currentlySelected + inc < 0) {
+			if (currentlySelected + inc >= moviesList.size()) {
+				if (currentlySelected < moviesList.size())
+					moviesList.get(currentlySelected).setSelected(false);
+				loadMoreBtn.setSelected(true);
+				loadMoreBtn.requestFocus();
+				currentlySelected = moviesList.size();
+			}
+		} else {
+			if (currentlySelected < moviesList.size())
+				moviesList.get(currentlySelected).setSelected(false);
+			else
+				loadMoreBtn.setSelected(false);
+
+			currentlySelected = currentlySelected + inc;
+			moviesList.get(currentlySelected).setSelected(true);
+			this.requestFocus();
+		}
+		double rowsPerView = (scrollPan.getViewport().getHeight() / 385.0) - 1;
+		JScrollBar vertical = scrollPan.getVerticalScrollBar();
+		int newValue = (int) ((((double) (currentlySelected / getNumberOfItemInRow())) * 385) - (385 * rowsPerView) / 2);
+		vertical.setValue(newValue);
+		// TODO
+		App.LOGGER.info("currently sellected is " + currentlySelected
+				+ "  Max index is " + moviesList.size());
+
 	}
 
 	private void noMoreEntries() {
@@ -335,6 +472,18 @@ public class MovieListPan extends JPanel implements ActionListener,
 				.getWidth() / 2, 40));
 		noMoreentriesLab.setFont(new Font("Aril", Font.BOLD, 25));
 		movieListContainer.add(noMoreentriesLab);
+	}
+
+	private void noResponse() {
+		// TODO Auto-generated method stub
+		movieListContainer.add(this.noResponse);
+		this.searchBtn.setEnabled(true);
+	}
+
+	private void noResults() {
+		// TODO Auto-generated method stub
+		movieListContainer.add(this.noResult);
+		this.searchBtn.setEnabled(true);
 	}
 
 	public void search() {
@@ -419,155 +568,6 @@ public class MovieListPan extends JPanel implements ActionListener,
 		}
 		this.searchBtn.setEnabled(true);
 		this.currentlySelected = -999;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		// TODO Auto-generated method stub
-		if (event.getSource().equals(searchBtn)) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					search();
-				}
-
-			}).start();
-		} else if (event.getSource().equals(loadMoreBtn)) {
-
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					loadMoreBtn.setVisible(false);
-					getNextPage();
-					loadMoreBtn.setVisible(true);
-				}
-
-			}).start();
-		}
-	}
-
-	private int getNumberOfItemInRow() {
-		int width = movieListContainer.getWidth();
-		// int height = movieListContainer.getHeight();
-
-		return width / 260;
-
-	}
-
-	private void NavigateTo(int increment) {
-		// TODO : maybe there is better ways to do this my man
-		int inc = increment;
-		if (this.currentlySelected == -999) {
-			currentlySelected = 0;
-			inc = 0;
-		}
-		if (currentlySelected + inc >= moviesList.size()
-				|| currentlySelected + inc < 0) {
-			if (currentlySelected + inc >= moviesList.size()) {
-				if (currentlySelected < moviesList.size())
-					moviesList.get(currentlySelected).setSelected(false);
-				loadMoreBtn.setSelected(true);
-				loadMoreBtn.requestFocus();
-				currentlySelected = moviesList.size();
-			}
-		} else {
-			if (currentlySelected < moviesList.size())
-				moviesList.get(currentlySelected).setSelected(false);
-			else
-				loadMoreBtn.setSelected(false);
-
-			currentlySelected = currentlySelected + inc;
-			moviesList.get(currentlySelected).setSelected(true);
-			this.requestFocus();
-		}
-		double rowsPerView = (scrollPan.getViewport().getHeight() / 385.0) - 1;
-		JScrollBar vertical = scrollPan.getVerticalScrollBar();
-		int newValue = (int) ((((double) (currentlySelected / getNumberOfItemInRow())) * 385) - (385 * rowsPerView) / 2);
-		vertical.setValue(newValue);
-		// TODO
-		App.LOGGER.info("currently sellected is " + currentlySelected
-				+ "  Max index is " + moviesList.size());
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		App.LOGGER.debug("Key Event   : " + arg0.getKeyCode());
-		// make sure we don't fuck up :p
-		if (arg0.getSource().equals(searchField)) {
-			return;
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
-			App.LOGGER.info("Arrow key up presssed ");
-			NavigateTo(-getNumberOfItemInRow());
-
-		} else if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
-			App.LOGGER.info("Arrow key down presssed ");
-			NavigateTo(getNumberOfItemInRow());
-
-		} else if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
-			App.LOGGER.info("Arrow key right presssed ");
-			NavigateTo(1);
-
-		} else if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
-			App.LOGGER.info("Arrow key left presssed ");
-			NavigateTo(-1);
-		} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (currentlySelected < moviesList.size())
-				listWatcher.ListActionPerformed(
-						moviesList.get(currentlySelected).getMovie(),
-						Settings.getDefaultEnterOperation());
-			if (currentlySelected == moviesList.size()) {
-				this.actionPerformed(new ActionEvent(loadMoreBtn,
-						ActionEvent.ACTION_PERFORMED, "update"));
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		if (arg0.getSource().equals(searchField)) {
-			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-				this.actionPerformed(new ActionEvent(searchBtn,
-						ActionEvent.ACTION_PERFORMED, "search"));
-				App.LOGGER.info("Key Event   : " + arg0.getKeyCode());
-
-			}
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void ListActionPerformed(YifyMovie movie, int action) {
-		// TODO Auto-generated method stub
-		// DO nothing here
-	}
-
-	@Override
-	public void ItemSelected(MovieItem movieItem) {
-		// TODO Auto-generated method stub
-		try {
-			moviesList.get(currentlySelected).setSelected(false);
-		} catch (Exception e) {
-
-		}
-		currentlySelected = moviesList.indexOf(movieItem);
-		movieItem.setSelected(true);
-		// TODO : switch to debug on release
-		App.LOGGER.info("currently sellected is " + currentlySelected
-				+ "  Max index is " + moviesList.size());
-		this.requestFocus();
 	}
 
 }

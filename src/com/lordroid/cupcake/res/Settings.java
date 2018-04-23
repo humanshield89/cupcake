@@ -137,35 +137,94 @@ public class Settings {
 
 	/**
 	 * 
-	 * @param bool
+	 * @return
 	 */
-	public static void setautoLoadSubtitles(boolean bool) {
-		int i = 0;
-		if (bool)
-			i = 1;
-		PropReader.writeProp("AutoLoadSubtitles", i + "", S.CONFIG_FILE);
-		AutoLoadSubtitles = i;
+	public static String getCurrentDefaultPlayQuality() {
+
+		return DEFAULT_PLAY_QUALITY[CurrentDefaultPlayQuality];
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static boolean LoadOsSubtitles() {
-
-		return LoadOsSubtitles == 1;
+	public static int getCurrentGenre() {
+		return CurrentGenre;
 	}
 
 	/**
 	 * 
-	 * @param bool
+	 * @return
 	 */
-	public static void setLoadOsSubtitles(boolean bool) {
-		int i = 0;
-		if (bool)
-			i = 1;
-		PropReader.writeProp("LoadOsSubtitles", i + "", S.CONFIG_FILE);
-		AutoLoadSubtitles = i;
+	public static long getCurrentMaxCacheSize() {
+		return currentMaxCacheSize;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getCurrentMinimumRating() {
+		return currentMiniRating;
+	}
+
+	/**
+	 * 
+	 * @return indexOfCurrentOrder
+	 */
+	public static int getCurrentOrder() {
+		return CurrentOrder;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getCurrentQuality() {
+		return CurrentFilterQuality;
+	}
+
+	/**
+	 * 
+	 * @return currentSortBy
+	 */
+	public static int getCurrentSortBy() {
+		return currentSortBy;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getCurrentVolume() {
+		return CurrentVolume;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getDefaultEnterOperation() {
+
+		return DefaultEnterOperation;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static String getDefaultSubtittleEncoding() {
+		// TODO
+		return SUB_ENCODING[DefaultSubtittleEncoding];
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getDefaultSubtittleEncodingIndex() {
+		// TODO
+		return DefaultSubtittleEncoding;
 	}
 
 	/**
@@ -176,6 +235,30 @@ public class Settings {
 		// Integer i = new Integer(PropReader.getProp("GuiLanguage",
 		// S.CONFIG_FILE));
 		return GuiLanguage;
+	}
+
+	/**
+	 * 
+	 * @return maxSearchIndex
+	 */
+	public static int getMaxSearchItemsPerPage() {
+		return MaxSearchItemsPerPage;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getParentalWarningLvl() {
+		return ParentalWarningLvl;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getRememberFiltersOnStartup() {
+		return RememberFiltersOnStartup;
 	}
 
 	/**
@@ -205,166 +288,23 @@ public class Settings {
 
 	/**
 	 * 
-	 * @param size
-	 */
-	public static void setCurrentMaxCacheSize(long size) {
-		PropReader.writeProp("CurrentMaxCacheSize", size + "", S.CONFIG_FILE);
-		currentMaxCacheSize = size;
-	}
-
-	public static void setDefaultEnterOperation(int i) {
-		PropReader.writeProp("DefaultEnterOperation", i + "", S.CONFIG_FILE);
-		DefaultEnterOperation = i;
-	}
-
-	/**
-	 * 
 	 * @return
 	 */
-	public static long getCurrentMaxCacheSize() {
-		return currentMaxCacheSize;
+	public static boolean LoadOsSubtitles() {
+
+		return LoadOsSubtitles == 1;
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @param bool
 	 */
-	public static int getCurrentQuality() {
-		return CurrentFilterQuality;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getCurrentMinimumRating() {
-		return currentMiniRating;
-	}
-
-	/**
-	 * 
-	 * @return currentSortBy
-	 */
-	public static int getCurrentSortBy() {
-		return currentSortBy;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getCurrentGenre() {
-		return CurrentGenre;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static String getCurrentDefaultPlayQuality() {
-
-		return DEFAULT_PLAY_QUALITY[CurrentDefaultPlayQuality];
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getDefaultSubtittleEncodingIndex() {
-		// TODO
-		return DefaultSubtittleEncoding;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static String getDefaultSubtittleEncoding() {
-		// TODO
-		return SUB_ENCODING[DefaultSubtittleEncoding];
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getCurrentVolume() {
-		return CurrentVolume;
-	}
-
-	/**
-	 * 
-	 * @return maxSearchIndex
-	 */
-	public static int getMaxSearchItemsPerPage() {
-		return MaxSearchItemsPerPage;
-	}
-
-	/**
-	 * 
-	 * @return indexOfCurrentOrder
-	 */
-	public static int getCurrentOrder() {
-		return CurrentOrder;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getDefaultEnterOperation() {
-
-		return DefaultEnterOperation;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getRememberFiltersOnStartup() {
-		return RememberFiltersOnStartup;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static int getParentalWarningLvl() {
-		return ParentalWarningLvl;
-	}
-
-	public static void setParentalWarningLvl(int lvl) {
-
-		PropReader.writeProp("ParentalWarningLvl", lvl + "", S.CONFIG_FILE);
-		ParentalWarningLvl = lvl;
-	}
-
-	/**
-	 * 
-	 * @param i
-	 */
-	public static void setCurrentVolume(int i) {
-		PropReader.writeProp("CurrentVolume", i + "", S.CONFIG_FILE);
-		CurrentVolume = i;
-	}
-
-	/**
-	 * 
-	 * @param quality
-	 */
-	public static void setCurrentQuality(int quality) {
-		PropReader.writeProp("CurrentFilterQuality", quality + "",
-				S.CONFIG_FILE);
-		CurrentFilterQuality = quality;
-	}
-
-	/**
-	 * 
-	 * @param sortBy
-	 */
-	public static void setCurrentSortBy(int sortBy) {
-		PropReader.writeProp("currentSortBy", sortBy + "", S.CONFIG_FILE);
-		currentSortBy = sortBy;
+	public static void setautoLoadSubtitles(boolean bool) {
+		int i = 0;
+		if (bool)
+			i = 1;
+		PropReader.writeProp("AutoLoadSubtitles", i + "", S.CONFIG_FILE);
+		AutoLoadSubtitles = i;
 	}
 
 	/**
@@ -374,6 +314,15 @@ public class Settings {
 	public static void setCurrentGenre(int genre) {
 		PropReader.writeProp("CurrentGenre", genre + "", S.CONFIG_FILE);
 		CurrentGenre = genre;
+	}
+
+	/**
+	 * 
+	 * @param size
+	 */
+	public static void setCurrentMaxCacheSize(long size) {
+		PropReader.writeProp("CurrentMaxCacheSize", size + "", S.CONFIG_FILE);
+		currentMaxCacheSize = size;
 	}
 
 	/**
@@ -397,12 +346,104 @@ public class Settings {
 
 	/**
 	 * 
+	 * @param quality
+	 */
+	public static void setCurrentQuality(int quality) {
+		PropReader.writeProp("CurrentFilterQuality", quality + "",
+				S.CONFIG_FILE);
+		CurrentFilterQuality = quality;
+	}
+
+	/**
+	 * 
+	 * @param sortBy
+	 */
+	public static void setCurrentSortBy(int sortBy) {
+		PropReader.writeProp("currentSortBy", sortBy + "", S.CONFIG_FILE);
+		currentSortBy = sortBy;
+	}
+
+	/**
+	 * 
+	 * @param i
+	 */
+	public static void setCurrentVolume(int i) {
+		PropReader.writeProp("CurrentVolume", i + "", S.CONFIG_FILE);
+		CurrentVolume = i;
+	}
+
+	public static void setDefaultEnterOperation(int i) {
+		PropReader.writeProp("DefaultEnterOperation", i + "", S.CONFIG_FILE);
+		DefaultEnterOperation = i;
+	}
+
+	/**
+	 * 
 	 * @param index
 	 */
 	public static void setDefaultPlayQuality(int index) {
 		PropReader.writeProp("CurrentDefaultPlayQuality", index + "",
 				S.CONFIG_FILE);
 		CurrentDefaultPlayQuality = index;
+	}
+
+	/**
+	 * 
+	 * @param index
+	 */
+	public static void setDefaultSubtittleEncoding(int index) {
+		// TODO
+		PropReader.writeProp("DefaultSubtittleEncoding", index + "",
+				S.CONFIG_FILE);
+		DefaultSubtittleEncoding = index;
+	}
+
+	/**
+	 * 
+	 * @param langIndex
+	 */
+	public static void setGuiLanugage(int langIndex) {
+		PropReader.writeProp("GuiLanguage", langIndex + "", S.CONFIG_FILE);
+		GuiLanguage = langIndex;
+	}
+
+	/**
+	 * 
+	 * @param bool
+	 */
+	public static void setLoadOsSubtitles(boolean bool) {
+		int i = 0;
+		if (bool)
+			i = 1;
+		PropReader.writeProp("LoadOsSubtitles", i + "", S.CONFIG_FILE);
+		AutoLoadSubtitles = i;
+	}
+
+	/**
+	 * 
+	 * @param index
+	 */
+	public static void setMaxSearchItemsPerPage(int index) {
+
+		PropReader
+				.writeProp("MaxSearchItemsPerPage", index + "", S.CONFIG_FILE);
+		MaxSearchItemsPerPage = index;
+	}
+
+	public static void setParentalWarningLvl(int lvl) {
+
+		PropReader.writeProp("ParentalWarningLvl", lvl + "", S.CONFIG_FILE);
+		ParentalWarningLvl = lvl;
+	}
+
+	/**
+	 * 
+	 * @param index
+	 */
+	public static void setRememberFiltersOnStartup(int index) {
+		PropReader.writeProp("RememberFiltersOnStartup", index + "",
+				S.CONFIG_FILE);
+		RememberFiltersOnStartup = index;
 	}
 
 	/**
@@ -431,47 +472,6 @@ public class Settings {
 	public static void setSubtitlesLang3(int langIndex) {
 		PropReader.writeProp("SubtitleLang3", langIndex + "", S.CONFIG_FILE);
 		SubtitleLang3 = langIndex;
-	}
-
-	/**
-	 * 
-	 * @param index
-	 */
-	public static void setDefaultSubtittleEncoding(int index) {
-		// TODO
-		PropReader.writeProp("DefaultSubtittleEncoding", index + "",
-				S.CONFIG_FILE);
-		DefaultSubtittleEncoding = index;
-	}
-
-	/**
-	 * 
-	 * @param langIndex
-	 */
-	public static void setGuiLanugage(int langIndex) {
-		PropReader.writeProp("GuiLanguage", langIndex + "", S.CONFIG_FILE);
-		GuiLanguage = langIndex;
-	}
-
-	/**
-	 * 
-	 * @param index
-	 */
-	public static void setMaxSearchItemsPerPage(int index) {
-
-		PropReader
-				.writeProp("MaxSearchItemsPerPage", index + "", S.CONFIG_FILE);
-		MaxSearchItemsPerPage = index;
-	}
-
-	/**
-	 * 
-	 * @param index
-	 */
-	public static void setRememberFiltersOnStartup(int index) {
-		PropReader.writeProp("RememberFiltersOnStartup", index + "",
-				S.CONFIG_FILE);
-		RememberFiltersOnStartup = index;
 	}
 
 }

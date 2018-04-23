@@ -41,16 +41,6 @@ public class LoadMoreLab extends JButton implements MouseListener {
 	}
 
 	@Override
-	public void setSelected(boolean bool) {
-		super.setSelected(bool);
-		if (bool)
-			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK_HOVERED));
-		else
-			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK));
-
-	}
-
-	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
@@ -81,6 +71,16 @@ public class LoadMoreLab extends JButton implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		this.setIcon(new ImageIcon(R.LOAD_MORE_BACK_HOVERED));
+	}
+
+	@Override
+	public void setSelected(boolean bool) {
+		super.setSelected(bool);
+		if (bool)
+			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK_HOVERED));
+		else
+			this.setIcon(new ImageIcon(R.LOAD_MORE_BACK));
+
 	}
 
 }

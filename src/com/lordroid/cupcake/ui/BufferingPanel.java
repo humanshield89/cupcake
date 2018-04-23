@@ -29,34 +29,6 @@ import com.alee.laf.progressbar.WebProgressBar;
 @SuppressWarnings("serial")
 public class BufferingPanel extends JPanel {
 
-	/**
-	 * @return the peersLab
-	 */
-	public JLabel getPeersLab() {
-		return peersLab;
-	}
-
-	/**
-	 * @return the currentDownSpeed
-	 */
-	public JLabel getCurrentDownSpeed() {
-		return currentDownSpeed;
-	}
-
-	/**
-	 * @return the buffred
-	 */
-	public JLabel getBuffred() {
-		return buffred;
-	}
-
-	/**
-	 * @return the progress
-	 */
-	public WebProgressBar getProgress() {
-		return progress;
-	}
-
 	private JLabel peersLab = new JLabel("0") {
 
 		@Override
@@ -77,13 +49,16 @@ public class BufferingPanel extends JPanel {
 			super.setText("Average Speed : " + str + " KB/S");
 		}
 	};
+
 	private JLabel buffred = new JLabel("0") {
 		@Override
 		public void setText(String text) {
 			super.setText("Buffred : " + text + " MB");
 		}
 	};
+
 	private WebProgressBar progress = new WebProgressBar();
+
 	private JPanel labelContainer = new JPanel();
 
 	public BufferingPanel() {
@@ -99,6 +74,31 @@ public class BufferingPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.add(progress, BorderLayout.CENTER);
 		this.add(labelContainer, BorderLayout.SOUTH);
+	}
+	/**
+	 * @return the buffred
+	 */
+	public JLabel getBuffred() {
+		return buffred;
+	}
+	/**
+	 * @return the currentDownSpeed
+	 */
+	public JLabel getCurrentDownSpeed() {
+		return currentDownSpeed;
+	}
+	/**
+	 * @return the peersLab
+	 */
+	public JLabel getPeersLab() {
+		return peersLab;
+	}
+
+	/**
+	 * @return the progress
+	 */
+	public WebProgressBar getProgress() {
+		return progress;
 	}
 
 	public void resetValues() {

@@ -19,7 +19,6 @@
 package com.lordroid.cupcake;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -45,16 +44,6 @@ import de.sciss.submin.Submin;
 public class App {
 	public static Logger LOGGER = LoggerFactory.getLogger(App.class);
 
-	private static void setSysPropreties() {
-		System.setProperty(
-				"http.agent",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-		// WebLookAndFeel.install();
-		// WebLookAndFeel.initializeManagers();
-		Submin.install(true);
-
-	}
-
 	private static boolean initVlcJ() {
 		String ourLocation = PathUtils.getExcutionPath();
 		System.setProperty("VLC_PLUGIN_PATH", new File(ourLocation
@@ -74,8 +63,7 @@ public class App {
 		return true;
 	}
 
-	public static void main(String[] args) throws IOException,
-			InterruptedException {
+	public static void main(String[] args) {
 		if (args != null && args.length > 0)
 			System.out.println(args[0]);
 		setSysPropreties();
@@ -92,13 +80,19 @@ public class App {
 				JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 				MainFram frame = new MainFram();
 
-				// frame.getContentPane().revalidate();
-
-				// frame.movieListPan.revalidate();
-				// frame.movieListPan.search();
 			}
 
 		});
+
+	}
+
+	private static void setSysPropreties() {
+		System.setProperty(
+				"http.agent",
+				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
+		// WebLookAndFeel.install();
+		// WebLookAndFeel.initializeManagers();
+		Submin.install(true);
 
 	}
 

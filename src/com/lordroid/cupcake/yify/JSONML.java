@@ -288,6 +288,25 @@ public class JSONML {
 	 * JSONArray in which the first element is the tag name. If the tag has
 	 * attributes, then the second element will be JSONObject containing the
 	 * name/value pairs. If the tag contains children, then strings and
+	 * JSONArrays will represent the child content and tags. Comments, prologs,
+	 * DTDs, and <code>&lt;[ [ ]]></code> are ignored.
+	 * 
+	 * @param x
+	 *            An XMLTokener.
+	 * @return A JSONArray containing the structured data from the XML string.
+	 * @throws JSONException
+	 *             Thrown on error converting to a JSONArray
+	 */
+	public static JSONArray toJSONArray(XMLTokener x) throws JSONException {
+		return (JSONArray) parse(x, true, null, false);
+	}
+
+	/**
+	 * Convert a well-formed (but not necessarily valid) XML string into a
+	 * JSONArray using the JsonML transform. Each XML tag is represented as a
+	 * JSONArray in which the first element is the tag name. If the tag has
+	 * attributes, then the second element will be JSONObject containing the
+	 * name/value pairs. If the tag contains children, then strings and
 	 * JSONArrays will represent the child content and tags. As opposed to
 	 * toJSONArray this method does not attempt to convert any text node or
 	 * attribute value to any type but just leaves it as a string. Comments,
@@ -305,25 +324,6 @@ public class JSONML {
 	public static JSONArray toJSONArray(XMLTokener x, boolean keepStrings)
 			throws JSONException {
 		return (JSONArray) parse(x, true, null, keepStrings);
-	}
-
-	/**
-	 * Convert a well-formed (but not necessarily valid) XML string into a
-	 * JSONArray using the JsonML transform. Each XML tag is represented as a
-	 * JSONArray in which the first element is the tag name. If the tag has
-	 * attributes, then the second element will be JSONObject containing the
-	 * name/value pairs. If the tag contains children, then strings and
-	 * JSONArrays will represent the child content and tags. Comments, prologs,
-	 * DTDs, and <code>&lt;[ [ ]]></code> are ignored.
-	 * 
-	 * @param x
-	 *            An XMLTokener.
-	 * @return A JSONArray containing the structured data from the XML string.
-	 * @throws JSONException
-	 *             Thrown on error converting to a JSONArray
-	 */
-	public static JSONArray toJSONArray(XMLTokener x) throws JSONException {
-		return (JSONArray) parse(x, true, null, false);
 	}
 
 	/**

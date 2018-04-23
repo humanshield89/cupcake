@@ -63,18 +63,14 @@ public class YifyMovieTorrent implements Runnable {
 	private final YifyTorrent yiFyTorrent;
 	private final YifyMovie movie;
 
-	/**
-	 * @return the yiFyTorrent
-	 */
-	public YifyTorrent getYiFyTorrent() {
-		return yiFyTorrent;
-	}
+	private final File downloadFolder;
 
-	/**
-	 * @return the movie
-	 */
-	public YifyMovie getMovie() {
-		return movie;
+	// components
+	public YifyMovieTorrent(YifyMovie movieArg, int quality) {
+		this.movie = movieArg;
+		this.yiFyTorrent = movie.getTorrent(quality);
+		downloadFolder = movie.getDownlodFolder();
+
 	}
 
 	/**
@@ -84,14 +80,11 @@ public class YifyMovieTorrent implements Runnable {
 		return downloadFolder;
 	}
 
-	private final File downloadFolder;
-
-	// components
-	public YifyMovieTorrent(YifyMovie movieArg, int quality) {
-		this.movie = movieArg;
-		this.yiFyTorrent = movie.getTorrent(quality);
-		downloadFolder = movie.getDownlodFolder();
-
+	/**
+	 * @return the movie
+	 */
+	public YifyMovie getMovie() {
+		return movie;
 	}
 
 	public File getVideo() {
@@ -112,9 +105,11 @@ public class YifyMovieTorrent implements Runnable {
 
 	}
 
-	public void start(Consumer<TorrentSessionState> watcher) {
-		this.watcher = watcher;
-		new Thread(this).start();
+	/**
+	 * @return the yiFyTorrent
+	 */
+	public YifyTorrent getYiFyTorrent() {
+		return yiFyTorrent;
 	}
 
 	@Override
@@ -155,6 +150,11 @@ public class YifyMovieTorrent implements Runnable {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void start(Consumer<TorrentSessionState> watcher) {
+		this.watcher = watcher;
+		new Thread(this).start();
 	}
 
 	public void stopTorrent() {

@@ -245,46 +245,61 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		setPlayerView();
 	}
 
-	/**
-	 * @param frame2
-	 */
-	public void setFullScreenStrategy(JFrame frame2) {
-		// TODO Auto-generated method stub
+	@Override
+	public void accept(TorrentSessionState arg0) {
 
-		if (!fullScreenStrategySet) {
-			frame = frame2;
-			mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
-					new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
-						@Override
-						protected void beforeEnterFullScreen() {
-							// controlPanel.setVisible(false);
-							// statusBar.setVisible(false);
-							// Window overlayWin = new Window();
-							// overlay.
-						}
+		// arg0.get
+		long totalSize = this.torrent.getYiFyTorrent().getSizeInBytes();
+		int totalNumberOfpeices = arg0.getPiecesTotal();
+		int downloadedPeices = arg0.getPiecesComplete();
+		long downloadedSize = (downloadedPeices * totalSize)
+				/ totalNumberOfpeices;
+		long downSizeForSpeedCal = arg0.getDownloaded();
+		int peers = arg0.getConnectedPeers().size();
+		long totalTime = System.currentTimeMillis() - this.torrentStartTime;
+		double speed = ((double) downSizeForSpeedCal / 1024)
+				/ (totalTime / 1000);
+		String[] values = { "" + peers, "" + speed,
+				"" + downloadedSize / 1024 / 1024 };
+		this.buffPan.updateValues(values);
+		// System.out.println("peers = "+peers+"    speed = "+speed+"    downloaded = "+downloadedSize+" time = "+totalTime);
+		// total peices ===> torrent.getTorrent.getSize(
+		// all downloaded ===> ?
+		// / ? = downloaded * size / peices;
 
-						@Override
-						protected void afterExitFullScreen() {
-							// controlPanel.setVisible(true);
-							// statusBar.setVisible(true);
-						}
+		// System.out.println("total peices : "+arg0.getPiecesTotal()+"downloaded  "+arg0.getDownloaded());
+		if (!TorrentStartedPlaying) {
+			if ((totalTime >= 60000 && downloadedSize >= totalSize * 4 / 100)
+					|| (downloadedSize / 1024 / 1024 >= 20)) {
+				this.setCurrentVideo(this.torrent.getVideo().getAbsolutePath());
 
-					});
-			fullScreenStrategySet = true;
+				this.setPlayerView();
+				this.play();
+				TorrentStartedPlaying = true;
+				loadRemoteSubtitles();
+			}
+		} else {
+			// remining = total - downloaded
+			// speed
+			// needed time = reminging / speed
+			// time remining on movie = player.getSIze
+			int movieLenght = torrent.getMovie().getRuntime() * 60; // seconds
+			long remining = totalSize - downloadedSize;
+			long neededTime = (long) (remining / (speed * 1024));
+			long timeleftonTheMovie = movieLenght
+					- mediaPlayerComponent.getMediaPlayer().getTime() / 1000;
+			if (neededTime > timeleftonTheMovie) {
+				App.LOGGER.info("we should pause" + "    remining time = "
+						+ remining + "   remining on movie = "
+						+ timeleftonTheMovie);
+			} else {
+				App.LOGGER.info("no need to pause" + "    remining time = "
+						+ remining + "   remining on movie = "
+						+ timeleftonTheMovie);
+			}
+
 		}
 
-	}
-
-	public void setPlayerView() {
-		CardLayout cl = (CardLayout) (cards.getLayout());
-		cl.show(cards, CARD_PLAYER);
-		repaint();
-	}
-
-	public void setBufferingView() {
-		CardLayout cl = (CardLayout) (cards.getLayout());
-		cl.show(cards, CARD_BUFFER_TORRENT);
-		repaint();
 	}
 
 	/*
@@ -299,6 +314,96 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.watchers.add(wcher);
 	}
 
+	@Override
+	public void audioDeviceChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			String arg1) {
+
+	}
+
+	@Override
+	public void backward(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+
+	}
+
+	@Override
+	public void buffering(uk.co.caprica.vlcj.player.MediaPlayer arg0, float arg1) {
+
+	}
+
+	/**
+	 * @param i
+	 */
+	protected void changeVolume(int value) {
+		setDefaultMarqueeProperties();
+		controlPanel.getVolumeControl().setValue(value);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
+				"Volume : " + controlPanel.getVolumeControl().getValue());
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
+		setVolumeIcon();
+	}
+
+	@Override
+	public void chapterChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public void corked(uk.co.caprica.vlcj.player.MediaPlayer arg0, boolean arg1) {
+
+	}
+
+	@Override
+	public void elementaryStreamAdded(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
+
+	}
+
+	@Override
+	public void elementaryStreamDeleted(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
+
+	}
+
+	@Override
+	public void elementaryStreamSelected(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
+
+	}
+
+	@Override
+	public void endOfSubItems(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+
+	}
+
+	@Override
+	public void error(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+		frame.setTitle("Cupcake " + "| PlayBack Error");
+		stop();
+	}
+
+	@Override
+	public void finished(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+		stop();
+	}
+
+	@Override
+	public void forward(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+
+	}
+
+	private void fullScreen() {
+		// TODO Auto-generated method stub
+		if (this.mediaPlayerComponent.getMediaPlayer().isFullScreen()) {
+			controlPanel.getFullScreen().setIcon(new ImageIcon(R.FULL_SCREEN));
+			this.mediaPlayerComponent.getMediaPlayer().setFullScreen(false);
+		} else {
+			controlPanel.getFullScreen().setIcon(
+					new ImageIcon(R.EXIT_FULL_SCREEN));
+			this.mediaPlayerComponent.getMediaPlayer().setFullScreen(true);
+		}
+	}
+
 	/**
 	 * @return the mediaPlayerComponent
 	 */
@@ -306,30 +411,164 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		return mediaPlayerComponent;
 	}
 
+	private void getRemoteSubs(MediaPlayer arg0) {
+		// TODO Auto-generated method stub
+		final MediaPlayer mediaPlayer2 = arg0;
+		try {
+			subtitleWorker.interrupt();
+		} catch (Exception e) {
+
+		}
+
+		subtitleWorker = new Thread(new Runnable() {
+			boolean subtitleSet = false;
+
+			@Override
+			public void run() {
+
+				List<SubtitleInfo> subInfoList1 = null;
+				List<SubtitleInfo> subInfoList2 = null;
+				List<SubtitleInfo> subInfoList3 = null;
+
+				// lang 1
+				try {
+					subInfoList1 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang1()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList1 != null)
+					for (int i = 0; i < subInfoList1.size(); i++) {
+						SubtitleInfo subInfo = subInfoList1.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang1Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+				// lang 2
+				try {
+					subInfoList2 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang2()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList2 != null)
+					for (int i = 0; i < subInfoList2.size(); i++) {
+						SubtitleInfo subInfo = subInfoList2.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang2Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+				// lang3
+				try {
+					subInfoList3 = SubtitleFetcher.getSubtitleList(video,
+							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+									.getSubtitlesLang3()]);
+				} catch (XmlRpcException e) {
+					e.printStackTrace();
+				}
+				if (subInfoList3 != null)
+					for (int i = 0; i < subInfoList3.size(); i++) {
+						SubtitleInfo subInfo = subInfoList3.get(i);
+						SubtitleMenuItem subItem = new SubtitleMenuItem(
+								subInfo, mediaPlayer2);
+						lang3Menu.add(subItem);
+						subtitlesGroup.add(subItem);
+						if (i == 0 && !subtitleSet
+								&& Settings.autoLoadSubtitles()) {
+							subItem.actionPerformed(new ActionEvent(subItem, 0,
+									"dummy"));
+							subtitleSet = true;
+						}
+					}
+			}
+
+		});
+		subtitleWorker.start();
+	}
+
+	private void getSubtitle(YifyMovieTorrent arg) {
+		// TODO
+		try {
+			boolean defaultSubSelected = false;
+			List<SubtitleInfo> list1 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang1()]);
+
+			List<SubtitleInfo> list2 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang2()]);
+
+			List<SubtitleInfo> list3 = SubtitleFetcher.getSubtitleList(arg
+					.getMovie(),
+					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
+							.getSubtitlesLang3()]);
+
+			if (list1 != null)
+				for (int i = 0; i < list1.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),
+							this);
+					this.lang1Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+			if (list2 != null)
+				for (int i = 0; i < list2.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),
+							this);
+					this.lang2Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+			if (list3 != null)
+				for (int i = 0; i < list3.size(); i++) {
+					SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),
+							this);
+					this.lang3Menu.add(item);
+					subtitlesGroup.add(item);
+					if (i == 0 && !defaultSubSelected
+							&& Settings.autoLoadSubtitles()) {
+						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
+						defaultSubSelected = true;
+					}
+				}
+
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	/**
 	 * @return the video
 	 */
 	public File getVideo() {
 		return video;
-	}
-
-	private void showControls(boolean bool) {
-
-		controlPanel.setVisible(bool);
-		// TODO make a special menu
-		frame.getJMenuBar().setVisible(bool);
-		if (!bool) {
-			BufferedImage cursorImg = new BufferedImage(16, 16,
-					BufferedImage.TYPE_INT_ARGB);
-
-			Cursor blankCursor = Toolkit.getDefaultToolkit()
-					.createCustomCursor(cursorImg, new Point(0, 0),
-							"blank cursor");
-			mediaPlayerComponent.setCursor(blankCursor);
-		} else {
-			mediaPlayerComponent.setCursor(Cursor.getDefaultCursor());
-		}
-
 	}
 
 	private void initActionListners() {
@@ -472,10 +711,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		new MouseMovementDetector(mediaPlayerComponent, 3000) {
 
 			@Override
-			protected void onStarted() {
-			}
-
-			@Override
 			protected void onMouseAtRest() {
 				App.LOGGER.debug("mouse is at rest ");
 				if (mediaPlayer.isPlaying() && !mouseOncontrol) {
@@ -493,6 +728,10 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			}
 
 			@Override
+			protected void onStarted() {
+			}
+
+			@Override
 			protected void onStopped() {
 
 			}
@@ -501,37 +740,96 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(this);
 	}
 
-	protected void setDefaultMarqueeProperties() {
-		mediaPlayerComponent.getMediaPlayer().enableMarquee(false);
-		mediaPlayerComponent.getMediaPlayer().setMarqueeSize(20);
-		mediaPlayerComponent.getMediaPlayer().setMarqueePosition(
-				libvlc_marquee_position_e.top_right);
-		mediaPlayerComponent.getMediaPlayer().setMarqueeTimeout(1000);
+	@Override
+	public void lengthChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			long arg1) {
 
 	}
 
-	/**
-	 * 
-	 */
-	protected void showSkipMarquee(boolean skiping) {
-		// TODO Auto-generated method stub
-		String str = (skiping ? "FastForward >> " : "<< Rewind ");
-		setDefaultMarqueeProperties();
-		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
-				str + TimeUtils.getLabelFormatedTime(mediaPlayer.getTime()));
-		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
+	private void loadRemoteSubtitles() {
+		if (!Settings.LoadOsSubtitles()) {
+
+			return;
+		}
+
+		if (this.currentlyPlayingSource == SOURCE_YIFY_TORRENT) {
+			getSubtitle(torrent);
+		} else if (this.currentlyPlayingSource == SOURCE_VIDEO) {
+			getRemoteSubs(this);
+		}
+
 	}
 
-	/**
-	 * @param i
-	 */
-	protected void changeVolume(int value) {
-		setDefaultMarqueeProperties();
-		controlPanel.getVolumeControl().setValue(value);
-		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
-				"Volume : " + controlPanel.getVolumeControl().getValue());
-		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
-		setVolumeIcon();
+	@Override
+	public void mediaChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			libvlc_media_t arg1, String arg2) {
+
+	}
+
+	@Override
+	public void mediaDurationChanged(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, long arg1) {
+
+	}
+
+	// TODO
+
+	@Override
+	public void mediaFreed(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+
+	}
+
+	@Override
+	public void mediaMetaChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+		currentTitle = " | " + arg0.getMediaMeta().getTitle();
+		frame.setTitle("Cupcake " + currentTitle);
+	}
+
+	@Override
+	public void mediaParsedChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public void mediaStateChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public void mediaSubItemAdded(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			libvlc_media_t arg1) {
+
+	}
+
+	@Override
+	public void mediaSubItemTreeAdded(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, libvlc_media_t arg1) {
+
+	}
+
+	@Override
+	public void muted(uk.co.caprica.vlcj.player.MediaPlayer arg0, boolean arg1) {
+
+	}
+
+	@Override
+	public void newMedia(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+
+	}
+
+	@Override
+	public void opening(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+		currentTitle = arg0.getMediaMeta().getTitle();
+		frame.setTitle("Cupcake " + currentTitle + " | Opening");
+	}
+
+	@Override
+	public void pausableChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
 	}
 
 	public void pause() {
@@ -539,11 +837,11 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 			this.mediaPlayerComponent.getMediaPlayer().pause();
 	}
 
-	private void stop() {
-		this.mediaPlayerComponent.getMediaPlayer().stop();
-		controlPanel.getProgress().setValue(0);
+	@Override
+	public void paused(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
 		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PLAY_BTN_ICON));
-		controlPanel.getCurrentTimeLab().setText("  00:00:00  ");
+		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_PAUSED);
+
 	}
 
 	private void play() {
@@ -592,6 +890,32 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 
 	}
 
+	@Override
+	public void playing(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PAUSE_BTN_ICON));
+		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_PLAYED);
+	}
+
+	@Override
+	public void positionChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			float arg1) {
+		App.LOGGER.debug("current value in slider is "
+				+ controlPanel.getProgress().getValue());
+
+	}
+
+	private void rebuildSubGroupButtons() {
+		subtitlesGroup = new ButtonGroup();
+		subtitlesGroup.add(disableSubsMenuItem);
+	}
+
+	private void removeAllSubtitleItems() {
+		localSubsMenu.removeAll();
+		lang1Menu.removeAll();
+		lang2Menu.removeAll();
+		lang3Menu.removeAll();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -618,6 +942,24 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.lastRewindTime = System.currentTimeMillis();
 	}
 
+	@Override
+	public void scrambledChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public void seekableChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	public void setBufferingView() {
+		CardLayout cl = (CardLayout) (cards.getLayout());
+		cl.show(cards, CARD_BUFFER_TORRENT);
+		repaint();
+	}
+
 	/**
 	 * @param str
 	 *            the video to set
@@ -626,6 +968,111 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.newMedia = 0;
 		this.video = new File(str);
 		App.LOGGER.debug("video set to " + str);
+	}
+
+	protected void setDefaultMarqueeProperties() {
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(false);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeSize(20);
+		mediaPlayerComponent.getMediaPlayer().setMarqueePosition(
+				libvlc_marquee_position_e.top_right);
+		mediaPlayerComponent.getMediaPlayer().setMarqueeTimeout(1000);
+
+	}
+
+	/**
+	 * @param frame2
+	 */
+	public void setFullScreenStrategy(JFrame frame2) {
+		// TODO Auto-generated method stub
+
+		if (!fullScreenStrategySet) {
+			frame = frame2;
+			mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(
+					new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
+						@Override
+						protected void afterExitFullScreen() {
+							// controlPanel.setVisible(true);
+							// statusBar.setVisible(true);
+						}
+
+						@Override
+						protected void beforeEnterFullScreen() {
+							// controlPanel.setVisible(false);
+							// statusBar.setVisible(false);
+							// Window overlayWin = new Window();
+							// overlay.
+						}
+
+					});
+			fullScreenStrategySet = true;
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalTorrent(java
+	 * .lang.Object)
+	 */
+	@Override
+	public void setMediaFromLocalTorrent(Object torrent) {
+		// TODO Auto-generated method stub
+		this.currentlyPlayingSource = SOURCE_LOCAL_TORRENT;
+		removeAllSubtitleItems();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalVideo(java
+	 * .io.File)
+	 */
+	@Override
+	public void setMediaFromLocalVideo(File videoArgs) {
+		setCurrentVideo(videoArgs.getAbsolutePath());
+		this.currentlyPlayingSource = SOURCE_VIDEO;
+		rebuildSubGroupButtons();
+		removeAllSubtitleItems();
+		// local subs
+		ArrayList<File> localSubs = FileUtils.searchrecursively(
+				video.getParentFile(), "srt");
+		for (File f : localSubs) {
+			LocalSubtitleFileMenuItem item = new LocalSubtitleFileMenuItem(f,
+					this);
+			localSubsMenu.add(item);
+		}
+		// remote subs
+
+		loadRemoteSubtitles();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromYifyTorrent(com
+	 * .lordroid.cupcake.yify.YifyTorrent)
+	 */
+	@Override
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
+		this.currentlyPlayingSource = SOURCE_YIFY_TORRENT;
+		this.setBufferingView();
+		this.torrent = new YifyMovieTorrent(yifyMovie, -1);
+		TorrentStartedPlaying = false;
+		removeAllSubtitleItems();
+		rebuildSubGroupButtons();
+		torrent.start(this);
+		torrentStartTime = System.currentTimeMillis();
+	}
+
+	public void setPlayerView() {
+		CardLayout cl = (CardLayout) (cards.getLayout());
+		cl.show(cards, CARD_PLAYER);
+		repaint();
 	}
 
 	/**
@@ -652,6 +1099,79 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	}
 
 	/**
+	 * this is called from Progress Bar
+	 */
+	private void setTime() {
+		// TODO Auto-generated method stub
+		App.LOGGER.debug(this.controlPanel.getProgress().getValue() + "");
+		this.mediaPlayerComponent.getMediaPlayer().setTime(
+				this.controlPanel.getProgress().getValue() * 1000);
+		this.controlPanel.getCurrentTimeLab().setText(
+				TimeUtils.getLabelFormatedTime(this.mediaPlayerComponent
+						.getMediaPlayer().getTime()));
+	}
+
+	/**
+	 * 
+	 */
+	private void setVolumeIcon() {
+		// TODO Auto-generated method stub
+		int volume = mediaPlayerComponent.getMediaPlayer().getVolume();
+		App.LOGGER.debug("current volume =  " + volume);
+		if (mediaPlayerComponent.getMediaPlayer().isMute()) {
+			controlPanel.getVolumeBtn().setIcon(new ImageIcon(R.VOLUME_MUTED));
+		} else {
+
+			if (volume >= 200) {
+				controlPanel.getVolumeBtn().setIcon(
+						new ImageIcon(R.VOLUME_FULL));
+			} else if (volume >= 100) {
+				controlPanel.getVolumeBtn().setIcon(
+						new ImageIcon(R.VOLUME_MEDIUM));
+			} else if (volume > 0) {
+				controlPanel.getVolumeBtn()
+						.setIcon(new ImageIcon(R.VOLUME_LOW));
+			} else {
+				controlPanel.getVolumeBtn().setIcon(
+						new ImageIcon(R.VOLUME_MUTED));
+			}
+		}
+		controlPanel.getCurrentVolume().setText("" + (volume / 2));
+		Settings.setCurrentVolume(volume / 2);
+	}
+
+	private void showControls(boolean bool) {
+
+		controlPanel.setVisible(bool);
+		// TODO make a special menu
+		frame.getJMenuBar().setVisible(bool);
+		if (!bool) {
+			BufferedImage cursorImg = new BufferedImage(16, 16,
+					BufferedImage.TYPE_INT_ARGB);
+
+			Cursor blankCursor = Toolkit.getDefaultToolkit()
+					.createCustomCursor(cursorImg, new Point(0, 0),
+							"blank cursor");
+			mediaPlayerComponent.setCursor(blankCursor);
+		} else {
+			mediaPlayerComponent.setCursor(Cursor.getDefaultCursor());
+		}
+
+	}
+
+	/**
+	 * 
+	 */
+	protected void showSkipMarquee(boolean skiping) {
+		// TODO Auto-generated method stub
+		String str = (skiping ? "FastForward >> " : "<< Rewind ");
+		setDefaultMarqueeProperties();
+		mediaPlayerComponent.getMediaPlayer().setMarqueeText(
+				str + TimeUtils.getLabelFormatedTime(mediaPlayer.getTime()));
+		mediaPlayerComponent.getMediaPlayer().enableMarquee(true);
+	}
+
+	/**
 	 * 
 	 */
 	private void skip() {
@@ -662,6 +1182,52 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		this.mediaPlayerComponent.getMediaPlayer().skip(skipAhead);
 		this.lastSkip = skipAhead;
 		this.lastSkipTime = System.currentTimeMillis();
+	}
+
+	@Override
+	public void snapshotTaken(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			String arg1) {
+
+	}
+
+	private void stop() {
+		this.mediaPlayerComponent.getMediaPlayer().stop();
+		controlPanel.getProgress().setValue(0);
+		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PLAY_BTN_ICON));
+		controlPanel.getCurrentTimeLab().setText("  00:00:00  ");
+	}
+
+	@Override
+	public void stopped(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
+		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_STOPED);
+	}
+
+	@Override
+	public void subItemFinished(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public void subItemPlayed(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
+	}
+
+	@Override
+	public synchronized void timeChanged(
+			uk.co.caprica.vlcj.player.MediaPlayer arg0, long arg1) {
+		int seconds = (int) (mediaPlayerComponent.getMediaPlayer().getTime() / 1000);
+		controlPanel.getProgress().setValue(seconds);
+		controlPanel.getCurrentTimeLab().setText(
+				TimeUtils.getLabelFormatedTime(mediaPlayerComponent
+						.getMediaPlayer().getTime()));
+	}
+
+	@Override
+	public void titleChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
+			int arg1) {
+
 	}
 
 	/**
@@ -728,60 +1294,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 		}
 	}
 
-	/**
-	 * 
-	 */
-	private void setVolumeIcon() {
-		// TODO Auto-generated method stub
-		int volume = mediaPlayerComponent.getMediaPlayer().getVolume();
-		App.LOGGER.debug("current volume =  " + volume);
-		if (mediaPlayerComponent.getMediaPlayer().isMute()) {
-			controlPanel.getVolumeBtn().setIcon(new ImageIcon(R.VOLUME_MUTED));
-		} else {
-
-			if (volume >= 200) {
-				controlPanel.getVolumeBtn().setIcon(
-						new ImageIcon(R.VOLUME_FULL));
-			} else if (volume >= 100) {
-				controlPanel.getVolumeBtn().setIcon(
-						new ImageIcon(R.VOLUME_MEDIUM));
-			} else if (volume > 0) {
-				controlPanel.getVolumeBtn()
-						.setIcon(new ImageIcon(R.VOLUME_LOW));
-			} else {
-				controlPanel.getVolumeBtn().setIcon(
-						new ImageIcon(R.VOLUME_MUTED));
-			}
-		}
-		controlPanel.getCurrentVolume().setText("" + (volume / 2));
-		Settings.setCurrentVolume(volume / 2);
-	}
-
-	/**
-	 * this is called from Progress Bar
-	 */
-	private void setTime() {
-		// TODO Auto-generated method stub
-		App.LOGGER.debug(this.controlPanel.getProgress().getValue() + "");
-		this.mediaPlayerComponent.getMediaPlayer().setTime(
-				this.controlPanel.getProgress().getValue() * 1000);
-		this.controlPanel.getCurrentTimeLab().setText(
-				TimeUtils.getLabelFormatedTime(this.mediaPlayerComponent
-						.getMediaPlayer().getTime()));
-	}
-
-	private void fullScreen() {
-		// TODO Auto-generated method stub
-		if (this.mediaPlayerComponent.getMediaPlayer().isFullScreen()) {
-			controlPanel.getFullScreen().setIcon(new ImageIcon(R.FULL_SCREEN));
-			this.mediaPlayerComponent.getMediaPlayer().setFullScreen(false);
-		} else {
-			controlPanel.getFullScreen().setIcon(
-					new ImageIcon(R.EXIT_FULL_SCREEN));
-			this.mediaPlayerComponent.getMediaPlayer().setFullScreen(true);
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -794,279 +1306,6 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	}
 
 	@Override
-	public void accept(TorrentSessionState arg0) {
-
-		// arg0.get
-		long totalSize = this.torrent.getYiFyTorrent().getSizeInBytes();
-		int totalNumberOfpeices = arg0.getPiecesTotal();
-		int downloadedPeices = arg0.getPiecesComplete();
-		long downloadedSize = (downloadedPeices * totalSize)
-				/ totalNumberOfpeices;
-		long downSizeForSpeedCal = arg0.getDownloaded();
-		int peers = arg0.getConnectedPeers().size();
-		long totalTime = System.currentTimeMillis() - this.torrentStartTime;
-		double speed = ((double) downSizeForSpeedCal / 1024)
-				/ (totalTime / 1000);
-		String[] values = { "" + peers, "" + speed,
-				"" + downloadedSize / 1024 / 1024 };
-		this.buffPan.updateValues(values);
-		// System.out.println("peers = "+peers+"    speed = "+speed+"    downloaded = "+downloadedSize+" time = "+totalTime);
-		// total peices ===> torrent.getTorrent.getSize(
-		// all downloaded ===> ?
-		// / ? = downloaded * size / peices;
-
-		// System.out.println("total peices : "+arg0.getPiecesTotal()+"downloaded  "+arg0.getDownloaded());
-		if (!TorrentStartedPlaying) {
-			if ((totalTime >= 60000 && downloadedSize >= totalSize * 4 / 100)
-					|| (downloadedSize / 1024 / 1024 >= 20)) {
-				this.setCurrentVideo(this.torrent.getVideo().getAbsolutePath());
-
-				this.setPlayerView();
-				this.play();
-				TorrentStartedPlaying = true;
-				loadRemoteSubtitles();
-			}
-		} else {
-			// remining = total - downloaded
-			// speed
-			// needed time = reminging / speed
-			// time remining on movie = player.getSIze
-			int movieLenght = torrent.getMovie().getRuntime() * 60; // seconds
-			long remining = totalSize - downloadedSize;
-			long neededTime = (long) (remining / (speed * 1024));
-			long timeleftonTheMovie = movieLenght
-					- mediaPlayerComponent.getMediaPlayer().getTime() / 1000;
-			if (neededTime > timeleftonTheMovie) {
-				App.LOGGER.info("we should pause" + "    remining time = "
-						+ remining + "   remining on movie = "
-						+ timeleftonTheMovie);
-			} else {
-				App.LOGGER.info("no need to pause" + "    remining time = "
-						+ remining + "   remining on movie = "
-						+ timeleftonTheMovie);
-			}
-
-		}
-
-	}
-
-	// TODO
-
-	@Override
-	public void audioDeviceChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			String arg1) {
-
-	}
-
-	@Override
-	public void backward(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-
-	}
-
-	@Override
-	public void buffering(uk.co.caprica.vlcj.player.MediaPlayer arg0, float arg1) {
-
-	}
-
-	@Override
-	public void chapterChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void corked(uk.co.caprica.vlcj.player.MediaPlayer arg0, boolean arg1) {
-
-	}
-
-	@Override
-	public void elementaryStreamAdded(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
-
-	}
-
-	@Override
-	public void elementaryStreamDeleted(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
-
-	}
-
-	@Override
-	public void elementaryStreamSelected(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1, int arg2) {
-
-	}
-
-	@Override
-	public void endOfSubItems(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-
-	}
-
-	@Override
-	public void error(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		frame.setTitle("Cupcake " + "| PlayBack Error");
-		stop();
-	}
-
-	@Override
-	public void finished(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		stop();
-	}
-
-	@Override
-	public void forward(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-
-	}
-
-	@Override
-	public void lengthChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			long arg1) {
-
-	}
-
-	@Override
-	public void mediaChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			libvlc_media_t arg1, String arg2) {
-
-	}
-
-	@Override
-	public void mediaDurationChanged(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, long arg1) {
-
-	}
-
-	@Override
-	public void mediaFreed(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-
-	}
-
-	@Override
-	public void mediaMetaChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-		currentTitle = " | " + arg0.getMediaMeta().getTitle();
-		frame.setTitle("Cupcake " + currentTitle);
-	}
-
-	@Override
-	public void mediaParsedChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void mediaStateChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void mediaSubItemAdded(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			libvlc_media_t arg1) {
-
-	}
-
-	@Override
-	public void mediaSubItemTreeAdded(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, libvlc_media_t arg1) {
-
-	}
-
-	@Override
-	public void muted(uk.co.caprica.vlcj.player.MediaPlayer arg0, boolean arg1) {
-
-	}
-
-	@Override
-	public void newMedia(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-
-	}
-
-	@Override
-	public void opening(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		currentTitle = arg0.getMediaMeta().getTitle();
-		frame.setTitle("Cupcake " + currentTitle + " | Opening");
-	}
-
-	@Override
-	public void pausableChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void paused(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PLAY_BTN_ICON));
-		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_PAUSED);
-
-	}
-
-	@Override
-	public void playing(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		controlPanel.getPlayBtn().setIcon(new ImageIcon(R.PAUSE_BTN_ICON));
-		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_PLAYED);
-	}
-
-	@Override
-	public void positionChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			float arg1) {
-		App.LOGGER.debug("current value in slider is "
-				+ controlPanel.getProgress().getValue());
-
-	}
-
-	@Override
-	public void scrambledChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void seekableChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void snapshotTaken(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			String arg1) {
-
-	}
-
-	@Override
-	public void stopped(uk.co.caprica.vlcj.player.MediaPlayer arg0) {
-		frame.setTitle("Cupcake " + currentTitle + S.MEDIA_STOPED);
-	}
-
-	@Override
-	public void subItemFinished(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public void subItemPlayed(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
-	public synchronized void timeChanged(
-			uk.co.caprica.vlcj.player.MediaPlayer arg0, long arg1) {
-		int seconds = (int) (mediaPlayerComponent.getMediaPlayer().getTime() / 1000);
-		controlPanel.getProgress().setValue(seconds);
-		controlPanel.getCurrentTimeLab().setText(
-				TimeUtils.getLabelFormatedTime(mediaPlayerComponent
-						.getMediaPlayer().getTime()));
-	}
-
-	@Override
-	public void titleChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
-			int arg1) {
-
-	}
-
-	@Override
 	public void videoOutput(uk.co.caprica.vlcj.player.MediaPlayer arg0, int arg1) {
 
 	}
@@ -1075,244 +1314,5 @@ public class MediaPlayer extends JPanel implements Watchable, Watcher,
 	public void volumeChanged(uk.co.caprica.vlcj.player.MediaPlayer arg0,
 			float arg1) {
 		controlPanel.getCurrentVolume().setText("" + arg0.getVolume());
-	}
-
-	private void loadRemoteSubtitles() {
-		if (!Settings.LoadOsSubtitles()) {
-
-			return;
-		}
-
-		if (this.currentlyPlayingSource == SOURCE_YIFY_TORRENT) {
-			getSubtitle(torrent);
-		} else if (this.currentlyPlayingSource == SOURCE_VIDEO) {
-			getRemoteSubs(this);
-		}
-
-	}
-
-	private void getSubtitle(YifyMovieTorrent arg) {
-		// TODO
-		try {
-			boolean defaultSubSelected = false;
-			List<SubtitleInfo> list1 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang1()]);
-
-			List<SubtitleInfo> list2 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang2()]);
-
-			List<SubtitleInfo> list3 = SubtitleFetcher.getSubtitleList(arg
-					.getMovie(),
-					SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-							.getSubtitlesLang3()]);
-
-			if (list1 != null)
-				for (int i = 0; i < list1.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list1.get(i),
-							this);
-					this.lang1Menu.add(item);
-					subtitlesGroup.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-			if (list2 != null)
-				for (int i = 0; i < list2.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list2.get(i),
-							this);
-					this.lang2Menu.add(item);
-					subtitlesGroup.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-			if (list3 != null)
-				for (int i = 0; i < list3.size(); i++) {
-					SubtitleMenuItem item = new SubtitleMenuItem(list3.get(i),
-							this);
-					this.lang3Menu.add(item);
-					subtitlesGroup.add(item);
-					if (i == 0 && !defaultSubSelected
-							&& Settings.autoLoadSubtitles()) {
-						item.actionPerformed(new ActionEvent(item, 0, "dummy"));
-						defaultSubSelected = true;
-					}
-				}
-
-		} catch (XmlRpcException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private void getRemoteSubs(MediaPlayer arg0) {
-		// TODO Auto-generated method stub
-		final MediaPlayer mediaPlayer2 = arg0;
-		try {
-			subtitleWorker.interrupt();
-		} catch (Exception e) {
-
-		}
-
-		subtitleWorker = new Thread(new Runnable() {
-			boolean subtitleSet = false;
-
-			@Override
-			public void run() {
-
-				List<SubtitleInfo> subInfoList1 = null;
-				List<SubtitleInfo> subInfoList2 = null;
-				List<SubtitleInfo> subInfoList3 = null;
-
-				// lang 1
-				try {
-					subInfoList1 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang1()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList1 != null)
-					for (int i = 0; i < subInfoList1.size(); i++) {
-						SubtitleInfo subInfo = subInfoList1.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang1Menu.add(subItem);
-						subtitlesGroup.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-				// lang 2
-				try {
-					subInfoList2 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang2()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList2 != null)
-					for (int i = 0; i < subInfoList2.size(); i++) {
-						SubtitleInfo subInfo = subInfoList2.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang2Menu.add(subItem);
-						subtitlesGroup.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-				// lang3
-				try {
-					subInfoList3 = SubtitleFetcher.getSubtitleList(video,
-							SubtitleFetcher.SUBTITLE_LANGUAGES_CODES[Settings
-									.getSubtitlesLang3()]);
-				} catch (XmlRpcException e) {
-					e.printStackTrace();
-				}
-				if (subInfoList3 != null)
-					for (int i = 0; i < subInfoList3.size(); i++) {
-						SubtitleInfo subInfo = subInfoList3.get(i);
-						SubtitleMenuItem subItem = new SubtitleMenuItem(
-								subInfo, mediaPlayer2);
-						lang3Menu.add(subItem);
-						subtitlesGroup.add(subItem);
-						if (i == 0 && !subtitleSet
-								&& Settings.autoLoadSubtitles()) {
-							subItem.actionPerformed(new ActionEvent(subItem, 0,
-									"dummy"));
-							subtitleSet = true;
-						}
-					}
-			}
-
-		});
-		subtitleWorker.start();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromYifyTorrent(com
-	 * .lordroid.cupcake.yify.YifyTorrent)
-	 */
-	@Override
-	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
-		this.currentlyPlayingSource = SOURCE_YIFY_TORRENT;
-		this.setBufferingView();
-		this.torrent = new YifyMovieTorrent(yifyMovie, -1);
-		TorrentStartedPlaying = false;
-		removeAllSubtitleItems();
-		rebuildSubGroupButtons();
-		torrent.start(this);
-		torrentStartTime = System.currentTimeMillis();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalVideo(java
-	 * .io.File)
-	 */
-	@Override
-	public void setMediaFromLocalVideo(File videoArgs) {
-		setCurrentVideo(videoArgs.getAbsolutePath());
-		this.currentlyPlayingSource = SOURCE_VIDEO;
-		rebuildSubGroupButtons();
-		removeAllSubtitleItems();
-		// local subs
-		ArrayList<File> localSubs = FileUtils.searchrecursively(
-				video.getParentFile(), "srt");
-		for (File f : localSubs) {
-			LocalSubtitleFileMenuItem item = new LocalSubtitleFileMenuItem(f,
-					this);
-			localSubsMenu.add(item);
-		}
-		// remote subs
-
-		loadRemoteSubtitles();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalTorrent(java
-	 * .lang.Object)
-	 */
-	@Override
-	public void setMediaFromLocalTorrent(Object torrent) {
-		// TODO Auto-generated method stub
-		this.currentlyPlayingSource = SOURCE_LOCAL_TORRENT;
-		removeAllSubtitleItems();
-	}
-
-	private void rebuildSubGroupButtons() {
-		subtitlesGroup = new ButtonGroup();
-		subtitlesGroup.add(disableSubsMenuItem);
-	}
-
-	private void removeAllSubtitleItems() {
-		localSubsMenu.removeAll();
-		lang1Menu.removeAll();
-		lang2Menu.removeAll();
-		lang3Menu.removeAll();
 	}
 }

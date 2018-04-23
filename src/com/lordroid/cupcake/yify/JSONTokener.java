@@ -40,6 +40,26 @@ import java.io.StringReader;
  * @version 2014-05-03
  */
 public class JSONTokener {
+	/**
+	 * Get the hex value of a character (base16).
+	 * 
+	 * @param c
+	 *            A character between '0' and '9' or between 'A' and 'F' or
+	 *            between 'a' and 'f'.
+	 * @return An int between 0 and 15, or -1 if c was not a hex digit.
+	 */
+	public static int dehexchar(char c) {
+		if (c >= '0' && c <= '9') {
+			return c - '0';
+		}
+		if (c >= 'A' && c <= 'F') {
+			return c - ('A' - 10);
+		}
+		if (c >= 'a' && c <= 'f') {
+			return c - ('a' - 10);
+		}
+		return -1;
+	}
 	/** current read character position on the current line. */
 	private long character;
 	/** flag to indicate if the end of the input has been found. */
@@ -54,8 +74,20 @@ public class JSONTokener {
 	private final Reader reader;
 	/** flag to indicate that a previous character was requested. */
 	private boolean usePrevious;
+
 	/** the number of characters read in the previous line. */
 	private long characterPreviousLine;
+
+	/**
+	 * Construct a JSONTokener from an InputStream. The caller must close the
+	 * input stream.
+	 * 
+	 * @param inputStream
+	 *            The source.
+	 */
+	public JSONTokener(InputStream inputStream) {
+		this(new InputStreamReader(inputStream));
+	}
 
 	/**
 	 * Construct a JSONTokener from a Reader. The caller must close the Reader.
@@ -73,17 +105,6 @@ public class JSONTokener {
 		this.character = 1;
 		this.characterPreviousLine = 0;
 		this.line = 1;
-	}
-
-	/**
-	 * Construct a JSONTokener from an InputStream. The caller must close the
-	 * input stream.
-	 * 
-	 * @param inputStream
-	 *            The source.
-	 */
-	public JSONTokener(InputStream inputStream) {
-		this(new InputStreamReader(inputStream));
 	}
 
 	/**
@@ -129,33 +150,38 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Get the hex value of a character (base16).
-	 * 
-	 * @param c
-	 *            A character between '0' and '9' or between 'A' and 'F' or
-	 *            between 'a' and 'f'.
-	 * @return An int between 0 and 15, or -1 if c was not a hex digit.
-	 */
-	public static int dehexchar(char c) {
-		if (c >= '0' && c <= '9') {
-			return c - '0';
-		}
-		if (c >= 'A' && c <= 'F') {
-			return c - ('A' - 10);
-		}
-		if (c >= 'a' && c <= 'f') {
-			return c - ('a' - 10);
-		}
-		return -1;
-	}
-
-	/**
 	 * Checks if the end of the input has been reached.
 	 * 
 	 * @return true if at the end of the file and we didn't step back
 	 */
 	public boolean end() {
 		return this.eof && !this.usePrevious;
+	}
+
+	/**
+	 * Increments the internal indexes according to the previous character read
+	 * and the character passed as the current character.
+	 * 
+	 * @param c
+	 *            the current character read.
+	 */
+	private void incrementIndexes(int c) {
+		if (c > 0) {
+			this.index++;
+			if (c == '\r') {
+				this.line++;
+				this.characterPreviousLine = this.character;
+				this.character = 0;
+			} else if (c == '\n') {
+				if (this.previous != '\r') {
+					this.line++;
+					this.characterPreviousLine = this.character;
+				}
+				this.character = 0;
+			} else {
+				this.character++;
+			}
+		}
 	}
 
 	/**
@@ -216,32 +242,6 @@ public class JSONTokener {
 		this.incrementIndexes(c);
 		this.previous = (char) c;
 		return this.previous;
-	}
-
-	/**
-	 * Increments the internal indexes according to the previous character read
-	 * and the character passed as the current character.
-	 * 
-	 * @param c
-	 *            the current character read.
-	 */
-	private void incrementIndexes(int c) {
-		if (c > 0) {
-			this.index++;
-			if (c == '\r') {
-				this.line++;
-				this.characterPreviousLine = this.character;
-				this.character = 0;
-			} else if (c == '\n') {
-				if (this.previous != '\r') {
-					this.line++;
-					this.characterPreviousLine = this.character;
-				}
-				this.character = 0;
-			} else {
-				this.character++;
-			}
-		}
 	}
 
 	/**

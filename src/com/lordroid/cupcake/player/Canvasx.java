@@ -57,19 +57,19 @@ public class Canvasx extends Canvas {
 	}
 
 	/**
+	 * 
+	 */
+	public void release() {
+		// TODO Auto-generated method stub
+		this.mediaPlayerx.release();
+	}
+
+	/**
 	 * @param videoSurface
 	 *            the videoSurface to set
 	 */
 	public void setVideoSurface(CanvasVideoSurface videoSurface) {
 		this.videoSurface = videoSurface;
 
-	}
-
-	/**
-	 * 
-	 */
-	public void release() {
-		// TODO Auto-generated method stub
-		this.mediaPlayerx.release();
 	}
 }

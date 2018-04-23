@@ -29,68 +29,6 @@ public class GaussianFilter extends ConvolveFilter {
 
 	static final long serialVersionUID = 5377089073023183684L;
 
-	protected float radius;
-	protected Kernel kernel;
-
-	/**
-	 * Construct a Gaussian filter
-	 */
-	public GaussianFilter() {
-		this(2);
-	}
-
-	/**
-	 * Construct a Gaussian filter
-	 * 
-	 * @param radius
-	 *            blur radius in pixels
-	 */
-	public GaussianFilter(float radius) {
-		setRadius(radius);
-	}
-
-	/**
-	 * Set the radius of the kernel, and hence the amount of blur. The bigger
-	 * the radius, the longer this filter will take.
-	 * 
-	 * @param radius
-	 *            the radius of the blur in pixels.
-	 */
-	public void setRadius(float radius) {
-		this.radius = radius;
-		kernel = makeKernel(radius);
-	}
-
-	/**
-	 * Get the radius of the kernel.
-	 * 
-	 * @return the radius
-	 */
-	public float getRadius() {
-		return radius;
-	}
-
-	@Override
-	public BufferedImage filter(BufferedImage src, BufferedImage dst) {
-		int width = src.getWidth();
-		int height = src.getHeight();
-
-		if (dst == null)
-			dst = createCompatibleDestImage(src, null);
-
-		int[] inPixels = new int[width * height];
-		int[] outPixels = new int[width * height];
-		src.getRGB(0, 0, width, height, inPixels, 0, width);
-
-		convolveAndTranspose(kernel, inPixels, outPixels, width, height, alpha,
-				CLAMP_EDGES);
-		convolveAndTranspose(kernel, outPixels, inPixels, height, width, alpha,
-				CLAMP_EDGES);
-
-		dst.setRGB(0, 0, width, height, inPixels, 0, width);
-		return dst;
-	}
-
 	public static void convolveAndTranspose(Kernel kernel, int[] inPixels,
 			int[] outPixels, int width, int height, boolean alpha,
 			int edgeAction) {
@@ -136,7 +74,6 @@ public class GaussianFilter extends ConvolveFilter {
 			}
 		}
 	}
-
 	/**
 	 * Make a Gaussian blur kernel.
 	 */
@@ -165,6 +102,69 @@ public class GaussianFilter extends ConvolveFilter {
 			matrix[i] /= total;
 
 		return new Kernel(rows, 1, matrix);
+	}
+
+	protected float radius;
+
+	protected Kernel kernel;
+
+	/**
+	 * Construct a Gaussian filter
+	 */
+	public GaussianFilter() {
+		this(2);
+	}
+
+	/**
+	 * Construct a Gaussian filter
+	 * 
+	 * @param radius
+	 *            blur radius in pixels
+	 */
+	public GaussianFilter(float radius) {
+		setRadius(radius);
+	}
+
+	@Override
+	public BufferedImage filter(BufferedImage src, BufferedImage dst) {
+		int width = src.getWidth();
+		int height = src.getHeight();
+
+		if (dst == null)
+			dst = createCompatibleDestImage(src, null);
+
+		int[] inPixels = new int[width * height];
+		int[] outPixels = new int[width * height];
+		src.getRGB(0, 0, width, height, inPixels, 0, width);
+
+		convolveAndTranspose(kernel, inPixels, outPixels, width, height, alpha,
+				CLAMP_EDGES);
+		convolveAndTranspose(kernel, outPixels, inPixels, height, width, alpha,
+				CLAMP_EDGES);
+
+		dst.setRGB(0, 0, width, height, inPixels, 0, width);
+		return dst;
+	}
+
+	/**
+	 * Get the radius of the kernel.
+	 * 
+	 * @return the radius
+	 */
+	public float getRadius() {
+		return radius;
+	}
+
+	/**
+	 * Set the radius of the kernel, and hence the amount of blur. The bigger
+	 * the radius, the longer this filter will take.
+	 * 
+	 * @param radius
+	 *            the radius of the blur in pixels.
+	 */
+	public void setRadius(float radius) {
+		this.radius = radius;
+		kernel = makeKernel(radius);
 	}
 
 	@Override

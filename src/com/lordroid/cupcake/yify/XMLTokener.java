@@ -49,105 +49,6 @@ public class XMLTokener extends JSONTokener {
 	}
 
 	/**
-	 * Construct an XMLTokener from a string.
-	 * 
-	 * @param s
-	 *            A source string.
-	 */
-	public XMLTokener(String s) {
-		super(s);
-	}
-
-	/**
-	 * Get the text in the CDATA block.
-	 * 
-	 * @return The string up to the <code>]]&gt;</code>.
-	 * @throws JSONException
-	 *             If the <code>]]&gt;</code> is not found.
-	 */
-	public String nextCDATA() throws JSONException {
-		char c;
-		int i;
-		StringBuilder sb = new StringBuilder();
-		while (more()) {
-			c = next();
-			sb.append(c);
-			i = sb.length() - 3;
-			if (i >= 0 && sb.charAt(i) == ']' && sb.charAt(i + 1) == ']'
-					&& sb.charAt(i + 2) == '>') {
-				sb.setLength(i);
-				return sb.toString();
-			}
-		}
-		throw syntaxError("Unclosed CDATA");
-	}
-
-/**
-     * Get the next XML outer token, trimming whitespace. There are two kinds
-     * of tokens: the '<' character which begins a markup tag, and the content
-     * text between markup tags.
-     *
-     * @return  A string, or a '<' Character, or null if there is no more
-     * source text.
-     * @throws JSONException
-     */
-	public Object nextContent() throws JSONException {
-		char c;
-		StringBuilder sb;
-		do {
-			c = next();
-		} while (Character.isWhitespace(c));
-		if (c == 0) {
-			return null;
-		}
-		if (c == '<') {
-			return XML.LT;
-		}
-		sb = new StringBuilder();
-		for (;;) {
-			if (c == 0) {
-				return sb.toString().trim();
-			}
-			if (c == '<') {
-				back();
-				return sb.toString().trim();
-			}
-			if (c == '&') {
-				sb.append(nextEntity(c));
-			} else {
-				sb.append(c);
-			}
-			c = next();
-		}
-	}
-
-	/**
-	 * Return the next entity. These entities are translated to Characters:
-	 * <code>&amp;  &apos;  &gt;  &lt;  &quot;</code>.
-	 * 
-	 * @param ampersand
-	 *            An ampersand character.
-	 * @return A Character or an entity String if the entity is not recognized.
-	 * @throws JSONException
-	 *             If missing ';' in XML entity.
-	 */
-	public Object nextEntity(char ampersand) throws JSONException {
-		StringBuilder sb = new StringBuilder();
-		for (;;) {
-			char c = next();
-			if (Character.isLetterOrDigit(c) || c == '#') {
-				sb.append(Character.toLowerCase(c));
-			} else if (c == ';') {
-				break;
-			} else {
-				throw syntaxError("Missing ';' in XML entity: &" + sb);
-			}
-		}
-		String string = sb.toString();
-		return unescapeEntity(string);
-	}
-
-	/**
 	 * Unescapes an XML entity encoding;
 	 * 
 	 * @param e
@@ -178,6 +79,105 @@ public class XMLTokener extends JSONTokener {
 			return '&' + e + ';';
 		}
 		return knownEntity.toString();
+	}
+
+	/**
+	 * Construct an XMLTokener from a string.
+	 * 
+	 * @param s
+	 *            A source string.
+	 */
+	public XMLTokener(String s) {
+		super(s);
+	}
+
+/**
+ * Get the text in the CDATA block.
+ * 
+ * @return The string up to the <code>]]&gt;</code>.
+ * @throws JSONException
+ *             If the <code>]]&gt;</code> is not found.
+ */
+public String nextCDATA() throws JSONException {
+	char c;
+	int i;
+	StringBuilder sb = new StringBuilder();
+	while (more()) {
+		c = next();
+		sb.append(c);
+		i = sb.length() - 3;
+		if (i >= 0 && sb.charAt(i) == ']' && sb.charAt(i + 1) == ']'
+				&& sb.charAt(i + 2) == '>') {
+			sb.setLength(i);
+			return sb.toString();
+		}
+	}
+	throw syntaxError("Unclosed CDATA");
+}
+
+	/**
+	     * Get the next XML outer token, trimming whitespace. There are two kinds
+	     * of tokens: the '<' character which begins a markup tag, and the content
+	     * text between markup tags.
+	     *
+	     * @return  A string, or a '<' Character, or null if there is no more
+	     * source text.
+	     * @throws JSONException
+	     */
+		public Object nextContent() throws JSONException {
+			char c;
+			StringBuilder sb;
+			do {
+				c = next();
+			} while (Character.isWhitespace(c));
+			if (c == 0) {
+				return null;
+			}
+			if (c == '<') {
+				return XML.LT;
+			}
+			sb = new StringBuilder();
+			for (;;) {
+				if (c == 0) {
+					return sb.toString().trim();
+				}
+				if (c == '<') {
+					back();
+					return sb.toString().trim();
+				}
+				if (c == '&') {
+					sb.append(nextEntity(c));
+				} else {
+					sb.append(c);
+				}
+				c = next();
+			}
+		}
+
+	/**
+	 * Return the next entity. These entities are translated to Characters:
+	 * <code>&amp;  &apos;  &gt;  &lt;  &quot;</code>.
+	 * 
+	 * @param ampersand
+	 *            An ampersand character.
+	 * @return A Character or an entity String if the entity is not recognized.
+	 * @throws JSONException
+	 *             If missing ';' in XML entity.
+	 */
+	public Object nextEntity(char ampersand) throws JSONException {
+		StringBuilder sb = new StringBuilder();
+		for (;;) {
+			char c = next();
+			if (Character.isLetterOrDigit(c) || c == '#') {
+				sb.append(Character.toLowerCase(c));
+			} else if (c == ';') {
+				break;
+			} else {
+				throw syntaxError("Missing ';' in XML entity: &" + sb);
+			}
+		}
+		String string = sb.toString();
+		return unescapeEntity(string);
 	}
 
 	/**

@@ -53,22 +53,10 @@ public class MovieItem extends JPanel implements MouseListener,
 	MovieItem thisPan;
 	private final YifyMovie movie;
 
-	/**
-	 * @return the movie
-	 */
-	public YifyMovie getMovie() {
-		return movie;
-	}
-
-	/**
-	 * @return the itemButtons
-	 */
-	public MovieItemButton[] getItemButtons() {
-		return itemButtons;
-	}
-
 	private BufferedImage coverImage;
+
 	private boolean isImageCached = false;
+
 	private BufferedImage blurryImage;
 	private boolean isBluredCached = false;
 	private boolean selected = false;
@@ -102,24 +90,22 @@ public class MovieItem extends JPanel implements MouseListener,
 
 		}
 	};
-
 	private final int infoPanY;
 	private JLabel titleLab = new JLabel();
+
 	private JLabel imdbIcon = new JLabel(new ImageIcon(R.IMDB_ICON));
 	private JLabel viewsIcon = new JLabel(new ImageIcon(R.VIEWS_ICON));
 	private JLabel imdbRatingLab = new JLabel();
 	private JLabel viewCountLab = new JLabel();
 	private JLabel genreLAb = new JLabel(new ImageIcon(R.GENRE_ICON));
 	private JLabel genreText = new JLabel();
-
 	private JLabel descriText = new JLabel();
 	private JLabel lab720p = new JLabel(new ImageIcon(R.QUALITY_720P));
+
 	private JLabel lab1080p = new JLabel(new ImageIcon(R.QUALITY_1080P));
 	private JLabel lab3d = new JLabel(new ImageIcon(R.QUALITY_3D));
-
 	private MovieItemButton[] itemButtons = { new MovieItemButton(0),
 			new MovieItemButton(1), new MovieItemButton(2) };
-
 	private final int infoPanHoveredY;
 
 	public MovieItem(YifyMovie moviearg) {
@@ -232,25 +218,44 @@ public class MovieItem extends JPanel implements MouseListener,
 		loadExtra();
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		MovieItemButton source = (MovieItemButton) arg0.getSource();
+		if (source.equals(itemButtons[0])) {
+			this.updateListWatchers(PLAY_ACTION);
+		} else if (source.equals(itemButtons[1])) {
+			this.updateListWatchers(LATER_ACTION);
+		} else if (source.equals(itemButtons[2])) {
+			this.updateListWatchers(DETAILS_ACTION);
+		}
+	}
+
+	@Override
+	public MovieItem addListPanWatcher(ListPanWatcher lw) {
+		this.watchersList.add(lw);
+		return this;
+	}
+
+	/**
+	 * @return the itemButtons
+	 */
+	public MovieItemButton[] getItemButtons() {
+		return itemButtons;
+	}
+
+	/**
+	 * @return the movie
+	 */
+	public YifyMovie getMovie() {
+		return movie;
+	}
+
 	private void initActions() {
 		for (MovieItemButton b : itemButtons) {
 			b.addActionListener(this);
 		}
 
-	}
-
-	private void loadExtra() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				movie.loadExtras();
-				viewCountLab.setText(TimeUtils.getFormatedViewCount(movie
-						.getDownloadCount()));
-			}
-
-		}).start();
 	}
 
 	private void initToolTip() {
@@ -275,34 +280,22 @@ public class MovieItem extends JPanel implements MouseListener,
 
 	}
 
-	@Override
-	public void paintComponent(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g;
-		if (!this.isImageCached) {
-			try {
-				coverImage = ImageIO.read(movie.getCoverImageFileMedium());
-				isImageCached = true;
-			} catch (Exception e) {
-				isImageCached = false;
+	public boolean isSelected() {
+		return selected;
+	}
 
-				e.printStackTrace();
+	private void loadExtra() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				movie.loadExtras();
+				viewCountLab.setText(TimeUtils.getFormatedViewCount(movie
+						.getDownloadCount()));
 			}
-		}
-		if (isImageCached) {
-			if (!isBluredCached) {
-				blurryImage = new GaussianFilter(10).filter(coverImage,
-						blurryImage);
-				isBluredCached = true;
-			}
-		}
 
-		if (!selected) {
-			g2d.drawImage(coverImage, 0, 0, this);
-		} else {
-			g2d.drawImage(blurryImage, 0, 0, this);
-			g2d.drawImage(R.BORDER_IMAGE, 0, 0, this);
-		}
-
+		}).start();
 	}
 
 	@Override
@@ -340,6 +333,53 @@ public class MovieItem extends JPanel implements MouseListener,
 		repaint();
 	}
 
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		if (!this.isImageCached) {
+			try {
+				coverImage = ImageIO.read(movie.getCoverImageFileMedium());
+				isImageCached = true;
+			} catch (Exception e) {
+				isImageCached = false;
+
+				e.printStackTrace();
+			}
+		}
+		if (isImageCached) {
+			if (!isBluredCached) {
+				blurryImage = new GaussianFilter(10).filter(coverImage,
+						blurryImage);
+				isBluredCached = true;
+			}
+		}
+
+		if (!selected) {
+			g2d.drawImage(coverImage, 0, 0, this);
+		} else {
+			g2d.drawImage(blurryImage, 0, 0, this);
+			g2d.drawImage(R.BORDER_IMAGE, 0, 0, this);
+		}
+
+	}
+
+	@Override
+	public void removeListPanWatcher(ListPanWatcher lw) {
+		this.watchersList.remove(lw);
+	}
+
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 		if (selected) {
@@ -357,50 +397,10 @@ public class MovieItem extends JPanel implements MouseListener,
 		}
 	}
 
-	public boolean isSelected() {
-		return selected;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public MovieItem addListPanWatcher(ListPanWatcher lw) {
-		this.watchersList.add(lw);
-		return this;
-	}
-
-	@Override
-	public void removeListPanWatcher(ListPanWatcher lw) {
-		this.watchersList.remove(lw);
-	}
-
 	@Override
 	public void updateListWatchers(int action) {
 		for (ListPanWatcher w : watchersList) {
 			w.ListActionPerformed(this.movie, action);
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		MovieItemButton source = (MovieItemButton) arg0.getSource();
-		if (source.equals(itemButtons[0])) {
-			this.updateListWatchers(PLAY_ACTION);
-		} else if (source.equals(itemButtons[1])) {
-			this.updateListWatchers(LATER_ACTION);
-		} else if (source.equals(itemButtons[2])) {
-			this.updateListWatchers(DETAILS_ACTION);
 		}
 	}
 

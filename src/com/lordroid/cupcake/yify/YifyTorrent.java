@@ -46,17 +46,10 @@ public class YifyTorrent {
 	}
 
 	/**
-	 * @return the seeds
+	 * @return the dateUploadedMilis
 	 */
-	public int getSeeds() {
-		return seeds;
-	}
-
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
+	public long getDateUploadedMilis() {
+		return dateUploadedMilis;
 	}
 
 	/**
@@ -64,6 +57,13 @@ public class YifyTorrent {
 	 */
 	public String getHash() {
 		return hash;
+	}
+
+	/**
+	 * @return the peers
+	 */
+	public int getPeers() {
+		return peers;
 	}
 
 	/**
@@ -81,10 +81,10 @@ public class YifyTorrent {
 	}
 
 	/**
-	 * @return the peers
+	 * @return the seeds
 	 */
-	public int getPeers() {
-		return peers;
+	public int getSeeds() {
+		return seeds;
 	}
 
 	/**
@@ -109,10 +109,10 @@ public class YifyTorrent {
 	}
 
 	/**
-	 * @return the dateUploadedMilis
+	 * @return the url
 	 */
-	public long getDateUploadedMilis() {
-		return dateUploadedMilis;
+	public String getUrl() {
+		return url;
 	}
 
 }

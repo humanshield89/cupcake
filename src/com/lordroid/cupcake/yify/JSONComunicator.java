@@ -33,47 +33,6 @@ import com.lordroid.cupcake.ui.MovieListPan;
 public class JSONComunicator {
 	private static final String API_URL = "https://yts.am/api/v2/list_movies.json?";
 
-	private static String readAll(BufferedReader rd) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-		while ((line = rd.readLine()) != null) {
-			sb.append(line);
-		}
-
-		return sb.toString();
-	}
-
-	public static JSONObject readJsonFromUrl(String url) throws IOException,
-			JSONException, Exception {
-		// InputStream is = new URL(url).openStream();
-		URL u = new URL(url);
-		HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
-		c.setRequestMethod("GET");
-		c.setRequestProperty("Content-length", "0");
-		c.setUseCaches(false);
-		c.setAllowUserInteraction(false);
-		c.setConnectTimeout(1000);
-		c.setReadTimeout(5000);
-		try {
-			c.connect();
-		} catch (UnknownHostException e) {
-			c.disconnect();
-			return null;
-		}
-		InputStream is = c.getInputStream();
-
-		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-			String jsonText = readAll(rd);
-			JSONObject json = new JSONObject(jsonText);
-			is.close();
-			c.disconnect();
-			return json;
-		} finally {
-			is.close();
-		}
-	}
-
 	public static String getJsonQueryUrl(int page, int quality,
 			int minimumRating, String queryTerm, int genre, int sortBy,
 			int order) {
@@ -113,6 +72,47 @@ public class JSONComunicator {
 		}
 		return query;
 
+	}
+
+	private static String readAll(BufferedReader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line);
+		}
+
+		return sb.toString();
+	}
+
+	public static JSONObject readJsonFromUrl(String url) throws IOException,
+			JSONException, Exception {
+		// InputStream is = new URL(url).openStream();
+		URL u = new URL(url);
+		HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+		c.setRequestMethod("GET");
+		c.setRequestProperty("Content-length", "0");
+		c.setUseCaches(false);
+		c.setAllowUserInteraction(false);
+		c.setConnectTimeout(1000);
+		c.setReadTimeout(5000);
+		try {
+			c.connect();
+		} catch (UnknownHostException e) {
+			c.disconnect();
+			return null;
+		}
+		InputStream is = c.getInputStream();
+
+		try {
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			String jsonText = readAll(rd);
+			JSONObject json = new JSONObject(jsonText);
+			is.close();
+			c.disconnect();
+			return json;
+		} finally {
+			is.close();
+		}
 	}
 
 }

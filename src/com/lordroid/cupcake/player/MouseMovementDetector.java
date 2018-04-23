@@ -30,6 +30,26 @@ import javax.swing.Timer;
 
 public abstract class MouseMovementDetector {
 
+	private class ActivityListener extends MouseMotionAdapter {
+		int lastX = 0;
+		int lastY = 0;
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			int x = e.getXOnScreen();
+			int y = e.getYOnScreen();
+			int dX;
+			int dY;
+			dX = (x > lastX) ? (x - lastX) : (lastX - x);
+			dY = (y > lastY) ? (y - lastY) : (lastY - x);
+			if (dX > 5 || dY > 5) {
+				movement();
+			}
+			lastX = x;
+			lastY = y;
+		}
+	}
+
 	private final Component component;
 
 	private final int timeout;
@@ -45,6 +65,26 @@ public abstract class MouseMovementDetector {
 	public MouseMovementDetector(Component component, int timeout) {
 		this.component = component;
 		this.timeout = timeout;
+	}
+
+	private void movement() {
+		if (!moving) {
+			moving = true;
+			onMouseMoved();
+		}
+		timer.restart();
+	}
+
+	protected void onMouseAtRest() {
+	}
+
+	protected void onMouseMoved() {
+	}
+
+	protected void onStarted() {
+	}
+
+	protected void onStopped() {
 	}
 
 	public void start() {
@@ -75,48 +115,8 @@ public abstract class MouseMovementDetector {
 		}
 	}
 
-	private void movement() {
-		if (!moving) {
-			moving = true;
-			onMouseMoved();
-		}
-		timer.restart();
-	}
-
 	private void timeout() {
 		moving = false;
 		onMouseAtRest();
-	}
-
-	protected void onStarted() {
-	}
-
-	protected void onMouseAtRest() {
-	}
-
-	protected void onMouseMoved() {
-	}
-
-	protected void onStopped() {
-	}
-
-	private class ActivityListener extends MouseMotionAdapter {
-		int lastX = 0;
-		int lastY = 0;
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			int x = e.getXOnScreen();
-			int y = e.getYOnScreen();
-			int dX;
-			int dY;
-			dX = (x > lastX) ? (x - lastX) : (lastX - x);
-			dY = (y > lastY) ? (y - lastY) : (lastY - x);
-			if (dX > 5 || dY > 5) {
-				movement();
-			}
-			lastX = x;
-			lastY = y;
-		}
 	}
 }

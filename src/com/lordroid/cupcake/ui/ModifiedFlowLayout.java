@@ -18,7 +18,11 @@
  */
 package com.lordroid.cupcake.ui;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 
 /**
  * A modified version of FlowLayout that allows containers using this Layout to
@@ -41,16 +45,27 @@ public class ModifiedFlowLayout extends FlowLayout {
 		super(align, hgap, vgap);
 	}
 
-	@Override
-	public Dimension minimumLayoutSize(Container target) {
-		// Size of largest component, so we can resize it in
-		// either direction with something like a split-pane.
-		return computeMinSize(target);
-	}
+	private Dimension computeMinSize(Container target) {
+		synchronized (target.getTreeLock()) {
+			int minx = Integer.MAX_VALUE;
+			int miny = Integer.MIN_VALUE;
+			boolean found_one = false;
+			int n = target.getComponentCount();
 
-	@Override
-	public Dimension preferredLayoutSize(Container target) {
-		return computeSize(target);
+			for (int i = 0; i < n; i++) {
+				Component c = target.getComponent(i);
+				if (c.isVisible()) {
+					found_one = true;
+					Dimension d = c.getPreferredSize();
+					minx = Math.min(minx, d.width);
+					miny = Math.min(miny, d.height);
+				}
+			}
+			if (found_one) {
+				return new Dimension(minx, miny);
+			}
+			return new Dimension(0, 0);
+		}
 	}
 
 	private Dimension computeSize(Container target) {
@@ -104,27 +119,16 @@ public class ModifiedFlowLayout extends FlowLayout {
 		}
 	}
 
-	private Dimension computeMinSize(Container target) {
-		synchronized (target.getTreeLock()) {
-			int minx = Integer.MAX_VALUE;
-			int miny = Integer.MIN_VALUE;
-			boolean found_one = false;
-			int n = target.getComponentCount();
+	@Override
+	public Dimension minimumLayoutSize(Container target) {
+		// Size of largest component, so we can resize it in
+		// either direction with something like a split-pane.
+		return computeMinSize(target);
+	}
 
-			for (int i = 0; i < n; i++) {
-				Component c = target.getComponent(i);
-				if (c.isVisible()) {
-					found_one = true;
-					Dimension d = c.getPreferredSize();
-					minx = Math.min(minx, d.width);
-					miny = Math.min(miny, d.height);
-				}
-			}
-			if (found_one) {
-				return new Dimension(minx, miny);
-			}
-			return new Dimension(0, 0);
-		}
+	@Override
+	public Dimension preferredLayoutSize(Container target) {
+		return computeSize(target);
 	}
 
 }

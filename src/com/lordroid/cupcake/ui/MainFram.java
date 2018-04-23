@@ -38,7 +38,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.lordroid.cupcake.bt.YifyMovieTorrent;
 import com.lordroid.cupcake.controlers.ListPanWatcher;
 import com.lordroid.cupcake.player.MediaPlayer;
 import com.lordroid.cupcake.player.MediaPlayerFrame;
@@ -61,7 +60,6 @@ public class MainFram extends JFrame implements ActionListener {
 	private JPanel PlayercontentPan = new JPanel();
 	private JPanel MoviecontentPan = new JPanel();
 	public MovieListPan movieListPan;
-	// private MediaPlayer player = new MediaPlayer(this);
 	public JMenuBar mainMenu = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
 	JMenu openMenu = new JMenu("Open");
@@ -99,7 +97,7 @@ public class MainFram extends JFrame implements ActionListener {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
+
 				systemExit();
 			}
 
@@ -132,11 +130,15 @@ public class MainFram extends JFrame implements ActionListener {
 		movieListPan = new MovieListPan(new ListPanWatcher() {
 
 			@Override
+			public void ItemSelected(MovieItem movieItem) {
+				// TODO Auto-generated method stub
+				// do nothing
+			}
+
+			@Override
 			public void ListActionPerformed(YifyMovie movie, int action) {
 				// TODO Auto-generated method stub
-				// App.LOGGER.info("Action performed on " + movie.getTitle()
-				// + " language =  " + movie.getLanguage() + "  id ="
-				// + movie.getId() + " Action value is : " + action);
+
 				if (action == MovieItem.PLAY_ACTION) {
 					// initPlayerView();
 					OpenMediaPlayer();
@@ -155,12 +157,6 @@ public class MainFram extends JFrame implements ActionListener {
 
 					}
 				}
-			}
-
-			@Override
-			public void ItemSelected(MovieItem movieItem) {
-				// TODO Auto-generated method stub
-				// do nothing
 			}
 
 		});
@@ -215,18 +211,25 @@ public class MainFram extends JFrame implements ActionListener {
 
 	}
 
-	protected void systemExit() {
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		MediaPlayer.getMediaplayerfactory().release();
-		System.exit(0);
-
+		Object source = arg0.getSource();
+		if (source.equals(playerViewMenuItem)) {
+			OpenMediaPlayer();
+		} else if (source.equals(MovieListViewMenuItem)) {
+			initMovieListPan();
+		} else if (source.equals(exitMenuItem)) {
+			systemExit();
+		} else if (source.equals(settingsMenuItem)) {
+			GlobalSettings.showSettings();
+		}
 	}
 
 	public void initMovieListPan() {
 
 		movieListPan.requestFocus();
 		this.setTitle("Cupcake " + "Movie list ");
-		// contentPan.revalidate();
 		playerViewMenuItem.setEnabled(true);
 		MovieListViewMenuItem.setEnabled(false);
 		CardLayout cl = (CardLayout) (CardContentPan.getLayout());
@@ -244,19 +247,11 @@ public class MainFram extends JFrame implements ActionListener {
 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	protected void systemExit() {
 		// TODO Auto-generated method stub
-		Object source = arg0.getSource();
-		if (source.equals(playerViewMenuItem)) {
-			OpenMediaPlayer();
-		} else if (source.equals(MovieListViewMenuItem)) {
-			initMovieListPan();
-		} else if (source.equals(exitMenuItem)) {
-			systemExit();
-		} else if (source.equals(settingsMenuItem)) {
-			GlobalSettings.showSettings();
-		}
+		MediaPlayer.getMediaplayerfactory().release();
+		System.exit(0);
+
 	}
 
 }

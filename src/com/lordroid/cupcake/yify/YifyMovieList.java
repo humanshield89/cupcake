@@ -26,6 +26,27 @@ public class YifyMovieList {
 	private int pageNumber;
 
 	/**
+	 * @return the limitPerPage
+	 */
+	public int getLimitPerPage() {
+		return limitPerPage;
+	}
+
+	/**
+	 * @return the movieCount
+	 */
+	public int getMovieCount() {
+		return movieCount;
+	}
+
+	/**
+	 * @return the pageNumber
+	 */
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+	/**
 	 * @return the status
 	 */
 	public String getStatus() {
@@ -37,27 +58,6 @@ public class YifyMovieList {
 	 */
 	public String getStatusMessage() {
 		return statusMessage;
-	}
-
-	/**
-	 * @return the movieCount
-	 */
-	public int getMovieCount() {
-		return movieCount;
-	}
-
-	/**
-	 * @return the limitPerPage
-	 */
-	public int getLimitPerPage() {
-		return limitPerPage;
-	}
-
-	/**
-	 * @return the pageNumber
-	 */
-	public int getPageNumber() {
-		return pageNumber;
 	}
 
 }

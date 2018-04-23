@@ -90,11 +90,11 @@ public class MediaPlayerFrame extends JFrame implements MediaPlayerImp {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromYifyTorrent(com
-	 * .lordroid.cupcake.yify.YifyTorrent)
+	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalTorrent(java
+	 * .lang.Object)
 	 */
 	@Override
-	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
+	public void setMediaFromLocalTorrent(Object torrent) {
 		// TODO Auto-generated method stub
 
 	}
@@ -116,11 +116,11 @@ public class MediaPlayerFrame extends JFrame implements MediaPlayerImp {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromLocalTorrent(java
-	 * .lang.Object)
+	 * com.lordroid.cupcake.player.MediaPlayerImp#setMediaFromYifyTorrent(com
+	 * .lordroid.cupcake.yify.YifyTorrent)
 	 */
 	@Override
-	public void setMediaFromLocalTorrent(Object torrent) {
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie) {
 		// TODO Auto-generated method stub
 
 	}

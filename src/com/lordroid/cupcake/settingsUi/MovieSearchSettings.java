@@ -97,9 +97,14 @@ public class MovieSearchSettings extends SettingsPaneImpl {
 	}
 
 	@Override
-	public void loadDefaultSettings() {
-		// TODO Auto-generated method stub
-
+	public void ApplySettings() {
+		Settings.setMaxSearchItemsPerPage(maxItemsPerPageCombo
+				.getSelectedIndex());
+		Settings.setDefaultEnterOperation(DEFAULT_ACTIONS[defaultOperationCombo
+				.getSelectedIndex()]);
+		Settings.setRememberFiltersOnStartup(remeberFiltersCombo
+				.getSelectedIndex());
+		Settings.setParentalWarningLvl(warnParentalCombo.getSelectedIndex());
 	}
 
 	@Override
@@ -114,14 +119,9 @@ public class MovieSearchSettings extends SettingsPaneImpl {
 	}
 
 	@Override
-	public void ApplySettings() {
-		Settings.setMaxSearchItemsPerPage(maxItemsPerPageCombo
-				.getSelectedIndex());
-		Settings.setDefaultEnterOperation(DEFAULT_ACTIONS[defaultOperationCombo
-				.getSelectedIndex()]);
-		Settings.setRememberFiltersOnStartup(remeberFiltersCombo
-				.getSelectedIndex());
-		Settings.setParentalWarningLvl(warnParentalCombo.getSelectedIndex());
+	public void loadDefaultSettings() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

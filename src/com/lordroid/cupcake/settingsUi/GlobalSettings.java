@@ -26,8 +26,18 @@ import com.lordroid.cupcake.res.R;
 
 @SuppressWarnings("serial")
 public class GlobalSettings extends WebTabbedPane {
+	public static void showSettings() {
+
+		GlobalSettings settings = new GlobalSettings();
+		int action = JOptionPane.showConfirmDialog(null, settings, "Settings ",
+				JOptionPane.OK_CANCEL_OPTION);
+		if (action == JOptionPane.OK_OPTION)
+			settings.ApplySettings();
+
+	}
 	private GeneralSettingsPan generalSettings = new GeneralSettingsPan();
 	private MovieSearchSettings movieSearchSettings = new MovieSearchSettings();
+
 	private MediaPlayerSettings mediaPlayerSettings = new MediaPlayerSettings();
 
 	public GlobalSettings() {
@@ -43,6 +53,12 @@ public class GlobalSettings extends WebTabbedPane {
 
 	}
 
+	public void ApplySettings() {
+		generalSettings.ApplySettings();
+		movieSearchSettings.ApplySettings();
+		mediaPlayerSettings.ApplySettings();
+	}
+
 	/**
 	 * @return the generalSettings
 	 */
@@ -55,22 +71,6 @@ public class GlobalSettings extends WebTabbedPane {
 	 */
 	public MovieSearchSettings getMovieSearchSettings() {
 		return movieSearchSettings;
-	}
-
-	public void ApplySettings() {
-		generalSettings.ApplySettings();
-		movieSearchSettings.ApplySettings();
-		mediaPlayerSettings.ApplySettings();
-	}
-
-	public static void showSettings() {
-
-		GlobalSettings settings = new GlobalSettings();
-		int action = JOptionPane.showConfirmDialog(null, settings, "Settings ",
-				JOptionPane.OK_CANCEL_OPTION);
-		if (action == JOptionPane.OK_OPTION)
-			settings.ApplySettings();
-
 	}
 
 }

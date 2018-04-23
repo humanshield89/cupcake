@@ -26,6 +26,20 @@ import com.lordroid.cupcake.App;
  */
 public class TimeUtils {
 
+	public static String getFormatedViewCount(long views) {
+		double viewD;
+		if (views / 1000000 >= 1) {
+			viewD = ((double) views) / 1000000;
+			return String.format("%.1f", viewD) + "M";
+		} else if (views / 1000 >= 1) {
+			viewD = ((double) views) / 1000;
+			return String.format("%.0f", viewD) + "K";
+		}
+
+		return ">1k";
+
+	}
+
 	public static String getLabelFormatedTime(long time) {
 		// check if it's more than an hour
 		App.LOGGER.debug("About to convert  time = " + time);
@@ -47,19 +61,5 @@ public class TimeUtils {
 		return "   " + (hhS.length() == 2 ? hhS : "0" + hhS) + ":"
 				+ (mmS.length() == 2 ? mmS : "0" + mmS) + ":"
 				+ (ssS.length() == 2 ? ssS : "0" + ssS) + "  ";
-	}
-
-	public static String getFormatedViewCount(long views) {
-		double viewD;
-		if (views / 1000000 >= 1) {
-			viewD = ((double) views) / 1000000;
-			return String.format("%.1f", viewD) + "M";
-		} else if (views / 1000 >= 1) {
-			viewD = ((double) views) / 1000;
-			return String.format("%.0f", viewD) + "K";
-		}
-
-		return ">1k";
-
 	}
 }

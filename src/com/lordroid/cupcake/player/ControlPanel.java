@@ -172,6 +172,15 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 					}
 
 					@Override
+					public void mouseDragged(MouseEvent e) {
+						// TODO Auto-generated method stub
+						Point p = e.getPoint();
+						int value = uix.valueForXPosition(p.x);
+
+						setValue(value);
+					}
+
+					@Override
 					public void mouseEntered(MouseEvent e) {
 						// TODO Auto-generated method stub
 						Point p = e.getPoint();
@@ -185,15 +194,6 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 					public void mouseExited(MouseEvent e) {
 						// TODO Auto-generated method stub
 						progress.setToolTipText("");
-					}
-
-					@Override
-					public void mouseDragged(MouseEvent e) {
-						// TODO Auto-generated method stub
-						Point p = e.getPoint();
-						int value = uix.valueForXPosition(p.x);
-
-						setValue(value);
 					}
 
 					@Override
@@ -318,13 +318,6 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 		// controlsContainer.setFocusable(false);
 	}
 
-	/**
-	 * @return the currentVolume
-	 */
-	public JLabel getCurrentVolume() {
-		return currentVolume;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -350,6 +343,13 @@ public class ControlPanel extends JPanel implements Watcher, Watchable {
 	 */
 	public JLabel getCurrentTimeLab() {
 		return currentTimeLab;
+	}
+
+	/**
+	 * @return the currentVolume
+	 */
+	public JLabel getCurrentVolume() {
+		return currentVolume;
 	}
 
 	/**

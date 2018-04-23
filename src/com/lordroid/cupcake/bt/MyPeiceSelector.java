@@ -29,14 +29,21 @@ import bt.torrent.selector.BaseStreamSelector;
  */
 public class MyPeiceSelector extends BaseStreamSelector {
 	static int x = 0;
-	PieceStatistics pieceStatistics;
-
 	/**
 	 * @since 1.1
 	 */
 	public static MyPeiceSelector sequential() {
 		return new MyPeiceSelector();
 	}
+
+	public static int setI(int value) {
+
+		x = value - 1;
+
+		return x;
+	}
+
+	PieceStatistics pieceStatistics;
 
 	@Override
 	protected PrimitiveIterator.OfInt createIterator(
@@ -47,11 +54,6 @@ public class MyPeiceSelector extends BaseStreamSelector {
 			int i = x;
 
 			@Override
-			public int nextInt() {
-				return i++;
-			}
-
-			@Override
 			public boolean hasNext() {
 				while (i < pieceStatistics.getPiecesTotal()
 						&& pieceStatistics.getCount(i) == 0) {
@@ -59,13 +61,11 @@ public class MyPeiceSelector extends BaseStreamSelector {
 				}
 				return i < pieceStatistics.getPiecesTotal();
 			}
+
+			@Override
+			public int nextInt() {
+				return i++;
+			}
 		};
-	}
-
-	public static int setI(int value) {
-
-		x = value - 1;
-
-		return x;
 	}
 }

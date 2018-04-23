@@ -31,6 +31,12 @@ import com.lordroid.cupcake.utils.HttpsDownloadUtility;
 public class YifyMovie {
 	private static final String YOUTUBE = "https://www.youtube.com/watch?v=";
 	private static final String MOVIE_DETAILS_API = "https://yts.am/api/v2/movie_details.json?movie_id=";
+	/**
+	 * @return the youtube
+	 */
+	public static String getYoutube() {
+		return YOUTUBE;
+	}
 	private int id;
 	private String url;
 	private String imdbCode;
@@ -63,13 +69,14 @@ public class YifyMovie {
 	private boolean isBGCached = false;
 	private boolean isBGBEingCached = false;
 	private boolean isCoverMediumCached = false;
-	private boolean isCoverMediumBeingCached = false;
 
 	// private boolean isCoverLargeCached = false;
 	// private boolean isCoverLargeBeingCached = false;
 
+	private boolean isCoverMediumBeingCached = false;
 	private boolean has720p = false;
 	private boolean has1080p = false;
+
 	private boolean has3d = false;
 
 	public YifyMovie(JSONObject movieArg) {
@@ -134,66 +141,6 @@ public class YifyMovie {
 		sortTorrentsBySize();
 		setAvailableQualities();
 
-	}
-
-	private void setAvailableQualities() {
-		// TODO Auto-generated method stub
-		// no need to look forward there is no torrents
-		if (this.torrents.isEmpty())
-			return;
-		for (YifyTorrent t : torrents) {
-			if (t.getQuality().equals(YifyS.QUALITY_720P)) {
-				this.has720p = true;
-			} else if (t.getQuality().equals(YifyS.QUALITY_1080P)) {
-				this.has1080p = true;
-			} else if (t.getQuality().equals(YifyS.QUALITY_3D)) {
-				this.has3d = true;
-			}
-		}
-	}
-
-	private void sortTorrentsBySize() {
-		if (this.torrents.isEmpty())
-			return;
-		// TODO Auto-generated method stub
-		boolean swaped = false;
-
-		do {
-			swaped = false;
-			for (int i = 0; i < torrents.size() - 1; i++) {
-				YifyTorrent prev = torrents.get(i);
-				YifyTorrent next = torrents.get(i + 1);
-				if (prev.getSizeInBytes() > next.getSizeInBytes()) {
-					torrents.set(i, next);
-					torrents.set(i + 1, prev);
-					swaped = true;
-				}
-			}
-
-		} while (swaped);
-		for (YifyTorrent t : torrents) {
-			App.LOGGER.info(t.getQuality() + "size = " + t.getSizeInBytes()
-					+ "  " + t.getSize());
-		}
-	}
-
-	public void loadExtras() {
-		// TODO find a faster way to do this
-		// 300 to 500 miliseconds to get the downlowd count is expensive
-		try {
-			JSONObject movie = JSONComunicator
-					.readJsonFromUrl(MOVIE_DETAILS_API + id)
-					.getJSONObject("data").getJSONObject("movie");
-			this.downloadCount = movie
-					.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
-			this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
 	}
 
 	public void cacheBgImage() {
@@ -276,6 +223,93 @@ public class YifyMovie {
 	}
 
 	/**
+	 * @return the bgImageFile
+	 */
+	public File getBgImageFile() {
+		return bgImageFile;
+	}
+
+	/**
+	 * @return the bgImageOriginal
+	 */
+	public String getBgImageOriginalURL() {
+		return bgImageOriginalURL;
+	}
+
+	/**
+	 * @return the bgImage
+	 */
+	public String getBgImageURL() {
+		return bgImageURL;
+	}
+
+	/**
+	 * @return the coverImageFileMedium
+	 */
+	public File getCoverImageFileMedium() {
+		if (!isCoverMediumCached) {
+			if (!this.isCoverMediumBeingCached) {
+				this.cacheCoverImageMedium();
+			}
+		}
+		return CoverImageFileMedium;
+	}
+
+	/**
+	 * @return the coverLarge
+	 */
+	public String getCoverLargeURL() {
+		return coverLargeURL;
+	}
+
+	/**
+	 * @return the coverMedium
+	 */
+	public String getCoverMediumURL() {
+
+		return coverMediumURL;
+	}
+
+	/**
+	 * @return the coverSmall
+	 */
+	public String getCoverSmallURL() {
+		return coverSmallURL;
+	}
+
+	/**
+	 * @return the descriptionFull
+	 */
+	public String getDescriptionFull() {
+		return descriptionFull;
+	}
+
+	/**
+	 * @return the descriptionShort
+	 */
+	public String getDescriptionShort() {
+		return descriptionShort;
+	}
+
+	/**
+	 * @return the downloadCount
+	 */
+	public int getDownloadCount() {
+		return downloadCount;
+	}
+
+	public File getDownlodFolder() {
+		return new File(S.MOVIE_DOWNLOAD_FOLDER + File.separator + id);
+	}
+
+	/**
+	 * @return the genre
+	 */
+	public List<String> getGenre() {
+		return genre;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -283,17 +317,73 @@ public class YifyMovie {
 	}
 
 	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	/**
 	 * @return the imdbCode
 	 */
 	public String getImdbCode() {
 		return imdbCode;
+	}
+
+	/**
+	 * @return the tmpFolder
+	 */
+	public File getImgTmpFolder() {
+		return ImgtmpFolder;
+	}
+
+	/**
+	 * @return the isBGCached
+	 */
+	public Boolean getIsBGCached() {
+		return isBGCached;
+	}
+
+	/**
+	 * @return the language
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @return the likeCount
+	 */
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	/**
+	 * @return the mPARating
+	 */
+	public String getMPARating() {
+		return MPARating;
+	}
+
+	/**
+	 * @return the rating
+	 */
+	public double getRating() {
+		return rating;
+	}
+
+	/**
+	 * @return the runtime
+	 */
+	public int getRuntime() {
+		return runtime;
+	}
+
+	/**
+	 * @return the slug
+	 */
+	public String getSlug() {
+		return slug;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public String getState() {
+		return state;
 	}
 
 	/**
@@ -317,226 +407,6 @@ public class YifyMovie {
 		return titleLong;
 	}
 
-	/**
-	 * @return the slug
-	 */
-	public String getSlug() {
-		return slug;
-	}
-
-	/**
-	 * @return the year
-	 */
-	public int getYear() {
-		return year;
-	}
-
-	/**
-	 * @return the rating
-	 */
-	public double getRating() {
-		return rating;
-	}
-
-	/**
-	 * @return the runtime
-	 */
-	public int getRuntime() {
-		return runtime;
-	}
-
-	/**
-	 * @return the genre
-	 */
-	public List<String> getGenre() {
-		return genre;
-	}
-
-	/**
-	 * @return the descriptionShort
-	 */
-	public String getDescriptionShort() {
-		return descriptionShort;
-	}
-
-	/**
-	 * @return the descriptionFull
-	 */
-	public String getDescriptionFull() {
-		return descriptionFull;
-	}
-
-	/**
-	 * @return the youtubeTrailerCode
-	 */
-	public String getYoutubeTrailerURL() {
-		return youtubeTrailerURL;
-	}
-
-	/**
-	 * @return the language
-	 */
-	public String getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @return the mPARating
-	 */
-	public String getMPARating() {
-		return MPARating;
-	}
-
-	/**
-	 * @return the likeCount
-	 */
-	public int getLikeCount() {
-		return likeCount;
-	}
-
-	/**
-	 * @return the downloadCount
-	 */
-	public int getDownloadCount() {
-		return downloadCount;
-	}
-
-	/**
-	 * @return the bgImage
-	 */
-	public String getBgImageURL() {
-		return bgImageURL;
-	}
-
-	/**
-	 * @return the bgImageOriginal
-	 */
-	public String getBgImageOriginalURL() {
-		return bgImageOriginalURL;
-	}
-
-	/**
-	 * @return the coverSmall
-	 */
-	public String getCoverSmallURL() {
-		return coverSmallURL;
-	}
-
-	/**
-	 * @return the torrents
-	 */
-	public ArrayList<YifyTorrent> getTorrents() {
-		return torrents;
-	}
-
-	/**
-	 * @return the coverMedium
-	 */
-	public String getCoverMediumURL() {
-
-		return coverMediumURL;
-	}
-
-	/**
-	 * @return the coverLarge
-	 */
-	public String getCoverLargeURL() {
-		return coverLargeURL;
-	}
-
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
-	}
-
-	/**
-	 * @return the youtube
-	 */
-	public static String getYoutube() {
-		return YOUTUBE;
-	}
-
-	/**
-	 * @return the tmpFolder
-	 */
-	public File getImgTmpFolder() {
-		return ImgtmpFolder;
-	}
-
-	public File getDownlodFolder() {
-		return new File(S.MOVIE_DOWNLOAD_FOLDER + File.separator + id);
-	}
-
-	/**
-	 * @return the bgImageFile
-	 */
-	public File getBgImageFile() {
-		return bgImageFile;
-	}
-
-	/**
-	 * @return the isBGCached
-	 */
-	public Boolean getIsBGCached() {
-		return isBGCached;
-	}
-
-	/**
-	 * @return the coverImageFileMedium
-	 */
-	public File getCoverImageFileMedium() {
-		if (!isCoverMediumCached) {
-			if (!this.isCoverMediumBeingCached) {
-				this.cacheCoverImageMedium();
-			}
-		}
-		return CoverImageFileMedium;
-	}
-
-	/**
-	 * @return the isBGBEingCached
-	 */
-	public boolean isBGBEingCached() {
-		return isBGBEingCached;
-	}
-
-	/**
-	 * @return the isCoverMediumCached
-	 */
-	public boolean isCoverMediumCached() {
-		return isCoverMediumCached;
-	}
-
-	/**
-	 * @return the isCoverMediumBeingCached
-	 */
-	public boolean isCoverMediumBeingCached() {
-		return isCoverMediumBeingCached;
-	}
-
-	/**
-	 * @return the has720p
-	 */
-	public boolean isHas720p() {
-		return has720p;
-	}
-
-	/**
-	 * @return the has1080p
-	 */
-	public boolean isHas1080p() {
-		return has1080p;
-	}
-
-	/**
-	 * @return the has3d
-	 */
-	public boolean isHas3d() {
-		return has3d;
-	}
-
 	public YifyTorrent getTorrent(int quality) {
 		if (quality == -1) {
 			for (YifyTorrent t : torrents) {
@@ -554,6 +424,136 @@ public class YifyMovie {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @return the torrents
+	 */
+	public ArrayList<YifyTorrent> getTorrents() {
+		return torrents;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @return the year
+	 */
+	public int getYear() {
+		return year;
+	}
+
+	/**
+	 * @return the youtubeTrailerCode
+	 */
+	public String getYoutubeTrailerURL() {
+		return youtubeTrailerURL;
+	}
+
+	/**
+	 * @return the isBGBEingCached
+	 */
+	public boolean isBGBEingCached() {
+		return isBGBEingCached;
+	}
+
+	/**
+	 * @return the isCoverMediumBeingCached
+	 */
+	public boolean isCoverMediumBeingCached() {
+		return isCoverMediumBeingCached;
+	}
+
+	/**
+	 * @return the isCoverMediumCached
+	 */
+	public boolean isCoverMediumCached() {
+		return isCoverMediumCached;
+	}
+
+	/**
+	 * @return the has1080p
+	 */
+	public boolean isHas1080p() {
+		return has1080p;
+	}
+
+	/**
+	 * @return the has3d
+	 */
+	public boolean isHas3d() {
+		return has3d;
+	}
+
+	/**
+	 * @return the has720p
+	 */
+	public boolean isHas720p() {
+		return has720p;
+	}
+
+	public void loadExtras() {
+		// TODO find a faster way to do this
+		// 300 to 500 miliseconds to get the downlowd count is expensive
+		try {
+			JSONObject movie = JSONComunicator
+					.readJsonFromUrl(MOVIE_DETAILS_API + id)
+					.getJSONObject("data").getJSONObject("movie");
+			this.downloadCount = movie
+					.getInt(YifyS.RESPONSE_DOWNLOAD_COUNT_KEY);
+			this.likeCount = movie.getInt(YifyS.RESPONSE_LIKE_COUNT_KEY);
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private void setAvailableQualities() {
+		// TODO Auto-generated method stub
+		// no need to look forward there is no torrents
+		if (this.torrents.isEmpty())
+			return;
+		for (YifyTorrent t : torrents) {
+			if (t.getQuality().equals(YifyS.QUALITY_720P)) {
+				this.has720p = true;
+			} else if (t.getQuality().equals(YifyS.QUALITY_1080P)) {
+				this.has1080p = true;
+			} else if (t.getQuality().equals(YifyS.QUALITY_3D)) {
+				this.has3d = true;
+			}
+		}
+	}
+
+	private void sortTorrentsBySize() {
+		if (this.torrents.isEmpty())
+			return;
+		// TODO Auto-generated method stub
+		boolean swaped = false;
+
+		do {
+			swaped = false;
+			for (int i = 0; i < torrents.size() - 1; i++) {
+				YifyTorrent prev = torrents.get(i);
+				YifyTorrent next = torrents.get(i + 1);
+				if (prev.getSizeInBytes() > next.getSizeInBytes()) {
+					torrents.set(i, next);
+					torrents.set(i + 1, prev);
+					swaped = true;
+				}
+			}
+
+		} while (swaped);
+		for (YifyTorrent t : torrents) {
+			App.LOGGER.info(t.getQuality() + "size = " + t.getSizeInBytes()
+					+ "  " + t.getSize());
+		}
 	}
 
 }

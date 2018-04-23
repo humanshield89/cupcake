@@ -27,21 +27,6 @@ import com.lordroid.cupcake.yify.YifyMovie;
  * 
  */
 public interface MediaPlayerImp {
-	/**
-	 * this is called when trying to load a new media calling this will remove
-	 * any previous playing media on the player
-	 * 
-	 * @param yifyTorrent
-	 *            the Yify torrent that will be played on the player
-	 */
-	public void setMediaFromYifyTorrent(YifyMovie yifyMovie);
-
-	/**
-	 * 
-	 * @param video
-	 */
-	public void setMediaFromLocalVideo(File video);
-
 	// TODO set this to a local torrent object once we make one
 	/**
 	 * TODO : this is not implemented yet ,finish this when we create a local
@@ -50,5 +35,20 @@ public interface MediaPlayerImp {
 	 * @param torrent
 	 */
 	public void setMediaFromLocalTorrent(Object torrent);
+
+	/**
+	 * 
+	 * @param video
+	 */
+	public void setMediaFromLocalVideo(File video);
+
+	/**
+	 * this is called when trying to load a new media calling this will remove
+	 * any previous playing media on the player
+	 * 
+	 * @param yifyTorrent
+	 *            the Yify torrent that will be played on the player
+	 */
+	public void setMediaFromYifyTorrent(YifyMovie yifyMovie);
 
 }

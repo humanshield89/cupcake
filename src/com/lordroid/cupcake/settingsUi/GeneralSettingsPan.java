@@ -143,32 +143,6 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 	}
 
 	@Override
-	public void loadDefaultSettings() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loadCurrentSettings() {
-		uiLangCombo.setSelectedIndex(Settings.getGuiLanguage());
-		cacheSlider
-				.setValue((int) (Settings.getCurrentMaxCacheSize() / 1024L / 1024L));
-		cacheValueLab.setText(cacheSlider.getValue() + " MB");
-		currentCacheSizeValueLab.setText(CacheTracker.getTotalDownFolderSize()
-				/ 1024 / 1024 + "MB");
-		imageCacheValueLab.setText(CacheTracker.getImageCacheSize() / 1024
-				/ 1024 + "MB");
-
-	}
-
-	@Override
-	public void ApplySettings() {
-		Settings.setGuiLanugage(uiLangCombo.getSelectedIndex());
-		Settings.setCurrentMaxCacheSize((long) cacheSlider.getValue() * 1024 * 1024);
-
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Object source = arg0.getSource();
 		if (source.equals(clearImageCacheBtn)) {
@@ -200,6 +174,32 @@ public class GeneralSettingsPan extends SettingsPaneImpl implements
 			}
 
 		}
+	}
+
+	@Override
+	public void ApplySettings() {
+		Settings.setGuiLanugage(uiLangCombo.getSelectedIndex());
+		Settings.setCurrentMaxCacheSize((long) cacheSlider.getValue() * 1024 * 1024);
+
+	}
+
+	@Override
+	public void loadCurrentSettings() {
+		uiLangCombo.setSelectedIndex(Settings.getGuiLanguage());
+		cacheSlider
+				.setValue((int) (Settings.getCurrentMaxCacheSize() / 1024L / 1024L));
+		cacheValueLab.setText(cacheSlider.getValue() + " MB");
+		currentCacheSizeValueLab.setText(CacheTracker.getTotalDownFolderSize()
+				/ 1024 / 1024 + "MB");
+		imageCacheValueLab.setText(CacheTracker.getImageCacheSize() / 1024
+				/ 1024 + "MB");
+
+	}
+
+	@Override
+	public void loadDefaultSettings() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

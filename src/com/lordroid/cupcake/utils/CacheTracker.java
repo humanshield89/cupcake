@@ -24,17 +24,13 @@ import com.lordroid.cupcake.res.S;
 
 public class CacheTracker {
 
-	public static void main(String args[]) {
-		// System.out.println(getTotalDownFolder() / 1024 / 1024 + "  mb");
+	public static long getImageCacheSize() {
+
+		return getTotalSize(new File(S.IMAGE_CACHE_TMP_FOLDER));
 	}
 
 	public static long getTotalDownFolderSize() {
 		return getTotalSize(new File(S.MOVIE_DOWNLOAD_FOLDER));
-	}
-
-	public static long getImageCacheSize() {
-
-		return getTotalSize(new File(S.IMAGE_CACHE_TMP_FOLDER));
 	}
 
 	private static long getTotalSize(File folder) {
@@ -46,5 +42,9 @@ public class CacheTracker {
 			}
 		}
 		return size;
+	}
+
+	public static void main(String args[]) {
+		// System.out.println(getTotalDownFolder() / 1024 / 1024 + "  mb");
 	}
 }

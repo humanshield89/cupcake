@@ -51,43 +51,21 @@ public class SubtitleFetcher {
 			"ara", "fre", "spa", "ita", "por", "pob", "rus", "arg", "tur",
 			"per", "chi", "zht" };
 
-	public static File unGzip(File infile, boolean deleteGzipfileOnSuccess)
+	public static File getSubtitle(SubtitleInfo sub, File movie)
 			throws IOException {
-		GZIPInputStream gin = new GZIPInputStream(new FileInputStream(infile));
-		FileOutputStream fos = null;
-		try {
-			File outFile = new File(infile.getParent(), infile.getName()
-					.replaceAll("\\.gz$", ""));
-			fos = new FileOutputStream(outFile);
-			byte[] buf = new byte[100000];
-			int len;
-			while ((len = gin.read(buf)) > 0) {
-				fos.write(buf, 0, len);
-			}
+		String url = sub.getSubDownloadLink();
 
-			fos.close();
-			if (deleteGzipfileOnSuccess) {
-				infile.delete();
-			}
-			return outFile;
-		} finally {
-			if (gin != null) {
-				gin.close();
-			}
-			if (fos != null) {
-				fos.close();
-			}
-		}
+		return unGzip(
+				HttpsDownloadUtility.HTTPdownloadFile(url,
+						movie.getAbsolutePath()), true);
 	}
 
-	public static List<SubtitleInfo> getSubtitleList(YifyMovie movie,
-			String lang) throws XmlRpcException {
-		OpenSubtitle openSubtitle = new OpenSubtitle();
-		openSubtitle.login();
-		List<SubtitleInfo> subs = openSubtitle.getMovieSubsByName(
-				movie.getTitle(), "20", lang);
-		openSubtitle.logOut();
-		return subs;
+	public static File getSubtitle(SubtitleInfo sub, YifyMovie movie)
+			throws IOException {
+		String url = sub.getSubDownloadLink();
+
+		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie
+				.getDownlodFolder().getAbsolutePath()), true);
 	}
 
 	public static List<SubtitleInfo> getSubtitleList(File video, String lang)
@@ -100,21 +78,14 @@ public class SubtitleFetcher {
 		return subs;
 	}
 
-	public static File getSubtitle(SubtitleInfo sub, YifyMovie movie)
-			throws IOException {
-		String url = sub.getSubDownloadLink();
-
-		return unGzip(HttpsDownloadUtility.HTTPdownloadFile(url, movie
-				.getDownlodFolder().getAbsolutePath()), true);
-	}
-
-	public static File getSubtitle(SubtitleInfo sub, File movie)
-			throws IOException {
-		String url = sub.getSubDownloadLink();
-
-		return unGzip(
-				HttpsDownloadUtility.HTTPdownloadFile(url,
-						movie.getAbsolutePath()), true);
+	public static List<SubtitleInfo> getSubtitleList(YifyMovie movie,
+			String lang) throws XmlRpcException {
+		OpenSubtitle openSubtitle = new OpenSubtitle();
+		openSubtitle.login();
+		List<SubtitleInfo> subs = openSubtitle.getMovieSubsByName(
+				movie.getTitle(), "20", lang);
+		openSubtitle.logOut();
+		return subs;
 	}
 
 	public static void main(String args[]) {
@@ -174,5 +145,34 @@ public class SubtitleFetcher {
 		openSubtitle.logOut();
 		return unGzip(gz, true);
 
+	}
+
+	public static File unGzip(File infile, boolean deleteGzipfileOnSuccess)
+			throws IOException {
+		GZIPInputStream gin = new GZIPInputStream(new FileInputStream(infile));
+		FileOutputStream fos = null;
+		try {
+			File outFile = new File(infile.getParent(), infile.getName()
+					.replaceAll("\\.gz$", ""));
+			fos = new FileOutputStream(outFile);
+			byte[] buf = new byte[100000];
+			int len;
+			while ((len = gin.read(buf)) > 0) {
+				fos.write(buf, 0, len);
+			}
+
+			fos.close();
+			if (deleteGzipfileOnSuccess) {
+				infile.delete();
+			}
+			return outFile;
+		} finally {
+			if (gin != null) {
+				gin.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
+		}
 	}
 }

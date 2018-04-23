@@ -173,37 +173,6 @@ public class XML {
 	}
 
 	/**
-	 * Removes XML escapes from the string.
-	 * 
-	 * @param string
-	 *            string to remove escapes from
-	 * @return string with converted entities
-	 */
-	public static String unescape(String string) {
-		StringBuilder sb = new StringBuilder(string.length());
-		for (int i = 0, length = string.length(); i < length; i++) {
-			char c = string.charAt(i);
-			if (c == '&') {
-				final int semic = string.indexOf(';', i);
-				if (semic > i) {
-					final String entity = string.substring(i + 1, semic);
-					sb.append(XMLTokener.unescapeEntity(entity));
-					// skip past the entity we just parsed.
-					i += entity.length() + 1;
-				} else {
-					// this shouldn't happen in most cases since the parser
-					// errors on unclosed entries.
-					sb.append(c);
-				}
-			} else {
-				// not part of an entity
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * Throw an exception if the string contains whitespace. Whitespace is not
 	 * allowed in tagNames and attributes.
 	 * 
@@ -646,5 +615,36 @@ public class XML {
 				: (string.length() == 0) ? "<" + tagName + "/>" : "<" + tagName
 						+ ">" + string + "</" + tagName + ">";
 
+	}
+
+	/**
+	 * Removes XML escapes from the string.
+	 * 
+	 * @param string
+	 *            string to remove escapes from
+	 * @return string with converted entities
+	 */
+	public static String unescape(String string) {
+		StringBuilder sb = new StringBuilder(string.length());
+		for (int i = 0, length = string.length(); i < length; i++) {
+			char c = string.charAt(i);
+			if (c == '&') {
+				final int semic = string.indexOf(';', i);
+				if (semic > i) {
+					final String entity = string.substring(i + 1, semic);
+					sb.append(XMLTokener.unescapeEntity(entity));
+					// skip past the entity we just parsed.
+					i += entity.length() + 1;
+				} else {
+					// this shouldn't happen in most cases since the parser
+					// errors on unclosed entries.
+					sb.append(c);
+				}
+			} else {
+				// not part of an entity
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 }

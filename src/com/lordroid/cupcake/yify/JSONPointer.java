@@ -53,9 +53,6 @@ import java.util.List;
  */
 public class JSONPointer {
 
-	// used for URL encoding and decoding
-	private static final String ENCODING = "utf-8";
-
 	/**
 	 * This class allows the user to build a JSONPointer in steps, using exactly
 	 * one segment in each step.
@@ -66,11 +63,16 @@ public class JSONPointer {
 		private final List<String> refTokens = new ArrayList<String>();
 
 		/**
-		 * Creates a {@code JSONPointer} instance using the tokens previously
-		 * set using the {@link #append(String)} method calls.
+		 * Adds an integer to the reference token list. Although not
+		 * necessarily, mostly this token will denote an array index.
+		 * 
+		 * @param arrayIndex
+		 *            the array index to be added to the token list
+		 * @return {@code this}
 		 */
-		public JSONPointer build() {
-			return new JSONPointer(this.refTokens);
+		public Builder append(int arrayIndex) {
+			this.refTokens.add(String.valueOf(arrayIndex));
+			return this;
 		}
 
 		/**
@@ -98,18 +100,16 @@ public class JSONPointer {
 		}
 
 		/**
-		 * Adds an integer to the reference token list. Although not
-		 * necessarily, mostly this token will denote an array index.
-		 * 
-		 * @param arrayIndex
-		 *            the array index to be added to the token list
-		 * @return {@code this}
+		 * Creates a {@code JSONPointer} instance using the tokens previously
+		 * set using the {@link #append(String)} method calls.
 		 */
-		public Builder append(int arrayIndex) {
-			this.refTokens.add(String.valueOf(arrayIndex));
-			return this;
+		public JSONPointer build() {
+			return new JSONPointer(this.refTokens);
 		}
 	}
+
+	// used for URL encoding and decoding
+	private static final String ENCODING = "utf-8";
 
 	/**
 	 * Static factory method for {@link Builder}. Example usage:
@@ -135,6 +135,10 @@ public class JSONPointer {
 
 	// Segments for the JSONPointer string
 	private final List<String> refTokens;
+
+	public JSONPointer(List<String> refTokens) {
+		this.refTokens = new ArrayList<String>(refTokens);
+	}
 
 	/**
 	 * Pre-parses and initializes a new {@code JSONPointer} instance. If you
@@ -176,13 +180,18 @@ public class JSONPointer {
 		}
 	}
 
-	public JSONPointer(List<String> refTokens) {
-		this.refTokens = new ArrayList<String>(refTokens);
-	}
-
-	private String unescape(String token) {
-		return token.replace("~1", "/").replace("~0", "~")
-				.replace("\\\"", "\"").replace("\\\\", "\\");
+	/**
+	 * Escapes path segment values to an unambiguous form. The escape char to be
+	 * inserted is '~'. The chars to be escaped are ~, which maps to ~0, and /,
+	 * which maps to ~1. Backslashes and double quote chars are also escaped.
+	 * 
+	 * @param token
+	 *            the JSONPointer segment value to be escaped
+	 * @return the escaped value for the token
+	 */
+	private String escape(String token) {
+		return token.replace("~", "~0").replace("/", "~1")
+				.replace("\\", "\\\\").replace("\"", "\\\"");
 	}
 
 	/**
@@ -264,20 +273,6 @@ public class JSONPointer {
 	}
 
 	/**
-	 * Escapes path segment values to an unambiguous form. The escape char to be
-	 * inserted is '~'. The chars to be escaped are ~, which maps to ~0, and /,
-	 * which maps to ~1. Backslashes and double quote chars are also escaped.
-	 * 
-	 * @param token
-	 *            the JSONPointer segment value to be escaped
-	 * @return the escaped value for the token
-	 */
-	private String escape(String token) {
-		return token.replace("~", "~0").replace("/", "~1")
-				.replace("\\", "\\\\").replace("\"", "\\\"");
-	}
-
-	/**
 	 * Returns a string representing the JSONPointer path value using URI
 	 * fragment identifier representation
 	 */
@@ -291,6 +286,11 @@ public class JSONPointer {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String unescape(String token) {
+		return token.replace("~1", "/").replace("~0", "~")
+				.replace("\\\"", "\"").replace("\\\\", "\\");
 	}
 
 }
